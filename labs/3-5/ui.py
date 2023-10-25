@@ -1,7 +1,7 @@
 import funcs as op
+from copy import deepcopy
 EC = 'x'
 
-versions = []
 def menu(lst:list):
     print('\033c', end='')
     print("Your list: ", lst)
@@ -25,13 +25,12 @@ def menu(lst:list):
     return input("Write the option number: ")
 
 def start(base_list: list):
-    versions.append(base_list)
+    op.append_version(base_list)
     valid_res = True
     while valid_res:
         opt = menu(base_list)
         valid_res = opt != EC
-        base_list = perform_op(opt, base_list)
-        versions.append(base_list)
+        base_list = deepcopy(perform_op(opt, base_list))
 
 def perform_op(opt, lst):
     match opt:
@@ -76,7 +75,7 @@ def perform_op(opt, lst):
         case '13':
             return op.filter_greater(lst, int(input("Greater Value: ")))
         case '14':
-            return versions[len(versions) - 1]
+            return op.undo()
         case _:
             print("Try again")
             return lst

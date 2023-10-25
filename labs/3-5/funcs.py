@@ -1,8 +1,14 @@
 from copy import deepcopy
 
+vs_list = []
+
+def append_version(lst:list):
+    vs_list.append(deepcopy(lst))
+
 # 1. Add the result of a new participant to the array
 def add(my_list:list, value):
     my_list.append(value)
+    append_version(my_list)
     return my_list
 
 def insert(lst:list, idx, val):
@@ -10,6 +16,7 @@ def insert(lst:list, idx, val):
         for _ in range(len(lst), idx - 1):
             lst.append(0)
     lst.insert(idx - 1, val)
+    append_version(lst)
     return lst
 
 # 2. Modify the scores in the array (as a result of appeals)
@@ -17,14 +24,17 @@ def remove(lst:list, idx): # removes the element at idx
     if len(lst) < idx + 1:
         return lst
     del lst[idx - 1]
+    append_version(lst)
     return lst
 
 def remove_int(lst:list, fidx, tidx): # removes elements between the two given idx values
     del lst[fidx - 1:tidx]
+    append_version(lst)
     return lst
 
 def replace(lst:list, idx, nval): # replaces the score on idx with nval
     lst[idx - 1] = nval
+    append_version(lst)
     return lst
 
 # 3 Get the participants with scores having some properties
@@ -63,11 +73,16 @@ def mul(lst:list, mul, fidx, tidx):
 
 # 5 Filter Values
 def filter_mul(lst:list, mul):
-    return [i for i in lst if i % mul == 0]
+    nlst = [i for i in lst if i % mul == 0]
+    append_version(nlst)
+    return nlst
 
 def filter_greater(lst:list, greater):
-    return [i for i in lst if i > greater]
+    nlst = [i for i in lst if i > greater]
+    append_version(nlst)
+    return nlst
 
 # 6 Undo
 def undo():
-    return []
+    if len(vs_list) > 1: vs_list.pop()
+    return vs_list[-1]
