@@ -5,13 +5,21 @@ vs_list = []
 def append_version(lst:list):
     vs_list.append(deepcopy(lst))
 
+def is_value_valid(val):
+    return val <= 100 and val >= 10
+
+def is_index_valid(lst, fidx, tidx):
+    return len(lst) >= tidx + 1 and fidx > 0
+
 # 1. Add the result of a new participant to the array
 def add(my_list:list, value):
+    if not is_value_valid(value): return my_list
     my_list.append(value)
     append_version(my_list)
     return my_list
 
 def insert(lst:list, idx, val):
+    if not is_value_valid(val) or idx < 1: return lst
     if idx + 1 > len(lst):
         for _ in range(len(lst), idx - 1):
             lst.append(0)
@@ -21,18 +29,19 @@ def insert(lst:list, idx, val):
 
 # 2. Modify the scores in the array (as a result of appeals)
 def remove(lst:list, idx): # removes the element at idx
-    if len(lst) < idx + 1:
-        return lst
+    if not is_index_valid(lst, idx, idx): return lst
     del lst[idx - 1]
     append_version(lst)
     return lst
 
 def remove_int(lst:list, fidx, tidx): # removes elements between the two given idx values
+    if not is_index_valid(lst, fidx, tidx): return lst
     del lst[fidx - 1:tidx]
     append_version(lst)
     return lst
 
 def replace(lst:list, idx, nval): # replaces the score on idx with nval
+    if not is_value_valid(nval) or not is_index_valid(lst, idx, idx): return lst
     lst[idx - 1] = nval
     append_version(lst)
     return lst
