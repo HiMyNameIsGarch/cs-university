@@ -9,7 +9,7 @@ def is_value_valid(val):
     return val <= 100 and val >= 10
 
 def is_index_valid(lst, fidx, tidx):
-    return len(lst) >= tidx + 1 and fidx > 0
+    return len(lst) >= tidx + 1 and fidx > 0 and fidx <= tidx
 
 # 1. Add the result of a new participant to the array
 def add(my_list:list, value):
@@ -64,19 +64,22 @@ def sorted_by(lst:list, val): # get the participants with scores higher than val
 
 # 4 Obtain different characteristics of participants
 def avg(lst:list, fidx, tidx):
+    if not is_index_valid(lst, fidx, tidx): return 0
     avg = 0
-    for elem in lst[fidx-1:tidx]:
+    for elem in lst[fidx-1:tidx-1]:
         avg += elem
     return avg // (tidx - fidx + 1)
 
 
 def min(lst:list, fidx, tidx):
-    nlst = lst[fidx-1:tidx]
+    if not is_index_valid(lst, fidx, tidx): return 0
+    nlst = lst[fidx-1:tidx-1]
     nlst.sort()
     return nlst[0]
 
 def mul(lst:list, mul, fidx, tidx):
-    nlst = lst[fidx-1:tidx]
+    if not is_index_valid(lst, fidx, tidx): return 0
+    nlst = lst[fidx-1:tidx-1]
     cp = [i for i in nlst if i % mul == 0]
     return cp
 
