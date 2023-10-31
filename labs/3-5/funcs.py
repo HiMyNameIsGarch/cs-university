@@ -64,27 +64,28 @@ def sorted_by(lst:list, val): # get the participants with scores higher than val
 
 # 4 Obtain different characteristics of participants
 def avg(lst:list, fidx, tidx):
-    if not is_index_valid(lst, fidx, tidx): return 0
+    if not is_index_valid(lst, fidx, tidx-1): return 0
     avg = 0
-    for elem in lst[fidx-1:tidx-1]:
+    for elem in lst[fidx-1:tidx]:
         avg += elem
     return avg // (tidx - fidx + 1)
 
 
 def min(lst:list, fidx, tidx):
-    if not is_index_valid(lst, fidx, tidx): return 0
-    nlst = lst[fidx-1:tidx-1]
+    if not is_index_valid(lst, fidx, tidx-1): return 0
+    nlst = lst[fidx-1:tidx]
     nlst.sort()
     return nlst[0]
 
 def mul(lst:list, mul, fidx, tidx):
-    if not is_index_valid(lst, fidx, tidx): return 0
-    nlst = lst[fidx-1:tidx-1]
+    if not is_index_valid(lst, fidx, tidx-1): return []
+    nlst = lst[fidx-1:tidx]
     cp = [i for i in nlst if i % mul == 0]
     return cp
 
 # 5 Filter Values
 def filter_mul(lst:list, mul):
+    if mul < 0: return []
     nlst = [i for i in lst if i % mul == 0]
     append_version(nlst)
     return nlst

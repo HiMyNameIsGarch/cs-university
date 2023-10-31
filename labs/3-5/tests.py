@@ -88,8 +88,8 @@ assert nlst == tlst, "Should return the entire list"
 tlst = [12,13,14]
 
 # Avg
-# avg = f.avg(tlst, 1,2)
-# assert avg == 12, "Should return the average value of first 2 terms"
+avg = f.avg(tlst, 1,2)
+assert avg == 12, "Should return the average value of first 2 terms"
 avg = f.avg(tlst, 2,1)
 assert avg == 0, "Should not return the average of wrong indexes"
 avg = f.avg(tlst, -12, 45)
@@ -98,8 +98,8 @@ assert avg == 0, "Should not return the average of indexes out of bounds"
 tlst = [56, 12, 34]
 
 # Min
-# min = f.min(tlst, 1, 3)
-# assert min == 12, "Should return the minimum value of the list"
+min = f.min(tlst, 1, 3)
+assert min == 12, "Should return the minimum value of the list"
 min = f.min(tlst, 3, 1)
 assert min == 0, "Should return default value of 0 as of wrong indexes"
 min = f.min(tlst, -1, 12)
@@ -108,10 +108,28 @@ assert min == 0, "Should return default value of 0 as of wrong indexes"
 tlst = [12, 55, 34, 89]
 
 # Mul
+mul_lst = f.mul(tlst, 2, 1, 4)
+assert mul_lst == [12, 34], "Should return only the elements that are multiple of 2"
+mul_lst = f.mul(tlst, 2, -1, 10)
+assert mul_lst == [], "Should return empty list as of wrong indexes"
+mul_lst = f.mul(tlst, 13, 1,2)
+assert mul_lst == [], "Should return empty list as there are no multiples of 13 in the list"
 
 # Filter_mul
+mul_lst = f.filter_mul(tlst, 10)
+assert mul_lst == [], "Should return the only elements mul of 10, which are none"
+mul_lst = f.filter_mul(tlst, 2)
+assert mul_lst == [12, 34], "Should return the only elements mul of 2"
+mul_lst = f.filter_mul(tlst, -1)
+assert mul_lst == [], "Should return empty list as of out of bound value"
 
 # Filter_greater
+grt_lst = f.filter_greater(tlst, 10)
+assert grt_lst == tlst, "Should return the entire list unmodified"
+grt_lst = f.filter_greater(tlst, 50)
+assert grt_lst == [55, 89], "Should return the only elements greater than 50"
+grt_lst = f.filter_greater(tlst, 101)
+assert grt_lst == [], "Should return empty list as of out of bound value"
 
 f.vs_list = []
 tlst = [12,14]
