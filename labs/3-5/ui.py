@@ -1,5 +1,6 @@
 import funcs as op
 from copy import deepcopy
+from file_operations import *
 EC = 'x'
 
 def menu(lst:list):
@@ -31,6 +32,7 @@ def start(base_list: list):
         opt = menu(base_list)
         valid_res = opt != EC
         base_list = deepcopy(perform_op(opt, base_list))
+        write_lst(base_list)
 
 def perform_op(opt, lst):
     match opt:
