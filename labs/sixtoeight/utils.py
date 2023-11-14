@@ -13,6 +13,6 @@ def intput( txt):
 #   - fidx: the first index
 #   - tidx: the final index
 # Returns: a boolean indicating if the indexes are valid
-def is_index_valid( lst, idx):
-    return len(lst) >= idx and idx > 0
+def is_index_valid(lst, idx):
+    return len(lst) >= idx and idx >= 0
 

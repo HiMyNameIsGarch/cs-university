@@ -61,7 +61,7 @@ class UI:
                 p = self.__point_repo.get_points_of_color(Color(intput("Color: ")))
                 self.__prt_pts(p)
             case 5:
-                pts = self.__point_repo.get_points_inside_square(intput("Up left corner: "), intput("Length: "))
+                pts = self.__point_repo.get_points_inside_square(self.__req_point(), intput("Length: "))
                 self.__prt_pts(pts)
             case 6:
                 dts = self.__point_repo.get_min_dist()
@@ -71,7 +71,7 @@ class UI:
             case 8:
                 self.__point_repo.del_point_at(intput("Index: "))
             case 9:
-                self.__point_repo.del_points_inside_square(intput("Up left corner: "), intput("Length: "))
+                self.__point_repo.del_points_inside_square(self.__req_point(), intput("Length: "))
             case 10:
                 self.__point_repo.plot_points()
             case 11:
