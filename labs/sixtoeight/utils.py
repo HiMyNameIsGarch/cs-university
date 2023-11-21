@@ -1,6 +1,15 @@
-def intput( txt):
+# Function to interactively receive integer input from the user with optional exit condition.
+# Parameters:
+#    - txt (str): The prompt text displayed to the user.
+#    - ec (str, optional): The exit condition. If the user enters this value, the function returns -1. Default is 'x'.
+#
+# Returns:
+#    - int: The integer entered by the user, or -1 if the exit condition is met.
+def intput(txt, ec='x') -> int:
     while True:
         val = input(txt)
+        if val == ec:
+            return -1
         try:
             return int(val)
         except:

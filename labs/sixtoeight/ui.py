@@ -10,7 +10,7 @@ class UI:
         self.__point_repo = PointRepository()
 
     def __menu(self):
-        # print('\033c', end='')
+        print('\033c', end='')
         opts = ""
         opts += "1. Add a point to the repository\n"
         opts += "2. Get all points\n"
@@ -18,7 +18,7 @@ class UI:
         opts += "4. Get all points of a given color\n"
         opts += "5. Get all points that are inside a given square (up-left corner and length given)\n"
         opts += "6. Get the minimum distance between two points\n"
-        opts += "7. Update a point at a given inde\n"
+        opts += "7. Update a point at a given index\n"
         opts += "8. Delete a point by index\n"
         opts += "9. Delete all points that are inside a given square\n"
         opts += "10. Plot all points in a chart (using library matplotlib)\n"
@@ -36,18 +36,20 @@ class UI:
         opts += "20. Delete all points within a certain distance from a given point\n"
         opts += "x. Quit\n"
         print(opts)
-        return intput("Write the option number: ")
+        return intput("Write the option number: ", self.__EC)
 
     def __prt_pts(self, pts):
         for p in pts:
             print(p)
-
+        input("")
 
     def __req_point(self):
         return Point(intput("Coord X: "), intput("Coord Y: "))
 
     def __perform_op(self, opt):
         match opt:
+            case -1:
+                return
             case 1:
                 p = self.__req_point()
                 self.__point_repo.add_point(p)
@@ -56,7 +58,7 @@ class UI:
                 self.__prt_pts(pts)
             case 3:
                 p = self.__point_repo.get_point_at(intput("Index: "))
-                print(p)
+                input(p)
             case 4:
                 p = self.__point_repo.get_points_of_color(Color(intput("Color: ")))
                 self.__prt_pts(p)
@@ -65,7 +67,7 @@ class UI:
                 self.__prt_pts(pts)
             case 6:
                 dts = self.__point_repo.get_min_dist()
-                print(dts)
+                input(dts)
             case 7:
                 self.__point_repo.update_point_at(intput("Index: "), self.__req_point())
             case 8:
@@ -82,10 +84,10 @@ class UI:
                 self.__prt_pts(pts)
             case 13:
                 max = self.__point_repo.get_max_dist()
-                print("Max distance is:", max)
+                input(f"Max distance is:{max}")
             case 14:
                 nr = self.__point_repo.get_nr_pts_of_color(Color(intput("Color: ")))
-                print("Number of points of color is:", nr)
+                input(f"Number of points of color is:{nr}")
             case 15:
                 self.__point_repo.update_color_of_coords(intput("X: "), intput("Y: "), Color(intput("Color: ")))
             case 16:
@@ -105,6 +107,7 @@ class UI:
         valid_res = True
         while valid_res:
             opt = self.__menu()
+            if opt == -1 : opt = self.__EC
             self.__perform_op(opt)
             valid_res = opt != self.__EC
 
