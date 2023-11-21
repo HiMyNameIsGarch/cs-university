@@ -7,5 +7,5 @@ class Color(Enum):
     YELLOW=4
     MAGENTA=5
 
-    def __eq__(self, __value) -> bool:
-        return super().__eq__(__value)
+    def __str__(self):
+       return self.name.lower()
