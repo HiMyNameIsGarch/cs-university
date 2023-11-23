@@ -6,7 +6,7 @@ from math import sqrt
 
 class PointRepository:
     def __init__(self) -> None:
-        self.__points:list[Point] = [Point(1,2),Point(3,2),Point(2,5),Point(1,4),Point(7,4),Point(3,8),Point(4,1)]
+        self.__points:list[Point] = [Point(1,2,Color(3)),Point(3,2,Color(3)),Point(2,5),Point(1,4,Color(4)),Point(7,4),Point(3,8),Point(4,1)]
 
     # Calculates the Euclidean distance between two points in a 2D space.
     # Parameters:

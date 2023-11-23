@@ -3,12 +3,8 @@ from color import Color
 from point_repository import PointRepository
 from point import Point
 
-pr = PointRepository()
-
-pn = Point(1,2)
-pt = Point(1,2)
-
 def should_get_distance():
+    pr = PointRepository()
     p1 = Point(1, 2)
     assert pr.__distance(p1, p1) == 0, "Distance between the same point should be 0"
 
@@ -23,6 +19,7 @@ def should_get_distance():
     assert pr.__distance(p1, p2) == expected_distance, "Distance calculation with negative coordinates is incorrect"
 
 def should_add_point():
+    pr = PointRepository()
     # Test adding a single point and checking if it's in the list
     point = Point(1, 2)
     pr.add_point(point)
@@ -40,6 +37,7 @@ def should_add_point():
     assert all(p in pr.get_points() for p in points), "Not all points were successfully added"
 
 def should_get_points():
+    pr = PointRepository()
     points = [Point(1, 2), Point(3, 4), Point(5, 6)]
     pr.set_points(points)
     assert pr.get_points() == points, "Expected the same list of points as set"
@@ -57,22 +55,24 @@ def should_get_points():
 
 
 def should_get_point_at():
-        points = [Point(1, 2), Point(3, 4), Point(5, 6)]
-        pr.set_points(points)
-        idx = len(points) + 1
-        assert pr.get_point_at(idx) is None, "Expected None for an invalid index"
+    pr = PointRepository()
+    points = [Point(1, 2), Point(3, 4), Point(5, 6)]
+    pr.set_points(points)
+    idx = len(points) + 1
+    assert pr.get_point_at(idx) is None, "Expected None for an invalid index"
 
-        points = [Point(1, 2), Point(3, 4), Point(5, 6)]
-        pr.set_points(points)
-        idx = -2
-        assert pr.get_point_at(idx) is None, "Expected None for a negative index"
+    points = [Point(1, 2), Point(3, 4), Point(5, 6)]
+    pr.set_points(points)
+    idx = -2
+    assert pr.get_point_at(idx) is None, "Expected None for a negative index"
 
-        points = [Point(1, 2), Point(3, 4), Point(5, 6)]
-        pr.set_points(points)
-        idx = 0
-        assert pr.get_point_at(idx) is None, "Expected None for a zero index"
+    points = [Point(1, 2), Point(3, 4), Point(5, 6)]
+    pr.set_points(points)
+    idx = 0
+    assert pr.get_point_at(idx) is None, "Expected None for a zero index"
 
 def should_get_points_of_color():
+    pr = PointRepository()
     color = Color.RED
     point = Point(1, 2, color=color)
     pr.add_point(point)
@@ -91,6 +91,7 @@ def should_get_points_of_color():
     assert pr.get_points_of_color(color) == [], "Expected an empty list as there are no points of the specified color"
 
 def should_get_points_inside_square():
+    pr = PointRepository()
     center_point = Point(1, 1)
     length = 2
     inside_point = Point(2, 0)
@@ -116,6 +117,7 @@ def should_get_points_inside_square():
     assert pr.get_points_inside_square(center_point, length) == [], "Expected an empty list as there are no points inside the square"
 
 def should_get_min_dist():
+    pr = PointRepository()
     # Test getting the minimum distance when the list is empty
     assert pr.get_min_dist() == 100, "Expected default value (100) for an empty list"
 
@@ -140,6 +142,7 @@ def should_get_min_dist():
     assert pr.get_min_dist() == min_dist, "Expected the correct minimum distance between points"
 
 def should_update_point_at():
+    pr = PointRepository()
     # Test updating a point at a valid index
     points = [Point(1, 2), Point(3, 4), Point(5, 6)]
     pr.set_points(points)
@@ -165,6 +168,7 @@ def should_update_point_at():
     assert pr.get_points() == points, "Expected no update for a negative index"
 
 def should_del_point_at():
+    pr = PointRepository()
     # Test deleting a point at a valid index
     points = [Point(1, 2), Point(3, 4), Point(5, 6)]
     pr.set_points(points)
@@ -187,6 +191,7 @@ def should_del_point_at():
     assert pr.get_points() == points, "Expected no deletion for a negative index"
 
 def should_del_points_inside_square():
+    pr = PointRepository()
     # Test deleting points inside a square when there is only one point inside
     center_point = Point(1, 1)
     length = 2
@@ -216,3 +221,15 @@ def should_del_points_inside_square():
         pr.add_point(point)
     pr.del_points_inside_square(center_point, length)
     assert pr.get_points() == outside_points, "Expected no deletion as there are no points inside the square"
+
+should_get_distance()
+should_del_points_inside_square()
+should_add_point()
+should_get_points()
+should_get_point_at()
+should_get_points_of_color()
+should_get_points_inside_square()
+should_get_min_dist()
+should_update_point_at()
+should_del_point_at()
+should_del_points_inside_square()
