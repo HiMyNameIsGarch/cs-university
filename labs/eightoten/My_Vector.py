@@ -3,18 +3,20 @@ from Color import Color
 import numpy as np
 
 class My_Vector():
-    def __get_modulo(self, nv:int):
-        if nv == 0:
-            return 1
-        if nv < 0:
-            return -1 * nv
-        return nv
 
     def __init__(self, vt:int=1, color:Color=Color('r')) -> None:
         self.__value:NDArray = np.array([0,0,0])
         self.__name_id = ''
         self.__vtype = self.__get_modulo(vt)
         self.__color = color
+        self.__type = { 1 : "o", 2 : "s", 3 : "^" }
+
+    def __get_modulo(self, nv:int):
+        if nv == 0:
+            return 1
+        if nv < 0:
+            return -1 * nv
+        return nv
 
     def __str__(self) -> str:
         s = ""
@@ -47,13 +49,7 @@ class My_Vector():
         self.__color = color
 
     def get_type_plot(self) -> str:
-        if self.__vtype == 1:
-            return 'o'
-        elif self.__vtype == 2:
-            return 's'
-        elif self.__vtype == 3:
-            return '^'
-        return "D"
+        return self.__type.get(self.__vtype, "D")
 
     def get_type(self) -> int:
         return self.__vtype
@@ -62,51 +58,40 @@ class My_Vector():
         self.__vtype = self.__get_modulo(ntype)
 
     # Methods
-    def add_scalar(self, scalar:int):
-        i = 0
-        for p in self.__value:
-            self.__value[i] = p + scalar
-            i += 1
+    def add_scalar(self, scalar:int) -> None:
+        self.__value = self.__value + scalar
 
-    def add(self, v:list):
+    def add(self, v:list) -> None:
         if len(v) != len(self.__value):
             return
-        for i in range(len(v)):
-            self.__value[i] = self.__value[i] + v[i]
+        na = np.array(v)
+        self.__value = self.__value + na
 
-    # OR
-
-    def subtract(self, v:list):
+    def subtract(self, v:list) -> None:
         if len(v) != len(self.__value):
             return
-        for i in range(len(v)):
-            self.__value[i] = self.__value[i] - v[i]
+        na = np.array(v)
+        self.__value = self.__value - na
 
-    def multiplication(self, v:list):
+    def multiplication(self, v:list) -> None:
         if len(v) != len(self.__value):
             return
-        for i in range(len(v)):
-            self.__value[i] = self.__value[i] * v[i]
+        na = np.array(v)
+        self.__value = self.__value * na
 
-    def sum(self):
-        s = 0
-        for n in self.__value:
-            s += n
-        return s
+    def sum(self) -> int:
+        return np.sum(self.__value)
 
-    def product(self):
-        s = 0
-        for n in self.__value:
-            s *= n
-        return s
+    def product(self) -> int:
+        return int(np.prod(self.__value))
 
-    def avg(self):
+    def avg(self) -> int:
         return self.sum() // len(self.__value)
 
-    def min(self):
-        return min(self.__value)
+    def min(self) -> int:
+        return np.min(self.__value)
 
-    def max(self):
-        return max(self.__value)
+    def max(self) -> int:
+        return np.max(self.__value)
 
 
