@@ -9,10 +9,10 @@ class UI:
         if callable(func_arg) and callable(func):
             func(func_arg())
 
-    def __i_want_sleep(self, func, func2, func_arg):
+    def __partial_nested(self, func, func2, func_arg):
         func(func2(func_arg()))
 
-    def __i_will_sleep_in_5(self, bigf, smf1, smf2):
+    def __partial_two_args(self, bigf, smf1, smf2):
         bigf(smf1(), smf2())
 
 
@@ -32,31 +32,43 @@ class UI:
                            self.__print_lst,
                            self.__repo.get_all)),
             "3" : ("Get a vector at a given index",
-                   partial(self.__i_want_sleep,
+                   partial(self.__partial_nested,
                            print,
                            self.__repo.get_at_idx,
                            self.__get_idx_from_user)),
             "4" : ("Update a vector at a given index",
-                   partial(self.__i_will_sleep_in_5,
+                   partial(self.__partial_two_args,
                            self.__repo.update_at_idx,
                            self.__get_idx_from_user,
                            self.__get_vector_from_user)),
             "5" : ("Update a vector identified by name_id",
-                   partial(self.__i_will_sleep_in_5,
-                           self.__repo.update_by_id,
+                   partial(self.__partial_two_args,
+                           self.__repo.update_by_name_id,
                            self.__get_vector_from_user,
-                            self.__get_idx_from_user)),
+                           self.__get_idx_from_user)),
             "6" : ("Delete a vector by index",
                    partial(self.__own_partial,
                            self.__repo.del_by_idx,
                            self.__get_idx_from_user)),
             "7" : ("Delete a vector by name_id",
                    partial(self.__own_partial,
-                           self.__repo.del_by_id,
+                           self.__repo.del_by_name_id,
                            self.__get_name_id_from_user)),
             "8" : ("Plot all vectors",
                    self.__repo.plot),
+            "9" : ("Get the sum of elements in all vectors",
+                   partial(self.__own_partial, print,
+                           self.__repo.get_sum_all_vectors)),
+            "17" : ("Delete all vectors from repository",
+                    self.__repo.delete_all_vectors),
+            "21" : ("Update all vectors by adding a given scalar to each element",
+                    partial(self.__own_partial,
+                            self.__repo.update_vectors_by_scalar,
+                            self.__get_scalar)),
         }
+
+    def __get_scalar(self):
+        return intput("Scalar: ")
 
     def __get_vector_from_user(self) -> My_Vector:
         mv = My_Vector()
@@ -84,8 +96,9 @@ class UI:
         while True:
             try:
                 idx = intput("Index: ")
-            except ValueError:
-                pass
+            except ValueError as ve:
+                print(ve)
+                raise ValueError(ve)
             break
         return idx
 
@@ -96,9 +109,12 @@ class UI:
 
     def start(self):
         while True:
-            self.__menu()
-            key = input("Pick your poison: ")
-            if key == "-1":
-                return
-            self.__opts[key][1]()
-            input("")
+            try:
+                self.__menu()
+                key = input("Pick your poison: ")
+                if key == "-1":
+                    return
+                self.__opts[key][1]()
+                input("")
+            except Exception as e:
+                input(e)

@@ -1,4 +1,6 @@
+from numpy._typing import NDArray
 from Color import Color
+import numpy as np
 
 class My_Vector():
     def __get_modulo(self, nv:int):
@@ -9,7 +11,7 @@ class My_Vector():
         return nv
 
     def __init__(self, vt:int=1, color:Color=Color('r')) -> None:
-        self.__value:list[int] = []
+        self.__value:NDArray = np.array([0,0,0])
         self.__name_id = ''
         self.__vtype = self.__get_modulo(vt)
         self.__color = color
@@ -30,7 +32,7 @@ class My_Vector():
         return self.__value
 
     def set_value(self, new_value:list):
-        self.__value = new_value
+        self.__value = np.array(new_value)
 
     def get_name_id(self):
         return self.__name_id
@@ -44,7 +46,16 @@ class My_Vector():
     def set_color(self, color:Color):
         self.__color = color
 
-    def get_type(self):
+    def get_type_plot(self) -> str:
+        if self.__vtype == 1:
+            return 'o'
+        elif self.__vtype == 2:
+            return 's'
+        elif self.__vtype == 3:
+            return '^'
+        return "D"
+
+    def get_type(self) -> int:
         return self.__vtype
 
     def set_type(self, ntype:int):
