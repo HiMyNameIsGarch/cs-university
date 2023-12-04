@@ -1,8 +1,8 @@
-from Vector_Repository import Vector_Repository
-from My_Vector import My_Vector
+from infrastructure.vector_repository import Vector_Repository
+from domain.my_vector import My_Vector
 from functools import partial
-from Color import Color
-from utils import *
+from domain.color import Color
+from domain.utils import *
 
 class UI:
     def __own_partial(self, func, func_arg):

@@ -1,7 +1,7 @@
-from My_Vector import My_Vector
+from domain.my_vector import My_Vector
 import matplotlib.pyplot as plt
-from Color import Color
-import utils
+from domain.color import Color
+from domain import utils
 
 class Vector_Repository:
     def __init__(self) -> None:

@@ -1,5 +1,5 @@
 from numpy._typing import NDArray
-from Color import Color
+from domain.color import Color
 import numpy as np
 
 class My_Vector():
@@ -10,6 +10,12 @@ class My_Vector():
         self.__vtype = self.__get_modulo(vt)
         self.__color = color
         self.__type = { 1 : "o", 2 : "s", 3 : "^" }
+
+    def __eq__(self, __value:object) -> bool:
+        if isinstance(__value, My_Vector):
+            nv = np.array(__value.get_value())
+            return np.array_equal(self.__value, nv)
+        return False
 
     def __get_modulo(self, nv:int):
         if nv == 0:
@@ -59,6 +65,8 @@ class My_Vector():
 
     # Methods
     def add_scalar(self, scalar:int) -> None:
+        if scalar < 1:
+            return
         self.__value = self.__value + scalar
 
     def add(self, v:list) -> None:
