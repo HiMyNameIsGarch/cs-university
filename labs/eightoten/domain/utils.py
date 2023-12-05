@@ -1,3 +1,5 @@
+from domain.color import Color
+
 # Function to interactively receive integer input from the user with optional exit condition.
 # Parameters:
 #    - txt (str): The prompt text displayed to the user.
@@ -12,6 +14,20 @@ def intput(txt, ec='x') -> int:
             return -1
         try:
             return int(val)
+        except:
+            print('\033[1A' + '\033[K', end='')
+
+# Function to interactively receive integer input from the user with optional exit condition.
+# Parameters:
+#    - txt (str): The prompt text displayed to the user.
+#
+# Returns:
+#    - Color: The object Color by the user
+def colorput(txt) -> Color:
+    while True:
+        val = input(txt)
+        try:
+            return Color(val)
         except:
             print('\033[1A' + '\033[K', end='')
 

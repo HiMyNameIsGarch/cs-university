@@ -71,21 +71,27 @@ class UI:
         return intput("Scalar: ")
 
     def __get_vector_from_user(self) -> My_Vector:
-        mv = My_Vector()
-        txt = input("Write vector in form: 1,2,3: ")
         vector_list = []
-        for e in txt.split(","):
-            try:
-                vector_list.append(int(e))
-            except ValueError:
-                pass
-        mv.set_value(vector_list)
-        t = intput("Vector of type: ")
-        mv.set_type(t)
+        while True:
+            txt = input("Write vector in form: 1,2,3: ")
+            for e in txt.split(","):
+                try:
+                    vector_list.append(int(e))
+                except ValueError:
+                    print('\033[1A' + '\033[K', end='')
+                    vector_list = []
+                    continue
+            if len(vector_list) != 0:
+                break
+
+        mv = My_Vector()
+        mv.value = vector_list
+        t = input("Vector of type: ")
+        mv.type = t
         name = input("Vector name id: ")
-        mv.set_name_id(name)
-        color = input("Vector color(r,g,b,y,m): ")
-        mv.set_color(Color(color))
+        mv.name_id = name
+        color = colorput("Vector color(r,g,b,y,m): ")
+        mv.color = Color(color)
         return mv
 
     def __get_name_id_from_user(self) -> str:
@@ -97,7 +103,6 @@ class UI:
             try:
                 idx = intput("Index: ")
             except ValueError as ve:
-                print(ve)
                 raise ValueError(ve)
             break
         return idx
