@@ -1,114 +1,110 @@
+from typing import List, Optional
 from domain.passenger import Passenger
+from domain.sorting import Sorting
 
 class Plane:
-    def __init__(self, nname:str, num:str, airline_co:str, no_of_seats:int, idestination:str, ipassengers:list[Passenger]):
+    def __init__(self, nname:str, num:str, airline_co:str, no_of_seats:int, idestination:str, ipassengers:Optional[List[Passenger]] = None):
         self.__name:str = nname
         self.__num:str = num
         self.__airline_company:str = airline_co
         self.__no_of_seats:int = no_of_seats
         self.__destination:str = idestination
-        self.__passengers:list[Passenger] = ipassengers
+        if ipassengers is None:
+            ipassengers = []
+        self.__passengers:List[Passenger] = ipassengers
+        self.__no_of_passengers:int = len(ipassengers)
 
-        def add_passenger(self, passenger:Passenger) -> None:
-            if len(self.__passengers) < self.__no_of_seats:
-                raise Exception("No more seats available")
-            if passenger in self.__passengers:
-                raise Exception("Passenger already on board")
+    def __str__(self) -> str:
+        return f"{self.name} {self.number} {self.airline_company} {self.no_of_passengers} {self.destination}"
 
-            self.__passengers.append(passenger)
-            self.__no_of_seats += 1
+    __repr__ = __str__
 
-        def update_passenger(self, passenger:Passenger) -> None:
-            if passenger not in self.__passengers:
-                raise Exception("Passenger not on board")
+    def add_passenger(self, passenger:Passenger) -> None:
+        if len(self.__passengers) < self.__no_of_seats:
+            raise Exception("No more seats available")
+        if passenger in self.__passengers:
+            raise Exception("Passenger already on board")
 
-            self.__passengers.remove(passenger)
-            self.__passengers.append(passenger)
+        self.__passengers.append(passenger)
+        self.__no_of_passengers += 1
 
-        def remove_passenger(self, passenger:Passenger) -> None:
-            if passenger not in self.__passengers:
-                raise Exception("Passenger not on board")
+    def update_passenger(self, passenger:Passenger) -> None:
+        if passenger not in self.__passengers:
+            raise Exception("Passenger not on board")
 
-            self.__passengers.remove(passenger)
-            self.__no_of_seats -= 1
+        self.__passengers.remove(passenger)
+        self.__passengers.append(passenger)
 
-        def sort_by_last_name(self) -> list[Passenger]:
-            return self.__passengers.sort(key=lambda passenger:
-                passenger.last_name)
+    def remove_passenger(self, passenger:Passenger) -> None:
+        if passenger not in self.__passengers:
+            raise Exception("Passenger not on board")
 
-        def sort_by_number_of_passengers(self) -> list[Passenger]:
-            return self.__passengers.sort(key=lambda passenger:
-                passenger.passport_number)
+        self.__passengers.remove(passenger)
+        self.__no_of_passengers -= 1
 
-        def sort_by_names_starting_with(self, letter:str) -> list[Passenger]:
-            return self.__passengers.sort(key=lambda passenger:
-                passenger.last_name.startswith(letter))
+    # 3
+    def sort_by_last_name(self) -> List[Passenger]:
+        return Sorting().sort(self.passengers, lambda passenger: passenger.last_name)
 
-        def sort_by_concat_nums_of_passengers_and_destination(self) -> list[Passenger]:
-            return self.__passengers.sort(key=lambda passenger:
-                passenger.passport_number + passenger.destination)
+    # 8
+    def get_passengers_starting_with(self, letter:str) -> list[Passenger]:
+        return Sorting().filter(self.__passengers, lambda passenger:
+            passenger.last_name.startswith(letter) or
+            passenger.first_name.startswith(letter))
 
-        def get_planes_starting_with_the_same_3_letters(self, letter:str) -> list[Passenger]:
-            if len(letter) != 3:
-                raise Exception("The letter must be 3 characters long")
-            return self.__passengers.filter(lambda passenger:
-                passenger.last_name.startswith(letter))
+    @property
+    def passengers_and_destination(self) -> str:
+        return f"{self.destination.lower()} {self.no_of_passengers}"
 
-        def get_passengers_starting_with(self, letter:str) -> list[Passenger]:
-            return self.__passengers.filter(lambda passenger:
-                passenger.last_name.startswith(letter) or
-                passenger.first_name.startswith(letter))
+    @property
+    def no_of_passengers(self) -> int:
+        return self.__no_of_passengers
 
-        def get_planes_where_is_the_passenger_named(self, name:str) -> list[Passenger]:
-            return self.__passengers.filter(lambda passenger:
-                passenger.last_name == name or
-                passenger.first_name == name)
+    @property
+    def name(self) -> str:
+        return self.__name
 
+    @name.setter
+    def name(self, name:str) -> None:
+        self.__name = name
 
-        @property
-        def name(self) -> str:
-            return self.__last_name
+    @property
+    def number(self) -> str:
+        return self.__num
 
-        @name.setter
-        def name(self, name:str) -> None:
-            self.__name = name
+    @number.setter
+    def number(self, num:str) -> None:
+        self.__num = num
 
-        @property
-        def number(self) -> str:
-            return self.__num
+    @property
+    def airline_company(self) -> str:
+        return self.__airline_company
 
-        @number.setter
-        def number(self, num:int) -> None:
-            self.__num = num
+    @airline_company.setter
+    def airline_company(self, airline:str) -> None:
+        self.__airline_company = airline
 
-        @property
-        def airline_company(self) -> str:
-            return self.__airline_company
+    @property
+    def seats(self) -> int:
+        return self.__seats
 
-        @airline_company.setter
-        def airline_company(self, airline:str) -> None:
-            self.__airline_company = airline
+    @seats.setter
+    def seats(self, seats:int) -> None:
+        self.__seats = seats
 
-        @property
-        def seats(self) -> int:
-            return self.__seats
+    @property
+    def destination(self) -> str:
+        return self.__destination
 
-        @seats.setter
-        def seats(self, seats:int) -> None:
-            self.__seats = seats
+    @destination.setter
+    def destination(self, destination:str) -> None:
+        self.__destination = destination
 
-        @property
-        def destination(self) -> str:
-            return self.__destination
+    @property
+    def passengers(self) -> List[Passenger]:
+        return self.__passengers
 
-        @destination.setter
-        def destination(self, destination:str) -> None:
-            self.__destination = destination
+    @passengers.setter
+    def passengers(self, passengers:List[Passenger]) -> None:
+        self.__passengers = passengers
 
-        @property
-        def passengers(self) -> list[Passenger]:
-            return self.__passengers
-
-        @passengers.setter
-        def passengers(self, passengers:list[Passenger]) -> None:
-            self.__passengers = passengers
