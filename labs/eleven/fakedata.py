@@ -1,9 +1,11 @@
 from typing import Optional, List
 from faker import Faker
-
 from domain.passenger import Passenger
 from domain.plane import Plane
+from faker_airtravel import AirTravelProvider
+
 fake = Faker()
+fake.add_provider(AirTravelProvider)
 
 def generate_passenger(num:int) -> Optional[List[Passenger]]:
     passengers:List[Passenger] = []
@@ -19,12 +21,13 @@ def generate_planes(num_planes, num_passengers_per_plane):
     planes:List[Plane] = []
     for _ in range(num_planes):
         num = fake.random_int(min=50, max=100)
+        flight = fake.flight()
         cplane = Plane(
-            nname=fake.name(),
-            num=fake.ssn(),
-            airline_co=fake.company(),
+            nname=flight['origin']['airport'],
+            num=flight['destination']['iata'],
+            airline_co=flight['airline'],
             no_of_seats=num,
-            idestination=fake.company(),
+            idestination=flight['destination']['airport'],
             ipassengers=generate_passenger(num_passengers_per_plane))
         planes.append(cplane)
     return planes
