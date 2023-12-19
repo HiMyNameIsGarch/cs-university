@@ -34,6 +34,7 @@ class Passenger:
         return f"{self.__first_name} {self.__last_name} {self.__passport_number}"
 
     __repr__ = __str__
+
     @property
     def id(self) -> uuid.UUID:
         return self.__id

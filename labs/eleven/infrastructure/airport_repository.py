@@ -11,6 +11,15 @@ class Airport_Repository:
     def add_plane(self, plane:Plane):
         self.__planes.append(plane)
 
+    def update_plane(self, plane:Plane):
+        self.__planes.append(plane)
+
+    def get_planes(self):
+        return self.__planes
+
+    def delete_plane(self, plane:Plane):
+        self.__planes.append(plane)
+
     # 4
     def sort_by_number_of_passengers(self) -> List[Plane]:
         return Sorting().sort(self.__planes, lambda plane:

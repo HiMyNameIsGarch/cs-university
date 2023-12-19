@@ -3,7 +3,9 @@ from domain.passenger import Passenger
 from domain.sorting import Sorting
 
 class Plane:
-    def __init__(self, nname:str, num:str, airline_co:str, no_of_seats:int, idestination:str, ipassengers:Optional[List[Passenger]] = None):
+    def __init__(self, nname:str, num:str, airline_co:str, no_of_seats:int,
+                 idestination:str, ipassengers:Optional[List[Passenger]] =
+                 None):
         self.__name:str = nname
         self.__num:str = num
         self.__airline_company:str = airline_co
