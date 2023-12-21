@@ -23,27 +23,27 @@ class Airport_Repository:
 
     # 4
     def sort_by_number_of_passengers(self) -> List[Plane]:
-        return Sorting().sort(self.planes, lambda plane:
+        return Sorting.sort(self.planes, lambda plane:
             plane.no_of_passengers)
     # 5
     def sort_by_no_of_passengers_and_name_starting_with(self, letter:str) -> List[Plane]:
-        return Sorting().sort([plane for plane in self.__planes if
-            Sorting().filter(plane.passengers, lambda passenger:
+        return Sorting.sort([plane for plane in self.__planes if
+            Sorting.filter(plane.passengers, lambda passenger:
                 passenger.full_name.__contains__(letter))], lambda plane:
                     plane.no_of_passengers)
     # 6
     def sort_by_concat_nums_of_passengers_and_destination(self) -> List[Plane]:
-        return Sorting().sort(self.__planes, lambda plane:
+        return Sorting.sort(self.__planes, lambda plane:
             plane.passengers_and_destination)
 
     # 7
     def get_planes_starting_with_the_same_3_letters(self) -> List[Plane]:
         return [plane for plane in self.__planes if
-            Sorting().filter(plane.passengers, lambda passenger:
+            Sorting.filter(plane.passengers, lambda passenger:
                 passenger.passport_number.startswith(passenger.passport_number[0:3]))]
 
     # 9
     def get_planes_where_is_the_passenger_named(self, name:str) -> List[Plane]:
         return [plane for plane in self.__planes if
-            Sorting().filter(plane.passengers, lambda passenger:
+            Sorting.filter(plane.passengers, lambda passenger:
                 passenger.full_name == name)]
