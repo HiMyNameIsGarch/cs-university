@@ -9,7 +9,6 @@ class Passenger:
 
     # overload lower than operator
     def __lt__(self, other):
-        # print(self.last_name, other.last_name)
         return self.__last_name.lower() < other.__last_name.lower()
 
     def __gt__(self, other):
@@ -31,7 +30,7 @@ class Passenger:
         return self.__last_name.lower() == other.__last_name.lower()
 
     def __str__(self) -> str:
-        return f"{self.__first_name} {self.__last_name} {self.__passport_number}"
+        return f"{self.__first_name} -- {self.__last_name} -- {self.__passport_number}"
 
     __repr__ = __str__
 

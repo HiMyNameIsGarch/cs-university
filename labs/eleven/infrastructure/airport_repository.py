@@ -8,21 +8,22 @@ class Airport_Repository:
             planes = []
         self.__planes:List[Plane] = planes
 
+    @property
+    def planes(self) -> List[Plane]:
+        return self.__planes
+
     def add_plane(self, plane:Plane):
         self.__planes.append(plane)
 
     def update_plane(self, plane:Plane):
         self.__planes.append(plane)
 
-    def get_planes(self):
-        return self.__planes
-
     def delete_plane(self, plane:Plane):
         self.__planes.append(plane)
 
     # 4
     def sort_by_number_of_passengers(self) -> List[Plane]:
-        return Sorting().sort(self.__planes, lambda plane:
+        return Sorting().sort(self.planes, lambda plane:
             plane.no_of_passengers)
     # 5
     def sort_by_no_of_passengers_and_name_starting_with(self, letter:str) -> List[Plane]:
