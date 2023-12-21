@@ -17,7 +17,7 @@ class Plane:
         self.__no_of_passengers:int = len(ipassengers)
 
     def __str__(self) -> str:
-        return f"{self.name} {self.number} {self.airline_company} {self.no_of_passengers} {self.destination}"
+        return f"{self.name} -- {self.number} -- {self.airline_company} -- {self.no_of_passengers} -- {self.destination}\n"
 
     __repr__ = __str__
 
@@ -46,11 +46,11 @@ class Plane:
 
     # 3
     def sort_by_last_name(self) -> List[Passenger]:
-        return Sorting().sort(self.passengers, lambda passenger: passenger.last_name)
+        return Sorting.sort(self.passengers, lambda passenger: passenger.last_name)
 
     # 8
     def get_passengers_starting_with(self, letter:str) -> list[Passenger]:
-        return Sorting().filter(self.__passengers, lambda passenger:
+        return Sorting.filter(self.__passengers, lambda passenger:
             passenger.last_name.startswith(letter) or
             passenger.first_name.startswith(letter))
 
