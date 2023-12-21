@@ -20,12 +20,14 @@ class Sorting:
         # Change root, if needed
         if largest != i:
             (arr[i], arr[largest]) = (arr[largest], arr[i])  # swap
-
             # Heapify the root.
-
-            self.__heapify(arr, n, largest)
+            # self.__heapify(arr, n, largest) # Fucking bug
+            self.__heapify(arr, n, largest, method)
 
     def __heapSort(self, arr, method = None):
+        if method is None:
+            method = lambda x: x
+
         n = len(arr)
          # Build a maxheap.
          # Since last parent will be at ((n//2)-1) we can start at that location.
@@ -43,8 +45,6 @@ class Sorting:
 
 
     # The main function to sort an array of given size
-
-    # TODO: implement a way to sort by a given function
     def sort(self, data, method = None):
         if method is None:
             method = lambda x: x
