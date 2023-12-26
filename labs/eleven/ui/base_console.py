@@ -17,7 +17,15 @@ class Base_UI:
     def print_lst(self, lst:List):
         print(lst)
 
-    def set_prop(self, obj:object, prop:str, prop_type:type, value:Any):
+    def set_prop(self, obj:object, prop:str, prop_type:type, prompt:str, method = None):
+        if method is None:
+            method = lambda x: x
+
+        self.__set_prop(obj, prop, prop_type,
+                      self.get_value_for(prop_type, prompt, method))
+
+
+    def __set_prop(self, obj:object, prop:str, prop_type:type, value:Any):
         if value is None:
             return
         if type(value) != prop_type:
