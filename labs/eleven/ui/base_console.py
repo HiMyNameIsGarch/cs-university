@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 class Base_UI:
     def __init__(self, opts:dict):
@@ -17,6 +17,32 @@ class Base_UI:
     def print_lst(self, lst:List):
         print(lst)
 
+    def set_prop(self, obj:object, prop:str, prop_type:type, value:Any):
+        if value is None:
+            return
+        if type(value) != prop_type:
+            raise TypeError("Invalid type")
+        setattr(obj, prop, value)
+
+    def get_value_for(self, prop_type:type, prompt:str, method = None):
+        if method is None:
+            method = lambda x: x
+
+        while True:
+            value = input(prompt)
+            if value == "exit":
+                return None
+            try:
+                nvalue = prop_type(value)
+
+                if not method(nvalue):
+                    raise ValueError("Invalid restriction")
+
+                return nvalue
+            except:
+                print('\033[1A' + '\033[K', end='')
+
+
     def __menu(self):
         print('\033c', end='')
         for key in self.__opts:
@@ -27,6 +53,7 @@ class Base_UI:
             try:
                 self.__menu()
                 key = input("Pick your poison: ")
+                # key = 't'
                 if key == "-1":
                     return
                 self.__opts[key][1]()

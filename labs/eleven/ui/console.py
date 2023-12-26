@@ -3,7 +3,9 @@ from functools import partial
 from typing import List
 from fakedata import generate_planes
 from domain.plane import Plane
+from domain.passenger import Passenger
 from ui.base_console import Base_UI
+from ui.c_passenger import Passenger_UI
 
 class UI(Base_UI):
 
@@ -15,6 +17,7 @@ class UI(Base_UI):
 
     def __init__(self):
         self.__repo = Airport_Repository(generate_planes(10, 5, 20))
+        self.pu = Passenger_UI(Passenger("asd", "asd", "asd"))
         self.__opts = {
             "1": ("Add airport",
                   partial(self.__repo.add_plane)),
@@ -26,6 +29,8 @@ class UI(Base_UI):
                   partial(self.__repo.delete_plane)),
             "44": ("Get all nested",
                   partial(self.__print_nested, self.__repo.planes)),
+
+            "t": ("test me", self.pu.start),
 
             # TODO
             "5": ("Sort the passengers in a plane by last name",
