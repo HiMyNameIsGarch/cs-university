@@ -1,8 +1,16 @@
 from typing import Any, List
 
 class Base_UI:
-    def __init__(self, opts:dict):
+    def __init__(self, opts:dict, header:str = "", header_obj:object = None):
         self.__opts = opts
+        self.__header:str = header
+        self.__header_obj:object = header_obj
+
+    @property
+    def header(self):
+        if self.__header_obj is None:
+            return self.__header
+        return self.__header + str(self.__header_obj)
 
     def own_partial(self, func, func_arg):
         if callable(func_arg) and callable(func):
@@ -23,6 +31,7 @@ class Base_UI:
 
         self.__set_prop(obj, prop, prop_type,
                       self.get_value_for(prop_type, prompt, method))
+        self.__header_obj = str(obj)
 
 
     def __set_prop(self, obj:object, prop:str, prop_type:type, value:Any):
@@ -53,6 +62,7 @@ class Base_UI:
 
     def __menu(self):
         print('\033c', end='')
+        print(self.header)
         for key in self.__opts:
             print(key + ".", self.__opts[key][0])
 
@@ -62,7 +72,7 @@ class Base_UI:
                 self.__menu()
                 key = input("Pick your poison: ")
                 # key = 't'
-                if key == "-1":
+                if key == "exit":
                     return
                 self.__opts[key][1]()
                 input("")

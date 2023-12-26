@@ -66,5 +66,5 @@ class UI(Base_UI):
             # "13": ("K planes", partial(self.__opts, input)),
 
         }
-        super().__init__(self.__opts)
+        super().__init__(self.__opts, "Welcome to Airport Security!")
 

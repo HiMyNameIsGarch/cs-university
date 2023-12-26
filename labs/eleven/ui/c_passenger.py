@@ -3,7 +3,7 @@ from domain.passenger import Passenger
 from ui.base_console import Base_UI
 
 class Passenger_UI(Base_UI):
-    def __init__(self, passenger:Passenger):
+    def __init__(self, passenger:Passenger, header:str = "Current Passenger: "):
         self.__passenger = passenger
         self.__opts = {
             "1": ("Modify First Name",
@@ -16,7 +16,7 @@ class Passenger_UI(Base_UI):
                   partial(self.set_prop, self.__passenger, "passport", str,
                           "Enter new passport: ")),
         }
-        super().__init__(self.__opts)
+        super().__init__(self.__opts, header, self.__passenger)
 
     @property
     def passenger(self):

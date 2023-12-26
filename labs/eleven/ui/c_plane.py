@@ -3,12 +3,12 @@ from ui.base_console import Base_UI
 from functools import partial
 
 class Plane_UI(Base_UI):
-    def __init__(self, plane:Plane):
+    def __init__(self, plane:Plane, header:str = "Current Plane: "):
         self.__plane = plane
         self.__opts = {
-            "1": ("Modify name",
+            "1": ("Modify Name",
                   partial(self.set_prop, self.__plane, "name", str, "Enter new first name: ")),
-            "2": ("Modify number",
+            "2": ("Modify Number",
                   partial(self.set_prop, self.__plane, "num", str, "Enter new plane number: ")),
             "3": ("Modify Airline Company",
                   partial(self.set_prop, self.__plane, "airline_company", str, "Enter new Airline Company: ")),
@@ -20,4 +20,4 @@ class Plane_UI(Base_UI):
                   partial(self.set_prop, self.__plane, "destination", str,
                           "Enter new Airline Company: ")),
         }
-        super().__init__(self.__opts)
+        super().__init__(self.__opts, header, self.__plane)
