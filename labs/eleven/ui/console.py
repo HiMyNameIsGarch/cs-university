@@ -6,6 +6,7 @@ from domain.plane import Plane
 from domain.passenger import Passenger
 from ui.base_console import Base_UI
 from ui.c_passenger import Passenger_UI
+from ui.c_plane import Plane_UI
 
 class UI(Base_UI):
 
@@ -15,23 +16,29 @@ class UI(Base_UI):
             for passenger in plane.passengers:
                 print(passenger)
 
+    def select_plane(self, planes:List[Plane]):
+        dict = {}
+        i = 1
+        for p in planes:
+            ap = Plane_UI(p)
+            dict[str(i)] = ((p.name, ap.start))
+            i += 1
+
+        bu = Base_UI(dict, "Select a plane:")
+        bu.start()
+
+
     def __init__(self):
         self.__repo = Airport_Repository(generate_planes(10, 5, 20))
         self.pu = Passenger_UI(Passenger("asd", "asd", "asd"))
         self.__opts = {
-            "1": ("Add airport",
-                  partial(self.__repo.add_plane)),
-            "2": ("Get all airports",
+            "1": ("Select plane", partial(self.select_plane, self.__repo.planes)),
+            "2": ("Get all planes",
                   partial(print, self.__repo.planes)),
-            "3": ("Update airport",
-                  partial(self.__repo.update_plane)),
-            "4": ("Delete airport",
-                  partial(self.__repo.delete_plane)),
-            "44": ("Get all nested",
-                  partial(self.__print_nested, self.__repo.planes)),
-
-            "t": ("test me", self.pu.start),
-
+            "3": ("Add a plane",
+                  partial(print, self.__repo.planes)),
+            "4": ("Delete a plane",
+                  partial(print, self.__repo.planes)),
             # TODO
             "5": ("Sort the passengers in a plane by last name",
                   partial(print, "todo")),

@@ -30,13 +30,6 @@ class Plane:
         self.__passengers.append(passenger)
         self.__no_of_passengers += 1
 
-    def update_passenger(self, passenger:Passenger) -> None:
-        if passenger not in self.__passengers:
-            raise Exception("Passenger not on board")
-
-        self.__passengers.remove(passenger)
-        self.__passengers.append(passenger)
-
     def remove_passenger(self, passenger:Passenger) -> None:
         if passenger not in self.__passengers:
             raise Exception("Passenger not on board")
@@ -53,6 +46,11 @@ class Plane:
         return Sorting.filter(self.__passengers, lambda passenger:
             passenger.last_name.startswith(letter) or
             passenger.first_name.startswith(letter))
+
+    # 10 - TODO
+    def form_groups_of_passengers_same_plane_diff_last_name(self, k:int) -> List[List[Passenger]]:
+        return Sorting.groups_of(k, self.__passengers, lambda passenger:
+            passenger.last_name)
 
     @property
     def passengers_and_destination(self) -> str:

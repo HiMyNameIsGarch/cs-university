@@ -13,7 +13,7 @@ class Passenger_UI(Base_UI):
                   partial(self.set_prop, self.__passenger,  "last_name", str,
                           "Enter new last name: ")),
             "3": ("Modify Passport Number",
-                  partial(self.set_prop, self.__passenger, "passport", str,
+                  partial(self.set_prop, self.__passenger, "passport_number", str,
                           "Enter new passport: ")),
         }
         super().__init__(self.__opts, header, self.__passenger)
