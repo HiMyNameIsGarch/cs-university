@@ -8,18 +8,21 @@ class Airport_Repository:
             planes = []
         self.__planes:List[Plane] = planes
 
+    def add_plane(self, plane:Plane) -> None:
+        if plane in self.__planes:
+            raise Exception("Plane already exists")
+
+        self.__planes.append(plane)
+
+    def remove_plane(self, plane:Plane) -> None:
+        if plane not in self.__planes:
+            raise Exception("Plane not found")
+
+        self.__planes.remove(plane)
+
     @property
     def planes(self) -> List[Plane]:
         return self.__planes
-
-    def add_plane(self, plane:Plane):
-        self.__planes.append(plane)
-
-    def update_plane(self, plane:Plane):
-        self.__planes.append(plane)
-
-    def delete_plane(self, plane:Plane):
-        self.__planes.append(plane)
 
     # 4
     def sort_by_number_of_passengers(self) -> List[Plane]:
@@ -47,3 +50,7 @@ class Airport_Repository:
         return [plane for plane in self.__planes if
             Sorting.filter(plane.passengers, lambda passenger:
                 passenger.full_name == name)]
+    # 11 - TODO
+    def form_groups_of_planes_same_dest_diff_companies(self, k:int) -> List[List[Plane]]:
+        return Sorting.groups_of(k, self.__planes, lambda plane:
+            plane.destination)

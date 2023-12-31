@@ -1,12 +1,10 @@
 from typing import Any, List
-from domain.plane import Plane
 
 class Base_UI:
-    def __init__(self, opts:dict, header:str = "", header_obj:object = None, only_once:bool=False):
+    def __init__(self, opts:dict, header:str = "", header_obj:object = None):
         self.__opts = opts
         self.__header:str = header
         self.__header_obj:object = header_obj
-        self.__only_once:bool = only_once
 
     @property
     def header(self):
@@ -73,15 +71,6 @@ class Base_UI:
             print(key + ".", self.__opts[key][0])
 
     def start(self):
-        if self.__only_once:
-            self.__menu()
-            key = input("Pick your poison: ")
-            # key = 't'
-            if key == "exit":
-                return
-            self.__opts[key][1]()
-            input("")
-            return key
         while True:
             try:
                 self.__menu()

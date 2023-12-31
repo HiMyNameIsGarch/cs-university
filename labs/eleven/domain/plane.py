@@ -18,7 +18,6 @@ class Plane:
         self.__passengers:List[Passenger] = ipassengers
         self.__no_of_passengers:int = len(ipassengers)
 
-    # Make the contains function search based on the __id property
     def __contains__(self, key):
         return key == self.__id
 
@@ -28,7 +27,7 @@ class Plane:
     __repr__ = __str__
 
     def add_passenger(self, passenger:Passenger) -> None:
-        if len(self.__passengers) < self.__no_of_seats:
+        if len(self.__passengers) >= self.__no_of_seats:
             raise Exception("No more seats available")
         if passenger in self.__passengers:
             raise Exception("Passenger already on board")

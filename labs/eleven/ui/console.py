@@ -7,6 +7,7 @@ from domain.passenger import Passenger
 from ui.base_console import Base_UI
 from ui.c_passenger import Passenger_UI
 from ui.c_plane import Plane_UI
+from ui.generators.g_plane import Plane_Generator
 
 class UI(Base_UI):
 
@@ -15,6 +16,16 @@ class UI(Base_UI):
             print("\n\n", plane.name, "\n")
             for passenger in plane.passengers:
                 print(passenger)
+
+    def delete_plane(self, planes:List[Plane]):
+        dict = {}
+        i = 1
+        for p in planes:
+            dict[str(i)] = ((p.name), partial(self.__repo.remove_plane, p))
+            i += 1
+
+        bu = Base_UI(dict, "Select a plane to delete: ")
+        bu.start()
 
     def select_plane(self, planes:List[Plane]):
         dict = {}
@@ -32,13 +43,19 @@ class UI(Base_UI):
         self.__repo = Airport_Repository(generate_planes(10, 5, 20))
         self.pu = Passenger_UI(Passenger("asd", "asd", "asd"))
         self.__opts = {
-            "1": ("Select plane", partial(self.select_plane, self.__repo.planes)),
+            "1": ("Select plane", partial(self.select_plane,
+                                          self.__repo.planes)),
             "2": ("Get all planes",
                   partial(print, self.__repo.planes)),
+
             "3": ("Add a plane",
-                  partial(print, self.__repo.planes)),
+                  partial(self.own_partial,
+                          self.__repo.add_plane,
+                          Plane_Generator.generate)),
+
             "4": ("Delete a plane",
-                  partial(print, self.__repo.planes)),
+                  partial(self.delete_plane, self.__repo.planes)),
+
             # TODO
             "5": ("Sort the passengers in a plane by last name",
                   partial(print, "todo")),

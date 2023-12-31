@@ -7,19 +7,27 @@ from functools import partial
 from typing import List
 
 class Plane_UI(Base_UI):
-    def select_passenger(self, planes:List[Passenger], only_once:bool = False):
+
+    def delete_passenger(self, passengers:List[Passenger]) -> None:
         dict = {}
         i = 1
-        for p in planes:
+        for p in passengers:
+            dict[str(i)] = ((p.first_name + " " + p.last_name), partial(self.__plane.remove_passenger, p))
+            i += 1
+
+        bu = Base_UI(dict, "Select a Passenger to delete: ")
+        bu.start()
+
+    def select_passenger(self, passengers:List[Passenger]):
+        dict = {}
+        i = 1
+        for p in passengers:
             ap = Passenger_UI(p)
             dict[str(i)] = ((p.first_name + " " + p.last_name, ap.start))
             i += 1
 
-        bu = Base_UI(dict, "Select a Passenger:", only_once)
-        key = bu.start()
-        for i in range(len(planes)):
-            if key == str(i + 1):
-                return planes[i]
+        bu = Base_UI(dict, "Select a Passenger:")
+        bu.start()
 
     def __init__(self, plane:Plane, header:str = "Current Plane: "):
         self.__plane = plane
@@ -37,9 +45,15 @@ class Plane_UI(Base_UI):
             "5": ("Modify Destination",
                   partial(self.set_prop, self.__plane, "destination", str,
                           "Enter new Destination: ")),
-            "6": ("Add a passenger", partial(self.own_partial, self.__plane.add_passenger, Passenger_Generator.generate)),
-            "7": ("Get passengers", partial(print, self.__plane.passengers)),
-            "8": ("Delete a passenger", partial(self.partial_nested_two, self.__plane.remove_passenger, self.select_passenger, self.__plane.passengers, True)),
-            "9": ("Select passenger", partial(self.select_passenger, self.__plane.passengers))
+
+            "6": ("Add a passenger", partial(self.own_partial,
+                                             self.__plane.add_passenger,
+                                             Passenger_Generator.generate)),
+            "7": ("Get passengers", partial(print,
+                                            self.__plane.passengers)),
+            "8": ("Delete a passenger", partial(self.delete_passenger,
+                                                self.__plane.passengers)),
+            "9": ("Select passenger", partial(self.select_passenger,
+                                              self.__plane.passengers))
         }
         super().__init__(self.__opts, header, self.__plane)
