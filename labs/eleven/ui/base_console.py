@@ -7,28 +7,22 @@ class Base_UI:
         self.__header_obj:object = header_obj
 
     @property
-    def header(self):
+    def header(self) -> str:
         if self.__header_obj is None:
             return self.__header
         return self.__header + str(self.__header_obj)
 
-    def own_partial(self, func, func_arg):
+    def own_partial(self, func, func_arg) -> None:
         if callable(func_arg) and callable(func):
             func(func_arg())
 
-    def partial_nested(self, func, func2, func_arg):
+    def partial_nested(self, func, func2, func_arg) -> None:
         func(func2(func_arg()))
 
-    def partial_nested_two(self, func, func2, func_arg, func_arg2):
-        func(func2(func_arg, func_arg2))
-
-    def partial_two_args(self, bigf, smf1, smf2):
-        bigf(smf1(), smf2())
-
-    def print_lst(self, lst:List):
+    def print_lst(self, lst:List) -> None:
         print(lst)
 
-    def set_prop(self, obj:object, prop:str, prop_type:type, prompt:str, method = None):
+    def set_prop(self, obj:object, prop:str, prop_type:type, prompt:str, method = None) -> None:
         if method is None:
             method = lambda x: x
 
@@ -37,14 +31,14 @@ class Base_UI:
         self.__header_obj = str(obj)
 
 
-    def __set_prop(self, obj:object, prop:str, prop_type:type, value:Any):
+    def __set_prop(self, obj:object, prop:str, prop_type:type, value:Any) -> None:
         if value is None:
             return
         if type(value) != prop_type:
             raise TypeError("Invalid type")
         setattr(obj, prop, value)
 
-    def get_value_for(self, prop_type:type, prompt:str, method = None):
+    def get_value_for(self, prop_type:type, prompt:str, method = None) -> Any:
         if method is None:
             method = lambda x: x
 
@@ -63,19 +57,35 @@ class Base_UI:
                 print('\033[1A' + '\033[K', end='')
 
 
-    def __menu(self):
+    def wrapper(self, iterator:List[Any], header:str, option, func):
+        if not callable(func):
+            raise TypeError("Argument func is not callable")
+
+        if option is None:
+            option = lambda x: x
+
+        dict = { }
+        i = 1
+        for p in iterator:
+            dict[str(i)] = (option(p), (func(p)))
+            i += 1
+
+        bu = Base_UI(dict, header)
+        bu.start()
+
+
+    def __menu(self) -> None:
         print('\033c', end='')
         if self.__header != "":
             print(self.header)
         for key in self.__opts:
             print(key + ".", self.__opts[key][0])
 
-    def start(self):
+    def start(self) -> None:
         while True:
             try:
                 self.__menu()
                 key = input("Pick your poison: ")
-                # key = 't'
                 if key == "exit":
                     return
                 self.__opts[key][1]()

@@ -3,45 +3,30 @@ from functools import partial
 from typing import List
 from fakedata import generate_planes
 from domain.plane import Plane
-from domain.passenger import Passenger
 from ui.base_console import Base_UI
-from ui.c_passenger import Passenger_UI
 from ui.c_plane import Plane_UI
 from ui.generators.g_plane import Plane_Generator
 
 class UI(Base_UI):
 
-    def __print_nested(self, lst:List[Plane]):
-        for plane in lst:
-            print("\n\n", plane.name, "\n")
-            for passenger in plane.passengers:
-                print(passenger)
+    def __del_func(self, arg):
+        return partial(self.__repo.remove_plane, arg)
 
     def delete_plane(self, planes:List[Plane]):
-        dict = {}
-        i = 1
-        for p in planes:
-            dict[str(i)] = ((p.name), partial(self.__repo.remove_plane, p))
-            i += 1
+        self.wrapper(planes, "Select a plane to delete: ", lambda x: x.name, self.__del_func)
 
-        bu = Base_UI(dict, "Select a plane to delete: ")
-        bu.start()
+    def __select_func(self, arg):
+        ap = Plane_UI(arg)
+        return ap.start
 
     def select_plane(self, planes:List[Plane]):
-        dict = {}
-        i = 1
-        for p in planes:
-            ap = Plane_UI(p)
-            dict[str(i)] = ((p.name, ap.start))
-            i += 1
+        self.wrapper(planes, "Select a plane:", lambda x: x.name, self.__select_func)
 
-        bu = Base_UI(dict, "Select a plane:")
-        bu.start()
+    def __init__(self, args:List[str] = []):
+        self.__repo = Airport_Repository()
+        if len(args) > 1 and args[1] == "gen":
+            self.__repo = Airport_Repository(generate_planes(10, 5, 20))
 
-
-    def __init__(self):
-        self.__repo = Airport_Repository(generate_planes(10, 5, 20))
-        self.pu = Passenger_UI(Passenger("asd", "asd", "asd"))
         self.__opts = {
             "1": ("Select plane", partial(self.select_plane,
                                           self.__repo.planes)),

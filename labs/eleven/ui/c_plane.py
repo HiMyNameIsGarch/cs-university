@@ -1,33 +1,24 @@
 from domain.plane import Plane
 from domain.passenger import Passenger
 from ui.generators.g_passenger import Passenger_Generator
-from ui.c_passenger import Passenger_UI
 from ui.base_console import Base_UI
 from functools import partial
 from typing import List
 
 class Plane_UI(Base_UI):
 
-    def delete_passenger(self, passengers:List[Passenger]) -> None:
-        dict = {}
-        i = 1
-        for p in passengers:
-            dict[str(i)] = ((p.first_name + " " + p.last_name), partial(self.__plane.remove_passenger, p))
-            i += 1
+    def __del_func(self, arg):
+        return partial(self.__plane.remove_passenger, arg)
 
-        bu = Base_UI(dict, "Select a Passenger to delete: ")
-        bu.start()
+    def delete_passenger(self, passengers:List[Passenger]) -> None:
+        self.wrapper(passengers, "Select a passenger to delete: ", lambda x: x.full_name, self.__del_func)
+
+    def __select_func(self, arg):
+        ap = Plane_UI(arg)
+        return ap.start
 
     def select_passenger(self, passengers:List[Passenger]):
-        dict = {}
-        i = 1
-        for p in passengers:
-            ap = Passenger_UI(p)
-            dict[str(i)] = ((p.first_name + " " + p.last_name, ap.start))
-            i += 1
-
-        bu = Base_UI(dict, "Select a Passenger:")
-        bu.start()
+        self.wrapper(passengers, "Select a passenger:", lambda x: x.full_name, self.__select_func)
 
     def __init__(self, plane:Plane, header:str = "Current Plane: "):
         self.__plane = plane
