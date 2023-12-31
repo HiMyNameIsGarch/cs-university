@@ -22,13 +22,14 @@ class Plane:
         return key == self.__id
 
     def __str__(self) -> str:
-        return f"{self.name} -- {self.number} -- {self.airline_company} -- {self.no_of_passengers} -- {self.destination}\n"
+        return f"{self.name} -- {self.number} -- {self.airline_company} -- {self.no_of_passengers} -- {self.destination}"
 
     __repr__ = __str__
 
     def add_passenger(self, passenger:Passenger) -> None:
         if len(self.__passengers) >= self.__no_of_seats:
             raise Exception("No more seats available")
+
         if passenger in self.__passengers:
             raise Exception("Passenger already on board")
 
@@ -47,10 +48,10 @@ class Plane:
         return Sorting.sort(self.passengers, lambda passenger: passenger.last_name)
 
     # 8
-    def get_passengers_starting_with(self, letter:str) -> list[Passenger]:
+    def get_passengers_which_contains(self, letters:str) -> list[Passenger]:
         return Sorting.filter(self.__passengers, lambda passenger:
-            passenger.last_name.startswith(letter) or
-            passenger.first_name.startswith(letter))
+            passenger.last_name.__contains__(letters) or
+            passenger.first_name.__contains__(letters))
 
     # 10 - TODO
     def form_groups_of_passengers_same_plane_diff_last_name(self, k:int) -> List[List[Passenger]]:

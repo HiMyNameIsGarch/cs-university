@@ -19,8 +19,9 @@ class Base_UI:
     def partial_nested(self, func, func2, func_arg) -> None:
         func(func2(func_arg()))
 
-    def print_lst(self, lst:List) -> None:
-        print(lst)
+    def print_lst(self, lst:List[Any]) -> None:
+        for item in lst:
+            print(item)
 
     def set_prop(self, obj:object, prop:str, prop_type:type, prompt:str, method = None) -> None:
         if method is None:
@@ -89,6 +90,7 @@ class Base_UI:
                 if key == "exit":
                     return
                 self.__opts[key][1]()
-                input("")
+                if key is not "exit":
+                    input("")
             except Exception as e:
                 input(e)
