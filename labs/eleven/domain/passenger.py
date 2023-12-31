@@ -32,6 +32,9 @@ class Passenger:
     def __str__(self) -> str:
         return f"{self.__first_name} -- {self.__last_name} -- {self.__passport_number}"
 
+    def __contains__(self, key):
+        return key == self.__id
+
     __repr__ = __str__
 
     @property

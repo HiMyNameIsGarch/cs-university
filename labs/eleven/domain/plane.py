@@ -1,3 +1,4 @@
+import uuid
 from typing import List, Optional
 from domain.passenger import Passenger
 from domain.sorting import Sorting
@@ -6,6 +7,7 @@ class Plane:
     def __init__(self, nname:str, num:str, airline_co:str, no_of_seats:int,
                  idestination:str, ipassengers:Optional[List[Passenger]] =
                  None):
+        self.__id:uuid.UUID = uuid.uuid4()
         self.__name:str = nname
         self.__num:str = num
         self.__airline_company:str = airline_co
@@ -15,6 +17,10 @@ class Plane:
             ipassengers = []
         self.__passengers:List[Passenger] = ipassengers
         self.__no_of_passengers:int = len(ipassengers)
+
+    # Make the contains function search based on the __id property
+    def __contains__(self, key):
+        return key == self.__id
 
     def __str__(self) -> str:
         return f"{self.name} -- {self.number} -- {self.airline_company} -- {self.no_of_passengers} -- {self.destination}\n"
@@ -51,6 +57,10 @@ class Plane:
     def form_groups_of_passengers_same_plane_diff_last_name(self, k:int) -> List[List[Passenger]]:
         return Sorting.groups_of(k, self.__passengers, lambda passenger:
             passenger.last_name)
+
+    @property
+    def id(self) -> uuid.UUID:
+        return self.__id
 
     @property
     def passengers_and_destination(self) -> str:
@@ -107,4 +117,3 @@ class Plane:
     @passengers.setter
     def passengers(self, passengers:List[Passenger]) -> None:
         self.__passengers = passengers
-
