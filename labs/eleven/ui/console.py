@@ -24,7 +24,7 @@ class UI(Base_UI):
     def __init__(self, args:List[str] = []):
         self.__repo = Airport_Repository()
         if len(args) > 1 and args[1] == "gen":
-            self.__repo = Airport_Repository(generate_planes(10, 5, 20))
+            self.__repo = Airport_Repository( generate_planes(10, 5, 10))
 
         self.__opts = {
             "1": ("Select plane", partial(self.select_plane,
@@ -63,9 +63,12 @@ class UI(Base_UI):
                           self.__repo.get_planes_where_is_the_passenger_named,
                           input)),
 
-            # TODO
-            # "12": ("K planes", partial(self.__repo.planes, input)),
+            "11": ("Form groups of k planes with same destination and different companies",
+                   partial(self.partial_nested,
+                           self.print_groups,
+                           self.__repo.form_groups_of_planes_same_dest_diff_companies,
+                           self.intput)),
 
         }
-        super().__init__(self.__opts, "Welcome to Airport Security!")
+        super().__init__(self.__opts, f"Welcome to Airport Security! Planes: {self.__repo.no_of_planes}")
 

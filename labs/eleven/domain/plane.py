@@ -48,7 +48,7 @@ class Plane:
         return Sorting.sort(self.passengers, lambda passenger: passenger.last_name)
 
     # 8
-    def get_passengers_which_contains(self, letters:str) -> list[Passenger]:
+    def get_passengers_which_contains(self, letters:str) -> List[Passenger]:
         return Sorting.filter(self.__passengers, lambda passenger:
             passenger.last_name.__contains__(letters) or
             passenger.first_name.__contains__(letters))

@@ -23,6 +23,16 @@ class Base_UI:
         for item in lst:
             print(item)
 
+    def intput(self) -> int:
+        return self.get_value_for(int, "Value: ")
+
+    def print_groups(self, groups) -> None:
+        i = 1
+        for group in groups:
+            print(f"Group:{i}")
+            self.print_lst(group)
+            i+=1
+
     def set_prop(self, obj:object, prop:str, prop_type:type, prompt:str, method = None) -> None:
         if method is None:
             method = lambda x: x

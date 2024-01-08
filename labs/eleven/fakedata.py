@@ -10,6 +10,8 @@ fake.add_provider(AirTravelProvider)
 
 def generate_passenger(num:int) -> Optional[List[Passenger]]:
     passengers:List[Passenger] = []
+    if num <= 0:
+        return []
     for _ in range(num):
         passengers.append(Passenger(
             fake.first_name(),
@@ -18,10 +20,11 @@ def generate_passenger(num:int) -> Optional[List[Passenger]]:
     return passengers
 
 # Generate a random number
-def generate_planes(num_planes, num_passengers_per_plane):
+def generate_planes(num_planes, min_pass, max_pass):
     planes:List[Plane] = []
     for _ in range(num_planes):
         num = fake.random_int(min=50, max=100)
+        num_pass = fake.random_int(min=min_pass, max=max_pass)
         flight = fake.flight()
         cplane = Plane(
             nname=flight['origin']['airport'],
@@ -29,7 +32,7 @@ def generate_planes(num_planes, num_passengers_per_plane):
             airline_co=flight['airline'],
             no_of_seats=num,
             idestination=flight['destination']['airport'],
-            ipassengers=generate_passenger(num_passengers_per_plane))
+            ipassengers=generate_passenger(num_pass))
         planes.append(cplane)
     return planes
 
@@ -37,5 +40,5 @@ def generate_planes(num_planes, num_passengers_per_plane):
 # Experimental, don't touch
 def gen_threads():
      with ProcessPoolExecutor(8) as exe:
-        results = exe.map(generate_planes, [10000000]*8, [100]*8)
+        results = exe.map(generate_planes, [1000000]*8, [100]*8)
         return list(results)
