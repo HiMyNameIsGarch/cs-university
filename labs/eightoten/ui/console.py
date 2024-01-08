@@ -103,6 +103,7 @@ class UI:
             try:
                 idx = intput("Index: ")
             except ValueError as ve:
+                print(ve)
                 raise ValueError(ve)
             break
         return idx
