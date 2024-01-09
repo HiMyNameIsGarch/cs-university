@@ -8,6 +8,10 @@ from concurrent.futures import ProcessPoolExecutor
 fake = Faker()
 fake.add_provider(AirTravelProvider)
 
+# Generate a random number of passengers
+# Parameters: num:int the number of passengers to be generated
+# Return: List[Passenger] the list of passengers
+# Exceptions: None
 def generate_passenger(num:int) -> Optional[List[Passenger]]:
     passengers:List[Passenger] = []
     if num <= 0:
@@ -19,7 +23,12 @@ def generate_passenger(num:int) -> Optional[List[Passenger]]:
             fake.ssn()))
     return passengers
 
-# Generate a random number
+# Generate a random number of planes
+# Parameters: num_planes:int the number of planes to be generated
+#             min_pass:int the minimum number of passengers
+#             max_pass:int the maximum number of passengers
+# Return: List[Plane] the list of planes
+# Exceptions: None
 def generate_planes(num_planes, min_pass, max_pass):
     planes:List[Plane] = []
     for _ in range(num_planes):
