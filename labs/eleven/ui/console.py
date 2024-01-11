@@ -3,6 +3,7 @@ from functools import partial
 from typing import List
 from fakedata import generate_planes
 from domain.plane import Plane
+from domain.backtracking import Backtracking
 from ui.base_console import Base_UI
 from ui.c_plane import Plane_UI
 from ui.generators.g_plane import Plane_Generator
@@ -24,13 +25,16 @@ class UI(Base_UI):
     def __init__(self, args:List[str] = []):
         self.__repo = Airport_Repository()
         if len(args) > 1 and args[1] == "gen":
-            self.__repo = Airport_Repository( generate_planes(10, 5, 10))
+            self.__repo = Airport_Repository(generate_planes(10, 5, 10))
+
+        # data = Backtracking.backtrack(2, [1,2,3,4,5,6,7,8,9], lambda x1, x2: x1 != x2 and x1 % 2 == 1 and x2 %2==1)
+        # print(data)
 
         self.__opts = {
             "1": ("Select plane", partial(self.select_plane,
                                           self.__repo.planes)),
             "2": ("Get all planes",
-                  partial(self.print_lst, self.__repo.planes)),
+                 partial(self.print_lst, self.__repo.planes)),
 
             "3": ("Add a plane",
                   partial(self.own_partial,
