@@ -12,4 +12,3 @@ class Test_Measurement(unittest.TestCase):
             Measurement(8.9, 60, 11)
         ])
         self.assertRaises(Exception, self.__repo.add_measurement, Measurement(-1.0,-1,-1))
-        pass

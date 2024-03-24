@@ -1,5 +1,7 @@
 class Measurement:
     def __init__(self, pressure:float, temp:int, hour_of_day:int):
+        if pressure < 0 or pressure > 10:
+            raise Exception("Pressure must be between 0 and 10")
         self.__pressure = pressure
         self.__hour_of_day = hour_of_day
         self.__temperature = temp
