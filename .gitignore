@@ -8,3 +8,10 @@ __pycache__/
 
 # Zip files from assignments
 *.zip
+
+# core files
+core
+
+# build files
+build/
+
