@@ -3,16 +3,16 @@
 
 #include <iostream>
 #include <cmath>
-// #include "displaytype.h"
+#include "displaytype.h"
 
 class Complex {
 private :
     // D
-    // static DisplayType dt;
+    static DisplayType dt;
+
 public:
     double r;
     double i;
-
 
     // A
     Complex();
@@ -23,17 +23,13 @@ public:
     bool operator!=(const Complex& other);
 
     // C
-    double magnitude(const Complex& c);
-    double phase(const Complex& c);
+    double magnitude() const;
+    double phase() const;
 
     // D
-    // static DisplayType const& DISPLAY_TYPE() {
-    //     return Complex::dt;
-    // }
+    static DisplayType DISPLAY_TYPE();
 
-    // static void DISPLAY_TYPE(DisplayType newType) {
-    //     Complex::dt = newType;
-    // }
+    static void DISPLAY_TYPE(DisplayType newType);
 
     // E
     friend std::ostream& operator<<(std::ostream& os, const Complex& point);
@@ -48,5 +44,4 @@ public:
     Complex operator*(const double& scalar) const;
 
 };
-
 #endif
