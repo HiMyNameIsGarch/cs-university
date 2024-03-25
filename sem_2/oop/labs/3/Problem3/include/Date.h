@@ -5,13 +5,18 @@
 
 class Date {
 private:
-    int day;
-    int month;
-    int year;
+    int d;
+    int m;
+    int y;
 public:
     // A
     Date();
     Date(int day, int month, int year);
+
+    // getters
+    const int &day() const { return d;};
+    const int &month() const { return m;};
+    const int &year() const { return y;};
 
     // B
     friend std::ostream& operator<<(std::ostream& os, const Date& date);

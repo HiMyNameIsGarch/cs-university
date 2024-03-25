@@ -1,8 +1,6 @@
-#include <iostream>
-#include "./include/Date.h"
+#include "./include/DateTest.h"
 
 int main() {
-    Date date1(2020, 2, 29);
-    std::cout << date1 << std::endl;
+    DateTest::testAll();
     return 0;
 }

@@ -27,30 +27,30 @@ bool Date::isValidDate(int year, int month, int day) {
 }
 
 Date::Date() {
-    this->year = 1970;
-    this->month = 1;
-    this->day = 1;
+    this->y = 1970;
+    this->m = 1;
+    this->d = 1;
 }
 
-Date::Date(int year, int month, int day) {
-    if (isValidDate(year, month, day)) {
-        this->year = year;
-        this->month = month;
-        this->day = day;
+Date::Date(int y, int m, int day) {
+    if (isValidDate(y, m, day)) {
+        this->y = y;
+        this->m = m;
+        this->d = day;
     } else {
-        this->year = 1970;
-        this->month = 1;
-        this->day = 1;
+        this->y = 1970;
+        this->m = 1;
+        this->d = 1;
     }
 }
 
 std::ostream& operator<<(std::ostream& os, const Date& date) {
-    os << "Year: " << date.year << std::endl << "Month: " << date.month << std::endl << "Day: " << date.day << std::endl;
+    os << "Year: " << date.y << std::endl << "Month: " << date.m << std::endl << "Day: " << date.d << std::endl;
     return os;
 }
 
 bool Date::operator==(const Date& date) {
-    return this->year == date.year && this->month == date.month && this->day == date.day;
+    return this->y == date.y && this->m == date.m&& this->d == date.d;
 }
 
 bool Date::operator!=(const Date& date) {
@@ -58,13 +58,13 @@ bool Date::operator!=(const Date& date) {
 }
 
 bool Date::operator<(const Date& date) {
-    if (this->year < date.year) {
+    if (this->y < date.y) {
         return true;
-    } else if (this->year == date.year) {
-        if (this->month < date.month) {
+    } else if (this->y == date.y) {
+        if (this->m < date.m) {
             return true;
-        } else if (this->month == date.month) {
-            if (this->day < date.day) {
+        } else if (this->m == date.m) {
+            if (this->d < date.d) {
                 return true;
             }
         }
@@ -80,4 +80,36 @@ bool Date::operator>(const Date& date) {
 }
 bool Date::operator>=(const Date& date) {
     return (*this == date) || (*this > date);
+}
+void Date::addDays(int numDays) {
+    if (numDays < 0) {
+        return;
+    }
+    int daysInMonth = 0;
+    while (numDays > 0) {
+        if (this->m == 2) {
+            if (this->y % 4 == 0) {
+                daysInMonth = 29;
+            } else {
+                daysInMonth = 28;
+            }
+        } else if (this->m == 4 || this->m == 6 || this->m == 9 || this->m == 11) {
+            daysInMonth = 30;
+        } else {
+            daysInMonth = 31;
+        }
+        if (this->d + numDays > daysInMonth) {
+            numDays -= daysInMonth - this->d + 1;
+            this->d = 1;
+            if (this->m == 12) {
+                this->m = 1;
+                this->y++;
+            } else {
+                this->m++;
+            }
+        } else {
+            this->d += numDays;
+            numDays = 0;
+        }
+    }
 }
