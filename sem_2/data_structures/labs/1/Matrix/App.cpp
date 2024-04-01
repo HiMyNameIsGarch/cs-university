@@ -3,6 +3,7 @@
 
 int main() {
 
+    // Short tests
     testAll();
     testAllExtended();
     return 0;

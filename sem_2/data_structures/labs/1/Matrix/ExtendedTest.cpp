@@ -2,13 +2,9 @@
 #include "Matrix.h"
 #include "ExtendedTest.h"
 #include <iostream>
-#include <exception>
-
-using namespace std;
-
 
 void testCreate() {
-	cout << "Test create" << endl;
+	std::cout << "Test create" << std::endl;
 	Matrix m(10, 10);
 	assert(m.nrLines() == 10);
 	assert(m.nrColumns() == 10);
@@ -18,7 +14,7 @@ void testCreate() {
 }
 
 void testModify() {
-	cout << "Test modify" << endl;
+	std::cout << "Test modify" << std::endl;
 	Matrix m(10, 10);
 	for (int j = 0; j < m.nrColumns(); j++)
 		m.modify(4, j, 3);
@@ -31,7 +27,7 @@ void testModify() {
 }
 
 void testQuantity() {
-	cout << "Test quantity" << endl;
+	std::cout << "Test quantity" << std::endl;
 	Matrix m(200, 300);
 	for (int i = m.nrLines() / 2; i < m.nrLines(); i++) {
 		for (int j = 0; j <= m.nrColumns() / 2; j++)
@@ -78,32 +74,32 @@ void testQuantity() {
 }
 
 void testExceptions() {
-	cout << "Test exceptions" << endl;
+	std::cout << "Test exceptions" << std::endl;
 	Matrix m(10, 10);
 	try {
 		m.element(-10, 0);
 		assert(false);
 	}
-	catch (exception&) {
+	catch (std::exception&) {
 		assert(true);
 	}
 	try {
 		m.modify(12, 0, 1);
 		assert(false);
 	}
-	catch (exception&) {
+	catch (std::exception&) {
 		assert(true);
 	}
 	try {
 		assert(m.nrLines());
 	}
-	catch (exception&) {
+	catch (std::exception&) {
 		assert(false);
 	}
 }
 
 void testMix() {
-	cout << "Test mix" << endl;
+	std::cout << "Test mix" << std::endl;
 	int size = 2000;
 	Matrix m(size/2, size);
 	for (int i = 0; i < size/2; i++) {

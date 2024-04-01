@@ -5,12 +5,13 @@ typedef int TElem;
 #define NULL_TELEM 0
 typedef unsigned int uint;
 
-// max of 2 numbers
+// max of 2 numbers ( used in the resize function )
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
-
 
 #include <utility>
 typedef std::tuple<uint, uint, TElem> Position;
+
+//DO NOT CHANGE THIS PART
 class Matrix {
 
 private:
@@ -27,16 +28,20 @@ private:
     uint lines;
     uint columns;
 
+    // Maximum capacity, computed in the constructor
     uint maxCap;
 
-    uint searchAt(uint i, uint j) const;
+    // Get the index of the position (i, j) in the array
+    uint getIndexAt(uint i, uint j) const;
 
+    // Resize the array
     void resize();
 
 public:
 	//constructor
 	Matrix(uint nrLines, uint nrCols);
 
+    // Destructor
     ~Matrix();
 
 	//returns the number of lines
