@@ -1,77 +1,55 @@
 #include "Matrix.h"
 #include <stdexcept>
-#include <tuple>
 
-Matrix::Matrix(int nrLines, int nrCols) {
-
+Matrix::Matrix(uint nrLines, uint nrCols) {
     this->lines = nrLines;
     this->columns = nrCols;
+    this->maxCap = nrLines * nrCols;
     this->cp = 1;
-    this->sz = 0;
 
-    this->array = (Position *)malloc(sizeof(Position) * this->cp);
+    this->array = new Position[this->cp];
+
     if (this->array == NULL) {
         throw std::bad_alloc();
     }
 
-    // int c = 0;
-    // for(int i = 0; i < nrLines; i++) {
-    //     for(int j = 0; j < nrCols; j++) {
-    //         Position p = std::make_tuple(i, j, NULL_TELEM);
-    //         this->array[c] = p;
-    //         c++;
-    //     }
-    // }
+    this->sz = 0;
 }
 
 Matrix::~Matrix() {
-    free(this->array);
+    delete [] this->array;
 }
 
-int Matrix::nrLines() const {
+uint Matrix::nrLines() const {
     return this->lines;
 }
 
-int Matrix::nrColumns() const {
+uint Matrix::nrColumns() const {
 	return this->columns;
 }
 
 void Matrix::resize() {
-    this->cp += 1;
-    Position *new_array = (Position *)realloc(this->array, sizeof(Position) * this->cp);
-
+    // Allocate a new array with double capacity or new capacity
+    Position *new_array = new Position[MAX(this->cp * 2, this->maxCap) + 1]; // +1 for the case when cp = 0
     if (new_array == NULL) {
-        free(this->array);
+        delete [] this->array;
         throw std::bad_alloc();
     }
-    else {
-        this->array = new_array;
+
+    // Copy the elements from the old array to the new array
+    for(uint i = 0; i < this->cp; i++) {
+        new_array[i] = array[i];
     }
+    this-> cp = MAX(this->cp * 2, this->maxCap);
+
+    // Release the memory space occupied by the old array
+    delete [] this->array;
+
+    // Make the field e to refer the new array (with double capacity)
+    this->array = new_array;
 }
 
-int Matrix::searchAt(int i, int j) const {
-    int low = 0;
-    int high = this->sz;
-    while (low <= high) {
-        int mid = (low + high) / 2;
-        Position pos_mid = this->array[mid];
-        int ci = std::get<0>(pos_mid);
-        int cj = std::get<1>(pos_mid);
-
-        if (ci == i && cj == j) {
-            return std::get<2>(pos_mid);
-        }
-        else if (ci < i || (ci == i && cj < j)) {
-            low = mid + 1;
-        }
-        else {
-            high = mid - 1;
-        }
-    }
-    return NULL_TELEM;
-}
-
-TElem Matrix::element(int i, int j) const {
+TElem Matrix::element(uint i, uint j) const {
     if (i < 0 || i >= this->lines) {
         throw std::invalid_argument("i is out of bounds");
     }
@@ -79,28 +57,19 @@ TElem Matrix::element(int i, int j) const {
         throw std::invalid_argument("j is out of bounds");
     }
 
-    int low = 0;
-    int high = this->sz;
-    while (low <= high) {
-        int mid = (low + high) / 2;
-        Position pos_mid = this->array[mid];
-        int ci = std::get<0>(pos_mid);
-        int cj = std::get<1>(pos_mid);
+    int iab = i * nrColumns() + j;
 
-        if (ci == i && cj == j) {
-            return std::get<2>(pos_mid);
-        }
-        else if (ci < i || (ci == i && cj < j)) {
-            low = mid + 1;
-        }
-        else {
-            high = mid - 1;
-        }
+    if(this->cp < iab) {
+        return NULL_TELEM;
     }
-    return NULL_TELEM;
+
+    Position mid = this->array[iab];
+
+    TElem current = std::get<2>(mid);
+    return current;
 }
 
-TElem Matrix::modify(int i, int j, TElem e) {
+TElem Matrix::modify(uint i, uint j, TElem e) {
     if (i < 0 || i >= this->lines) {
         throw std::invalid_argument("i is out of bounds");
     }
@@ -112,26 +81,24 @@ TElem Matrix::modify(int i, int j, TElem e) {
         this->resize();
     }
 
-    int low = 0;
-    int high = this->sz;
-    while (low <= high) {
-        int mid = (low + high) / 2;
-        Position pos_mid = this->array[mid];
-        int ci = std::get<0>(pos_mid);
-        int cj = std::get<1>(pos_mid);
+    // magic formula ( not really )
+    // The formula is the index 'i' times the number of columns plus the index 'j'
+    // This computes the index of the element in the array at the position (i, j)
+    int iab = i * nrColumns() + j;
 
-        if (ci == i && cj == j) {
-            TElem old = std::get<2>(pos_mid);
-            this->array[mid] = Position(i,j,e);
-            return old;
-        }
-        else if (ci < i || (ci == i && cj < j)) {
-            low = mid + 1;
-        }
-        else {
-            high = mid - 1;
-        }
+    while(this->cp < iab) {
+        this->resize();
     }
+
+    Position mid = this->array[iab];
+
+    TElem old = std::get<2>(mid);
+
+    if(old != e) {
+        this->sz++;
+    }
+    this->array[iab] = Position(i,j,e);
+    return old;
 
 	return NULL_TELEM;
 }
