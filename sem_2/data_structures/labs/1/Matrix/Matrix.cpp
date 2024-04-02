@@ -18,7 +18,6 @@ Matrix::Matrix(uint nrLines, uint nrCols) {
     if (this->array == NULL) {
         throw std::bad_alloc();
     }
-
 }
 
 Matrix::~Matrix() {
@@ -31,6 +30,10 @@ uint Matrix::nrLines() const {
 
 uint Matrix::nrColumns() const {
 	return this->columns;
+}
+
+bool Matrix::isEmpty() const {
+    return this->sz == 0;
 }
 
 // magic formula ( not really )
@@ -73,7 +76,12 @@ TElem Matrix::element(uint i, uint j) const {
         throw std::invalid_argument("j is out of bounds");
     }
 
-    // Magic formula
+    // Check if the array is empty
+    if (this->isEmpty()) {
+        return NULL_TELEM;
+    }
+
+    // Magic formula to get the current index
     int idx = getIndexAt(i, j);
 
     // Check if the position (i, j) is in the array

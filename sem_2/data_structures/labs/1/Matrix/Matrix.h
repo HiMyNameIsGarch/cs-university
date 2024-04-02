@@ -11,7 +11,6 @@ typedef unsigned int uint;
 #include <utility>
 typedef std::tuple<uint, uint, TElem> Position;
 
-//DO NOT CHANGE THIS PART
 class Matrix {
 
 private:
@@ -58,5 +57,7 @@ public:
 	//returns the previous value from the position
 	//throws exception if (i,j) is not a valid position in the Matrix
 	TElem modify(uint i, uint j, TElem e);
+
+    bool isEmpty() const;
 
 };
