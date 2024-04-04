@@ -1,3 +1,6 @@
 [submodule "sem_2/oop/extra/CaesarCipher"]
 	path = sem_2/oop/extra/CaesarCipher
 	url = git@github.com:HiMyNameIsGarch/CaesarCipher.git
+[submodule "sem_2/oop/extra/ImageProcessingLib"]
+	path = sem_2/oop/extra/ImageProcessingLib
+	url = git@github.com:HiMyNameIsGarch/ImageProcessingLib.git
