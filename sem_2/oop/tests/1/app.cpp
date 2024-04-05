@@ -3,28 +3,29 @@
 #include <time.h>
 
 #define MAX_ARRAY 48
+#define MAX_AVG_HOUR 17
+#define BEGIN_AVG 4
 
 int main() {
     srand(time(0));
 
     AirQualityMeasurement *array = new AirQualityMeasurement[MAX_ARRAY];
-    AirQualityMeasurement *heap_air1 = (AirQualityMeasurement *) malloc(sizeof(AirQualityMeasurement));
-    AirQualityMeasurement *heap_air2 = (AirQualityMeasurement *) malloc(sizeof(AirQualityMeasurement));
 
-    *heap_air1 = AirQualityMeasurement();
-    *heap_air2 = AirQualityMeasurement();
+    // from now on, use new operator to call explicitly the constructor
+    AirQualityMeasurement *h1 = new AirQualityMeasurement();
+    AirQualityMeasurement *h2 = new AirQualityMeasurement();
 
     // Heap allocated objects
-    array[0] = *heap_air1;
-    array[1] = *heap_air2;
+    array[0] = *h1;
+    array[1] = *h1;
 
 
     // User input
-    std::cin >> array[3];
     std::cin >> array[2];
+    std::cin >> array[3];
 
     // Default constructor
-    for(int i = 4; i < MAX_ARRAY; i++) {
+    for(int i = BEGIN_AVG; i < MAX_ARRAY; i++) {
         array[i] = AirQualityMeasurement();
     }
 
@@ -32,7 +33,7 @@ int main() {
     std::cout << "The color purple has been registered " << AirQualityMeasurement::purple_has_registered() << " times" << std::endl;
 
     // Time object
-    Time time = Time(17, 0 ,0);
+    Time time = Time(MAX_AVG_HOUR, 0 ,0);
 
     int avg_air_quality = 0;
     int max_air_quality = 0;
@@ -51,8 +52,8 @@ int main() {
 
     std::cout << "Maximum air quality index: " << max_air_quality << " Color: " << AirQualityMeasurement::convert_air_to_color(max_air_quality) << std::endl;
 
-    free(heap_air1);
-    free(heap_air2);
+    free(h1);
+    free(h2);
 
     delete [] array;
     return 0;
