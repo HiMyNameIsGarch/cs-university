@@ -3,34 +3,34 @@
 
 #include <iostream>
 
-template <typename T>
-
 class Deque {
 
 private:
-    struct Node {
-        T value;
-        Node* next;
-        Node* prev;
-    };
+    // struct Node {
+    //     int value;
+    //     Node* next;
+    //     Node* prev;
+    // };
 
-    Node* head;
-    Node* tail;
+    // Node* head;
+    // Node* tail;
+    int *head;
+    int *tail;
 
     void copy(const Deque& other);
     void clear();
 
 public:
     Deque();
-    void push_front(const T& value);
+    void push_front(const int& value);
     void pop_front();
-    void push_back(const T& value);
+    void push_back(const int& value);
     void pop_back();
-    T top();
-    T back();
+    int top();
+    int back();
 
     bool is_empty();
-    T size();
+    int size();
 
     // Rule of three
 

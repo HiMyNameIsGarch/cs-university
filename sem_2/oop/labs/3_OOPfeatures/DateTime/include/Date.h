@@ -14,22 +14,23 @@ public:
     Date(int day, int month, int year);
 
     // getters
-    const int &day() const { return d;};
+    // const int &day() const { return d;};
     const int &month() const { return m;};
     const int &year() const { return y;};
+    int day() const { return d;};
 
     // B
     friend std::ostream& operator<<(std::ostream& os, const Date& date);
 
     // C
-    bool operator==(const Date& other);
-    bool operator!=(const Date& other);
+    bool operator==(const Date& other) const;
+    bool operator!=(const Date& other) const;
 
-    bool operator<=(const Date& other);
-    bool operator<(const Date& other);
+    bool operator<=(const Date& other) const;
+    bool operator<(const Date& other) const;
 
-    bool operator>=(const Date& other);
-    bool operator>(const Date& other);
+    bool operator>=(const Date& other) const;
+    bool operator>(const Date& other) const;
 
     // D
     void addDays(int numDays);

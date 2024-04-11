@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void encrypt(char *encrypted, short unsigned int shift) {
     for (int i = 0; encrypted[i] != '\0'; i++) {

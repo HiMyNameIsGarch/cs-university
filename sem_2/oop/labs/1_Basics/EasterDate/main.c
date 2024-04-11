@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 void strcopy(char str[5], char newStr[]){
     int i = 0;

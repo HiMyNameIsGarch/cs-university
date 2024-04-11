@@ -49,15 +49,15 @@ std::ostream& operator<<(std::ostream& os, const Date& date) {
     return os;
 }
 
-bool Date::operator==(const Date& date) {
+bool Date::operator==(const Date& date) const {
     return this->y == date.y && this->m == date.m&& this->d == date.d;
 }
 
-bool Date::operator!=(const Date& date) {
+bool Date::operator!=(const Date& date) const {
     return !(*this == date);
 }
 
-bool Date::operator<(const Date& date) {
+bool Date::operator<(const Date& date) const{
     if (this->y < date.y) {
         return true;
     } else if (this->y == date.y) {
@@ -71,14 +71,14 @@ bool Date::operator<(const Date& date) {
     }
     return false;
 }
-bool Date::operator<=(const Date& date) {
+bool Date::operator<=(const Date& date) const {
     return (*this == date) || (*this < date);
 }
 
-bool Date::operator>(const Date& date) {
+bool Date::operator>(const Date& date) const {
     return !(*this < date);
 }
-bool Date::operator>=(const Date& date) {
+bool Date::operator>=(const Date& date) const {
     return (*this == date) || (*this > date);
 }
 void Date::addDays(int numDays) {

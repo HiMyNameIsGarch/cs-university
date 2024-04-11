@@ -9,6 +9,7 @@ class Complex {
 private :
     // D
     static DisplayType dt;
+    double nigga;
 
 public:
     double r;
