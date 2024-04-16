@@ -30,11 +30,16 @@ private:
     // Maximum capacity, computed in the constructor
     uint maxCap;
 
-    // Get the index of the position (i, j) in the array
-    uint getIndexAt(uint i, uint j) const;
-
     // Resize the array
     void resize();
+
+    TElem deletePosition(int pos);
+
+    TElem addPosition(uint i, uint j, TElem e);
+
+    int searchAt(uint i, uint j) const;
+
+    int getFuturePosition(uint i, uint j) const;
 
 public:
 	//constructor
@@ -58,6 +63,7 @@ public:
 	//throws exception if (i,j) is not a valid position in the Matrix
 	TElem modify(uint i, uint j, TElem e);
 
+    // verifies if the matrix is empty
     bool isEmpty() const;
 
 };

@@ -133,6 +133,9 @@ void testMix() {
 	}
 	for (int i = 0; i < size/2; i++) {
 		for (int j = 0; j < size; j++) {
+            if(j == 1111) {
+                j = 1111;
+            }
 			TElem e = m.element(i, j);
 			if (i == j) {
 				assert(e == NULL_TELEM);
@@ -156,7 +159,7 @@ void testMix() {
 void testAllExtended() {
 	testCreate();
 	testModify();
+    testExceptions();
+    testMix();
 	testQuantity();
-	testMix();
-	testExceptions();
 }
