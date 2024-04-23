@@ -1,0 +1,132 @@
+==6291== Memcheck, a memory error detector
+==6291== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==6291== Using Valgrind-3.22.0-bd4db67b1d-20231031 and LibVEX; rerun with -h for copyright info
+==6291== Command: build/app
+==6291== Parent PID: 12985
+==6291== 
+--6291-- 
+--6291-- Valgrind options:
+--6291--    --leak-check=full
+--6291--    --show-leak-kinds=all
+--6291--    --track-origins=yes
+--6291--    --verbose
+--6291--    --log-file=debug/valgrind-out.txt
+--6291-- Contents of /proc/version:
+--6291--   Linux version 6.8.2-artix1-1 (linux@artixlinux) (gcc (GCC) 13.2.1 20230801, GNU ld (GNU Binutils) 2.42.0) #1 SMP PREEMPT_DYNAMIC Wed, 27 Mar 2024 20:16:29 +0000
+--6291-- 
+--6291-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
+--6291-- Page sizes: currently 4096, max supported 4096
+--6291-- Valgrind library directory: /usr/lib/valgrind
+--6291-- Reading syms from /home/garch/Dev/cs-university/sem_2/data_structures/labs/1/Matrix/build/app
+--6291-- Reading syms from /usr/lib/ld-linux-x86-64.so.2
+==6291== Downloading debug info for /usr/lib/ld-linux-x86-64.so.2...
+--6291--   Considering /home/garch/.cache/debuginfod_client/6da00c0ceeda78af5b423b58650748d28fdfc61f/debuginfo ..
+--6291--   .. CRC is valid
+==6291== Successfully downloaded debug file for /usr/lib/ld-linux-x86-64.so.2
+--6291-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--6291--    object doesn't have a dynamic symbol table
+--6291-- Scheduler: using generic scheduler lock implementation.
+--6291-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==6291== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-6291-by-garch-on-???
+==6291== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-6291-by-garch-on-???
+==6291== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-6291-by-garch-on-???
+==6291== 
+==6291== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==6291== don't want to do, unless you know exactly what you're doing,
+==6291== or are doing some strange experiment):
+==6291==   /usr/lib/valgrind/../../bin/vgdb --pid=6291 ...command...
+==6291== 
+==6291== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==6291==   /path/to/gdb build/app
+==6291== and then give GDB the following command
+==6291==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=6291
+==6291== --pid is optional if only one valgrind process is running
+==6291== 
+==6291== Downloading debug info for /usr/lib/valgrind/memcheck-amd64-linux...
+==6291== Server query failed: Connection reset by peer
+--6291-- REDIR: 0x4024be0 (ld-linux-x86-64.so.2:strlen) redirected to 0x582044bb (???)
+--6291-- REDIR: 0x4023390 (ld-linux-x86-64.so.2:index) redirected to 0x582044d5 (???)
+--6291-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--6291-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+==6291== WARNING: new redirection conflicts with existing -- ignoring it
+--6291--     old: 0x04024be0 (strlen              ) R-> (0000.0) 0x582044bb ???
+==6291== Downloading debug info for /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so...
+==6291== Server query failed: Connection reset by peer
+--6291--     new: 0x04024be0 (strlen              ) R-> (2007.0) 0x0484c380 strlen
+--6291-- REDIR: 0x40235c0 (ld-linux-x86-64.so.2:strcmp) redirected to 0x484d4d0 (strcmp)
+--6291-- REDIR: 0x40229f0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4850d40 (mempcpy)
+--6291-- Reading syms from /usr/lib/libstdc++.so.6.0.32
+--6291-- Reading syms from /usr/lib/libm.so.6
+--6291-- Reading syms from /usr/lib/libgcc_s.so.1
+--6291-- Reading syms from /usr/lib/libc.so.6
+==6291== Downloading debug info for /usr/lib/libc.so.6...
+--6291--   Considering /home/garch/.cache/debuginfod_client/2080ccaa527c57bf0289ba6672b99bb333357444/debuginfo ..
+--6291--   .. CRC is valid
+==6291== Successfully downloaded debug file for /usr/lib/libc.so.6
+--6291-- REDIR: 0x4024d80 (ld-linux-x86-64.so.2:strncmp) redirected to 0x484ccd0 (strncmp)
+==6291== Downloading debug info for /usr/lib/valgrind/vgpreload_core-amd64-linux.so...
+==6291== Server query failed: Connection reset by peer
+--6291-- REDIR: 0x4ca1940 (libc.so.6:strncasecmp) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9ecf0 (libc.so.6:mempcpy) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9f050 (libc.so.6:stpcpy) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4d14020 (libc.so.6:__memmove_chk) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4cc2280 (libc.so.6:wmemcmp) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9fba0 (libc.so.6:strcat) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9e480 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4cb6d60 (libc.so.6:wcsncpy) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4d13f00 (libc.so.6:__memcpy_chk) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+==6291== WARNING: new redirection conflicts with existing -- ignoring it
+--6291--     old: 0x04d56250 (__memcpy_chk_avx_una) R-> (2024.0) 0x048507b0 __memmove_chk
+--6291--     new: 0x04d56250 (__memcpy_chk_avx_una) R-> (2030.0) 0x04850e40 __memcpy_chk
+--6291-- REDIR: 0x4cb6540 (libc.so.6:wcslen) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9eea0 (libc.so.6:memset) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4cb6dc0 (libc.so.6:wcsnlen) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca1c30 (libc.so.6:strnlen) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca1cc0 (libc.so.6:strpbrk) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9fd20 (libc.so.6:strcmp) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9ee10 (libc.so.6:memrchr) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4cb5300 (libc.so.6:wcschr) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9fc10 (libc.so.6:index) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca1cf0 (libc.so.6:rindex) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4cb53b0 (libc.so.6:wcscmp) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9f0c0 (libc.so.6:stpncpy) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4cc2200 (libc.so.6:wmemchr) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca1ae0 (libc.so.6:strncmp) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9f120 (libc.so.6:strcasecmp) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca0ec0 (libc.so.6:strcspn) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4cb6330 (libc.so.6:wcscpy) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca19e0 (libc.so.6:strncasecmp_l) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9fc90 (libc.so.6:strchrnul) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9e390 (libc.so.6:bcmp) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca0e50 (libc.so.6:strcpy) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9f1c0 (libc.so.6:strcasecmp_l) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca18b0 (libc.so.6:strlen) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca1b80 (libc.so.6:strncpy) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4c9ebd0 (libc.so.6:memmove) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+==6291== Preferring higher priority redirection:
+--6291--     old: 0x04d56280 (__memcpy_avx_unalign) R-> (2018.0) 0x0484e5f0 __memcpy_avx_unaligned_erms
+--6291--     new: 0x04d56280 (__memcpy_avx_unalign) R-> (2018.1) 0x0484fdd0 memmove
+--6291-- REDIR: 0x4c9e310 (libc.so.6:memchr) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca1eb0 (libc.so.6:strspn) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4ca2660 (libc.so.6:strstr) redirected to 0x48381a0 (_vgnU_ifunc_wrapper)
+--6291-- REDIR: 0x4d5ae70 (libc.so.6:__strrchr_avx2) redirected to 0x484bd60 (rindex)
+--6291-- REDIR: 0x4d58fc0 (libc.so.6:__strlen_avx2) redirected to 0x484c260 (strlen)
+--6291-- REDIR: 0x4d55b20 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x484f4f0 (bcmp)
+--6291-- REDIR: 0x4d5a0a0 (libc.so.6:__strncmp_avx2) redirected to 0x484caf0 (strncmp)
+--6291-- REDIR: 0x4c9a750 (libc.so.6:malloc) redirected to 0x4843710 (malloc)
+--6291-- REDIR: 0x49238e0 (libstdc++.so.6:operator new[](unsigned long)) redirected to 0x4845580 (operator new[](unsigned long))
+--6291-- REDIR: 0x4921ae0 (libstdc++.so.6:operator delete[](void*)) redirected to 0x4848f00 (operator delete[](void*))
+--6291-- REDIR: 0x4d56240 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4850940 (mempcpy)
+--6291-- REDIR: 0x4923880 (libstdc++.so.6:operator new(unsigned long)) redirected to 0x4843f00 (operator new(unsigned long))
+--6291-- REDIR: 0x4d56280 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x484fdd0 (memmove)
+--6291-- REDIR: 0x4d58810 (libc.so.6:__strcmp_avx2) redirected to 0x484d3d0 (strcmp)
+--6291-- REDIR: 0x4921ab0 (libstdc++.so.6:operator delete(void*)) redirected to 0x48470c0 (operator delete(void*))
+--6291-- REDIR: 0x4c9ae20 (libc.so.6:free) redirected to 0x4846860 (free)
+==6291== 
+==6291== HEAP SUMMARY:
+==6291==     in use at exit: 0 bytes in 0 blocks
+==6291==   total heap usage: 14 allocs, 14 frees, 24,076,582 bytes allocated
+==6291== 
+==6291== All heap blocks were freed -- no leaks are possible
+==6291== 
+==6291== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

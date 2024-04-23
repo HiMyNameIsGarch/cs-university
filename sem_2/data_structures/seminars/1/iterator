@@ -1,0 +1,23 @@
+
+2.1 domain
+2.2 operations
+
+create
+    element, next, valid
+
+element(i', e^i)
+    pre  - I, valid(i)
+    post - e bel TElem
+
+next()
+
+
+subalgorithm printall(b)
+    iterator(b, it)
+    while(valid(it)) exec:
+        element(it, elem):
+        print(elem)
+        next(it)
+
+3. Reprezentation
+    {3,1,2,3}

@@ -1,0 +1,45 @@
+
+the elements can repeat
+order it's not important
+
+()  2,1,2,3 -> 1,2,4
+
+1.1 Domain definition - its a set
+
+B = { b | b is a bag with elements of }
+
+1.2 Interface specification
+
+    - create, destroy
+    - add, remove
+    - search, size
+    - iterator
+
+Create(b^o)
+        pre  -  true
+        post - b bel B
+
+destroy(b^o)
+        pre  - b bel B
+        post - b has been destroyed
+
+add(b^i,o, e^i)
+        pre  - b bel B, e bel T Elem
+        post - b' bel B, b' = b + e
+
+remove(b^i,o, e^i)
+        pre  - b bel B, e bel T Elem
+        post - b' = b - e
+
+search(b^i, e^i)
+        pre  - b bel B, e bel T Elem
+        post - true or false
+
+size(b^i, s^o)
+        pre  - b bel B
+        post - S bel N, s = |b|
+
+iterate(b^i, i^o)
+        pre  - b bel B
+        post - i bel I, i is an iterator over b
+             - i refers to a first elem in the bag 'b'
