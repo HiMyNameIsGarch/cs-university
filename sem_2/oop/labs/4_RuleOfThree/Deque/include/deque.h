@@ -3,19 +3,19 @@
 
 #include <iostream>
 
+constexpr int CHUNK_SIZE = 8;
+
 class Deque {
 
 private:
-    // struct Node {
-    //     int value;
-    //     Node* next;
-    //     Node* prev;
-    // };
+    int **chunks = nullptr;
 
-    // Node* head;
-    // Node* tail;
-    int *head;
-    int *tail;
+    int cap;
+    int numChunks;
+
+    int begin;
+    int end;
+    int currentChunk;
 
     void copy(const Deque& other);
     void clear();
