@@ -44,7 +44,7 @@ bool Matrix::isEmpty() const {
 // Average: T(sz)
 void Matrix::resize() {
     // Allocate a new array with double capacity or new capacity
-    Position *new_array = new Position[MAX(this->cp * 2, this->maxCap)];
+    Position *new_array = new Position[this->cp * 2];
     // Check if the memory was allocated
     if (new_array == NULL) {
         delete [] this->array;
@@ -57,7 +57,7 @@ void Matrix::resize() {
     }
 
     // Update the capacity of the array
-    this->cp = MAX(this->cp * 2, this->maxCap);
+    this->cp =this->cp * 2;
 
     // Release the memory space occupied by the old array
     delete [] this->array;

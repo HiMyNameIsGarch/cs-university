@@ -161,5 +161,5 @@ void testAllExtended() {
 	testModify();
     testExceptions();
     testMix();
-	// testQuantity();
+	testQuantity();
 }
