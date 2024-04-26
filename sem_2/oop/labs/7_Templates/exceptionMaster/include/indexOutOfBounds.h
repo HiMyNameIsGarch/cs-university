@@ -4,10 +4,13 @@
 #define INDEXOUTOFBOUNDS_H
 
 class IndexOutOfBounds: public ArrayMatrixException{
+private:
+    int cidx;
+    int ridx;
+
 public:
-    const char* what() const noexcept {
-        return "Index out of bounds, invalid attempt to access an element outside of the range of the matrix!";
-    }
+    IndexOutOfBounds(int cidx, int ridx);
+    const char* what() const noexcept;
 
 };
 

@@ -1,6 +1,6 @@
 # Compiler flags
 CXX = clang++
-CXXFLAGS = -std=c++20 -Wall -Wextra -I$(INCLUDE_DIR) -Werror -Wpedantic -g
+CXXFLAGS = -std=c++11 -Wall -Wextra -I$(INCLUDE_DIR) -Werror -Wpedantic -g
 
 # Directories
 SRC_DIR = src
@@ -10,7 +10,6 @@ DEBUG_DIR = debug
 
 # Files and include directories
 SRC_FILES := $(shell find $(SRC_DIR) -type f -name '*.cpp')
-H_FILES := $(shell find $(INCLUDE_DIR) -type f -name '*.h')
 INCLUDE_DIRS := $(shell find $(INCLUDE_DIR) -type d)
 
 MAIN := ./app.cpp
@@ -21,7 +20,7 @@ EXECUTABLE = $(BUILD_DIR)/app
 all: clean $(EXECUTABLE) run
 
 # Build the executable
-$(EXECUTABLE): $(SRC_FILES) $(H_FILES)
+$(EXECUTABLE): $(SRC_FILES)
 	@mkdir -p $(BUILD_DIR) # Make sure the build directory exists
 	@echo "Building executable..."
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(MAIN) && echo "Executable built successfully!" || echo "Failed to build executable!"

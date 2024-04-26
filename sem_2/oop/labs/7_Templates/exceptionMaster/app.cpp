@@ -3,15 +3,15 @@
 
 int main() {
     try {
-        Matrix<double> m(2, 2);
+        Matrix<double> *m = new Matrix<double>(2, 2);
         // 2 elements in each row
-        Matrix<unsigned short> n1(3, 3);
-        Matrix<unsigned short> n2(3, 4);
+        Matrix<unsigned short> *n1 = new Matrix<unsigned short>(3, 3);
+        Matrix<unsigned short> *n2 = new Matrix<unsigned short>(3, 4);
 
-        auto a = n1 + n2;
+        auto a = *n1 + *n2;
         std::cout << a[100][12] << std::endl;
 
-        double num = m[3][3];
+        double *num = m[3][3];
         std::cout << num << std::endl;
 
     } catch(...) {
