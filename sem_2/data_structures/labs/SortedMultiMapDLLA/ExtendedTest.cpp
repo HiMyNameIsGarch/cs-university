@@ -56,7 +56,7 @@ void testIteratorSteps(SortedMultiMap& m) {
 	}
 	smmi.first();
 	int c = 0;
-	
+
 	while (smmi.valid()) {
 		c++;
 		smmi.next();
@@ -81,7 +81,7 @@ void testRelation(Relation r) {
 		assert(r(first, current));
 		first = current;
 		smit.next();
-	}	
+	}
 	testIteratorSteps(smm);
 }
 
@@ -163,17 +163,16 @@ void testRemoveSearch(Relation r) {
             assert(smm.remove(c,c) == true);
 		testIteratorSteps(smm);
 	}
-	
+
 	for (int c = min; c <= max; c++) {
 		if (c%2==1){
             assert(smm.remove(c,c+1) == false);
             assert(smm.remove(c,c) == true);
-		}
-        else{
+		} else {
               assert(smm.remove(c,c+2) == true);
         }
 		testIteratorSteps(smm);
-	}    
+	}
 	assert(smm.size() == 0);
 }
 

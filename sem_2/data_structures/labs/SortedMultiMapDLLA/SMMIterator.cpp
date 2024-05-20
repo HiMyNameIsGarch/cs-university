@@ -2,25 +2,32 @@
 #include "SortedMultiMap.h"
 
 SMMIterator::SMMIterator(const SortedMultiMap& d) : map(d){
-	//TODO - Implementation
+    current = d.head;
 }
 
 void SMMIterator::first(){
-	//TODO - Implementation
+    current = map.head;
 }
 
+// Complexity: Theta(1)
 void SMMIterator::next(){
-	//TODO - Implementation
+    if(!valid()) {
+        throw std::exception();
+    }
+    current = map.nodes[current].next;
 }
 
+// Complexity: Theta(1)
 bool SMMIterator::valid() const{
-	//TODO - Implementation
-	return false;
+    return current != EMPTY_NODE;
 }
 
+// Complexity: Theta(1)
 TElem SMMIterator::getCurrent() const{
-	//TODO - Implementation
-	return NULL_TELEM;
+    if(!valid()) {
+        throw std::exception();
+    }
+    return map.nodes[current].info;
 }
 
 
