@@ -29,5 +29,3 @@ TElem SMMIterator::getCurrent() const{
     }
     return map.nodes[current].info;
 }
-
-

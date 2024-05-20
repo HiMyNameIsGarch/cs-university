@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "Map.h"
 #include "MapIterator.h"
+#include <iostream>
 
 
 void testAll() { //call each function to see if it is implemented
@@ -33,6 +34,7 @@ void testAll() { //call each function to see if it is implemented
 		s2 += e.second;
 		id.next();
 	}
+    std::cout << s1 << " " << s2 << std::endl;
 	assert(s1 == 19);
 	assert(s2 == 19);
 

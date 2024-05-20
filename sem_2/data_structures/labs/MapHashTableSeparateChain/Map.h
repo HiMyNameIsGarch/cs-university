@@ -8,7 +8,7 @@ typedef int TKey;
 typedef int TValue;
 typedef std::pair<TKey, TValue> TElem;
 #define NULL_TVALUE -111111
-#define NULL_TELEM pair<TKey, TValue>(-111111, -111111)
+#define NULL_TELEM std::pair<TKey, TValue>(-111111, -111111)
 class MapIterator;
 
 
@@ -17,7 +17,19 @@ class Map {
 	friend class MapIterator;
 
 	private:
-		//TODO - Representation
+        struct Node
+        {
+            TElem element;
+            bool valid;
+        };
+
+        int m_capacity;
+        Node* m_hashtable;
+        int m_size;
+
+        int hash(TKey key) const;
+        int getNextPosition(int position, int i) const;
+        void resize();
 
 	public:
 
@@ -32,8 +44,9 @@ class Map {
 	//searches for the key and returns the value associated with the key if the map contains the key or null: NULL_TVALUE otherwise
 	TValue search(TKey c) const;
 
-	//removes a key from the map and returns the value associated with the key if the key existed ot null: NULL_TVALUE otherwise
-	TValue remove(TKey c);
+        // removes a key from the map and returns the value associated with the
+        // key if the key existed or null: NULL_TVALUE otherwise
+        TValue remove(TKey c);
 
 	//returns the number of pairs (key,value) from the map
 	int size() const;

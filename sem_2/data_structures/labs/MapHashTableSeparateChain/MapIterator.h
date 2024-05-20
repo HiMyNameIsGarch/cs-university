@@ -6,7 +6,7 @@ class MapIterator
 	friend class Map;
 private:
 	const Map& map;
-	//TODO - Representation
+    int current;
 
 	MapIterator(const Map& m);
 public:

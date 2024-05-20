@@ -23,14 +23,14 @@ void testCreate() {
 	assert(m.size() == 0);
 	assert(m.isEmpty() == true);
 
-	for (int i = -10; i < 10; i++) { 
+	for (int i = -10; i < 10; i++) {
 		assert(m.search(i) == NULL_TVALUE);
 	}
-	for (int i = -10; i < 10; i++) { 
+	for (int i = -10; i < 10; i++) {
 		assert(m.search(i) == NULL_TVALUE);
 	}
 
-	MapIterator it = m.iterator(); 
+	MapIterator it = m.iterator();
 	assert(it.valid() == false);
 	try {
 		it.next();
@@ -51,7 +51,7 @@ void testCreate() {
 
 void testAdd() {
 	cout << "Test add" << endl;
-	Map m; 
+	Map m;
 	for (int i = 0; i < 10; i++) {
 		assert(m.add(i, i) == NULL_TVALUE);
 	}
@@ -60,15 +60,15 @@ void testAdd() {
 	for (int i = -10; i < 0; i++) {
 		assert(m.add(i, i) == NULL_TVALUE);
 	}
-	for (int i = 0; i < 10; i++) { 
+	for (int i = 0; i < 10; i++) {
 		assert(m.add(i, i) == i);
 	}
-	for (int i = 10; i < 20; i++) { 
+	for (int i = 10; i < 20; i++) {
 		assert(m.add(i, i) == NULL_TVALUE);
 	}
 	assert(m.isEmpty() == false);
 	assert(m.size() == 30);
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 		m.add(i, i);
 	}
 	assert(m.isEmpty() == false);
@@ -87,7 +87,7 @@ void testAdd() {
 			assert(m.search(i) == NULL_TVALUE);
 		}
 	}
-	for (int i = 10000; i > -10000; i--) { 
+	for (int i = 10000; i > -10000; i--) {
 		m.add(i, i);
 	}
 	testIteratorSteps(m);
@@ -99,14 +99,14 @@ void testRemove() {
 	cout << "Test remove" << endl;
 	Map m;
 
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 		assert(m.remove(i) == NULL_TVALUE);
 	}
 	assert(m.size() == 0);
-	for (int i = -100; i < 100; i = i + 2) { 
+	for (int i = -100; i < 100; i = i + 2) {
 		assert(m.add(i, i) == NULL_TVALUE);
 	}
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 		if (i % 2 == 0) {
 			assert(m.remove(i) == i);
 		}
@@ -116,11 +116,11 @@ void testRemove() {
 	}
 	assert(m.size() == 0);
 
-	for (int i = -100; i <= 100; i = i + 2) { 
+	for (int i = -100; i <= 100; i = i + 2) {
 		assert(m.add(i, i) == NULL_TVALUE);
 	}
 	testIteratorSteps(m);
-	for (int i = 100; i > -100; i--) { 
+	for (int i = 100; i > -100; i--) {
 		if (i % 2 == 0) {
 			assert(m.remove(i) == i);
 		}
@@ -143,7 +143,7 @@ void testRemove() {
 		assert(m.add(i, 4) == 3);
 	}
 	assert(m.size() == 200);
-	for (int i = -200; i < 200; i++) { 
+	for (int i = -200; i < 200; i++) {
 		if (i < -100 || i >= 100) {
 			assert(m.remove(i) == NULL_TVALUE);
 		}
@@ -161,13 +161,13 @@ void testRemove() {
 void testIterator() {
 	cout << "Test iterator" << endl;
 	Map m;
-	MapIterator it = m.iterator(); 
+	MapIterator it = m.iterator();
 	assert(it.valid() == false);
-	   
-	for (int i = 0; i < 100; i++) { 
+
+	for (int i = 0; i < 100; i++) {
 		m.add(33, 33);
 	}
-	MapIterator it2 = m.iterator(); 
+	MapIterator it2 = m.iterator();
 	assert(it2.valid() == true);
 	TElem el = it2.getCurrent();
 	assert(el.first == 33);
@@ -193,7 +193,7 @@ void testIterator() {
 	assert(it2.valid() == true);
 
 	Map m2;
-	for (int i = -100; i < 100; i++) { 
+	for (int i = -100; i < 100; i++) {
 		assert(m2.add(i, i) == NULL_TVALUE);
 		assert(m2.add(i, i) == i);
 		assert(m2.add(i, i) == i);
@@ -208,7 +208,7 @@ void testIterator() {
 	assert(it3.valid() == true);
 
 	Map m3;
-	for (int i = 0; i < 200; i = i + 4) { 
+	for (int i = 0; i < 200; i = i + 4) {
 		m3.add(i, i);
 	}
 
@@ -251,7 +251,7 @@ void testQuantity() {
 		it.next();
 	}
 	assert(it.valid() == false);
-	
+
 	for (int j = 30000 - 1; j >= 0; j--) {
 		assert(m.remove(j) == j);
 	}
@@ -270,7 +270,3 @@ void testAllExtended() {
 	testIterator();
 	testQuantity();
 }
-
-
-
-
