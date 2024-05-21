@@ -8,157 +8,133 @@ using std::make_pair;
 
 SortedMultiMap::SortedMultiMap(Relation r) {
     rl = r;
-    cap = 1;
+    cap = INITIAL_CAPACITY;
     sz = 0;
     head = EMPTY_NODE;
     tail = EMPTY_NODE;
+
+    // allocate the arrays
+    elems = new TElem[cap];
+    links = new Link[cap];
+
+    // initialize the links
+    for(int i = 0; i < cap - 1; i++) {
+        links[i].next = i + 1;
+        links[i].prev = EMPTY_NODE;
+    }
+
+    links[cap - 1].next = EMPTY_NODE;
     firstEmpty = 0;
-    nodes = new DLLANode[cap];
 }
 
-void SortedMultiMap::resize() {
-    DLLANode *newNodes = new DLLANode[cap * 2];
-    for (int i = 0; i < cap; i++) {
-        newNodes[i] = nodes[i];
+int SortedMultiMap::createNode(TElem e) {
+    int i = allocate();
+    if(i != EMPTY_NODE) {
+        elems[i] = e;
     }
-    delete[] nodes;
-    nodes = newNodes;
-    cap *= 2;
+    return i;
 }
 
-int SortedMultiMap::allocateNode() {
-    int newElemIdx = firstEmpty;
-    if (newElemIdx != EMPTY_NODE) {
-        firstEmpty = nodes[firstEmpty].next;
-        if (firstEmpty != EMPTY_NODE) {
-            nodes[firstEmpty].prev = EMPTY_NODE;
+int SortedMultiMap::allocate() {
+    // if the array is full, resize it
+    if(firstEmpty == EMPTY_NODE) {
+        cap *= 2;
+        TElem *newElems = new TElem[cap];
+        Link *newLinks = new Link[cap];
+
+        for(int i = 0; i < cap / 2; i++) {
+            newElems[i] = elems[i];
+            newLinks[i] = links[i];
         }
-        nodes[newElemIdx].next = EMPTY_NODE;
-        nodes[newElemIdx].prev = EMPTY_NODE;
+
+        for(int i = cap / 2; i < cap - 1; i++) {
+            newLinks[i].next = i + 1;
+            newLinks[i].prev = EMPTY_NODE;
+        }
+
+        newLinks[cap - 1].next = EMPTY_NODE;
+        firstEmpty = cap / 2;
+
+        delete[] elems;
+        delete[] links;
+
+        elems = newElems;
+        links = newLinks;
     }
-    return newElemIdx;
+    // get the first empty position
+    int i = firstEmpty;
+    firstEmpty = links[firstEmpty].next;
+    return i;
 }
 
-int SortedMultiMap::freeNode(int pos) {
-    nodes[pos].next = firstEmpty;
-    nodes[pos].prev = EMPTY_NODE;
-    if (firstEmpty != EMPTY_NODE) {
-        nodes[firstEmpty].prev = pos;
-    }
-    firstEmpty = pos;
-    return pos;
+// deallocate the space of index i
+void SortedMultiMap::deallocate(int i) {
+    links[i].next = firstEmpty;
+    links[i].prev = EMPTY_NODE;
+    firstEmpty = i;
 }
 
-void SortedMultiMap::insertAtPos(TElem elem, int pos) {
-    if(pos < 1 || pos > sz + 1) {
-        throw std::invalid_argument("Invalid position");
-    }
-
-    int newElemIdx = allocateNode();
-    if (newElemIdx == EMPTY_NODE) {
-        resize();
-        newElemIdx = allocateNode();
-    }
-
-    nodes[newElemIdx].info = elem;
-    if (pos == 1) {
-        if(head == EMPTY_NODE) {
-            head = newElemIdx;
-            tail = newElemIdx;
-        } else {
-            nodes[newElemIdx].next = head;
-            nodes[head].prev = newElemIdx;
-            head = newElemIdx;
-        }
-    } else {
-        int currentIdx = head;
-        int cPos = 1;
-        while (currentIdx != EMPTY_NODE && cPos < pos - 1) {
-            currentIdx = nodes[currentIdx].next;
-            cPos++;
-        }
-        if (currentIdx != EMPTY_NODE) {
-            int nextNode = nodes[currentIdx].next;
-            nodes[newElemIdx].next = nextNode;
-            nodes[newElemIdx].prev = currentIdx;
-            nodes[currentIdx].next = newElemIdx;
-            if (nextNode == EMPTY_NODE) {
-                tail = newElemIdx;
-            } else {
-                nodes[nextNode].prev = newElemIdx;
-            }
-        }
-    }
-}
-
+//adds a new key value pair to the sorted multi map
 void SortedMultiMap::add(TKey c, TValue v) {
-    // if the list is empty
-    if (isEmpty()) {
-        head = allocateNode();
-        tail = head;
-        nodes[head].info = make_pair(c, v);
-        sz++;
-        firstEmpty = head + 1;
-        return;
+    int i = createNode(make_pair(c,v));
+    if (i != EMPTY_NODE){
+        links[i].next = head;
+        links[i].prev = -1;
+        if (head != EMPTY_NODE) {
+            links[head].prev = i;
+        } else {
+            tail = i; // If the list was empty, set tail to i
+        }
+        head = i;
     }
-    // check if size is enough
-    if (sz == cap) {
-        resize();
-    }
-    // find the position to insert the new element
-        // Find the position to insert the new element based on key
-    int current = head;
-    while (current != EMPTY_NODE && rl(nodes[current].info.first, c)) {
-        current = nodes[current].next;
-    }
-
-    // Insert the new element at the found position
-    insertAtPos(std::make_pair(c, v), current);
+    sz += 1;
 }
 
+//returns the values belonging to a given key
 vector<TValue> SortedMultiMap::search(TKey c) const {
-    vector<TValue> values = {};
-    if (isEmpty() || c < 0) {
-        return values;
-    }
+    vector<TValue> values;
     int current = head;
-    while (current != EMPTY_NODE) {
-        if (nodes[current].info.first == c) {
-            values.push_back(nodes[current].info.second);
+    while(current != EMPTY_NODE) {
+        if(elems[current].first == c) {
+            values.push_back(elems[current].second);
         }
-        current = nodes[current].next;
+        current = links[current].next;
     }
-	return values;
+    return values;
 }
 
+//removes a key value pair from the sorted multimap
+//returns true if the pair was removed (it was part of the multimap), false if nothing is removed
 bool SortedMultiMap::remove(TKey c, TValue v) {
-    if(isEmpty()) {
-        return false;
-    }
+    bool found = false;
     int current = head;
-    while (current != -1) {
-        if (nodes[current].info.first == c && nodes[current].info.second == v) {
-            if (current == head) {
-                head = nodes[current].next;
-                if (head != -1) {
-                    nodes[head].prev = -1;
-                }
-            } else if (current == tail) {
-                tail = nodes[current].prev;
-                if (tail != -1) {
-                    nodes[tail].next = -1;
-                }
-            } else {
-                nodes[nodes[current].prev].next = nodes[current].next;
-                nodes[nodes[current].next].prev = nodes[current].prev;
-            }
-            freeNode(current);
-            sz--;
-            return true;
+    int prev = -1;
+    while (current != EMPTY_NODE && !found) {
+        if (elems[current].first == c && elems[current].second == v) {
+            found = true;
+        } else {
+            prev = current;
+            current = links[current].next;
         }
-        current = nodes[current].next;
     }
-    return false;
+    if (!found) {
+        return false;
+    } else {
+        // We have to remove the element at index current
+        if (prev == -1) {
+            head = links[head].next;
+        } else {
+            links[prev].next = links[current].next;
+        }
+        if (current == tail) {
+            tail = prev;
+        } else {
+            links[links[current].next].prev = prev;
+        }
+        deallocate(current);
+        sz -= 1;
+        return true;
+    }
 }
 
 
@@ -175,5 +151,6 @@ SMMIterator SortedMultiMap::iterator() const {
 }
 
 SortedMultiMap::~SortedMultiMap() {
-    delete[] nodes;
+    delete[] links;
+    delete[] elems;
 }

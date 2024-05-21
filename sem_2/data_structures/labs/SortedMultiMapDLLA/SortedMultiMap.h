@@ -12,12 +12,13 @@ typedef std::pair<TKey, TValue> TElem;
 // NULL values
 #define NULL_TVALUE -111111
 #define NULL_TELEM pair<TKey, TValue>(-111111, -111111);
-#define EMPTY_NODE -1
 
-struct DLLANode {
-    TElem info;
-    int next;
+constexpr int EMPTY_NODE = -1;
+constexpr int INITIAL_CAPACITY = 8;
+
+struct Link {
     int prev;
+    int next;
 };
 
 using std::vector;
@@ -28,23 +29,33 @@ typedef bool(*Relation)(TKey, TKey);
 class SortedMultiMap {
 	friend class SMMIterator;
     private:
-		//TODO - Representation
-    DLLANode *nodes;
+
+    // the array of elements of pair
+    TElem *elems;
+    // the array of links prev and next
+    Link* links;
+
+    // the capacity of the array
     int cap;
+
+    // the head and tail of the list
     int head;
     int tail;
+
+    // the first empty position in the array
     int firstEmpty;
+
+    // the size of the array
     int sz;
+
+    // the relation
     Relation rl;
 
-    // functions
-    int allocateNode();
-    // return the position was freed
-    int freeNode(int pos);
-    // resize the array of nodes
-    void resize();
-    // insert elem at a given position
-    void insertAtPos(TElem elem, int pos);
+    int allocate();
+	//dealoca spatiul de indice i
+	void deallocate(int i);
+	//functie privata care creeaza un nod in lista inlantuita
+	int createNode(TElem e);
 
     public:
 
