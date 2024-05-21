@@ -13,18 +13,22 @@ typedef std::pair<TKey, TValue> TElem;
 #define NULL_TVALUE -111111
 #define NULL_TELEM pair<TKey, TValue>(-111111, -111111);
 
-constexpr int EMPTY_NODE = -1;
-constexpr int INITIAL_CAPACITY = 8;
-
 struct Link {
     int prev;
     int next;
 };
 
+constexpr int EMPTY_NODE = -1;
+constexpr int INITIAL_CAPACITY = 8;
+
+typedef Link* Plink;
+
+
 using std::vector;
 
 class SMMIterator;
 typedef bool(*Relation)(TKey, TKey);
+
 
 class SortedMultiMap {
 	friend class SMMIterator;

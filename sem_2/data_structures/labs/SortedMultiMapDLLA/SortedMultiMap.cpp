@@ -78,6 +78,7 @@ void SortedMultiMap::deallocate(int i) {
 //adds a new key value pair to the sorted multi map
 void SortedMultiMap::add(TKey c, TValue v) {
     int i = createNode(make_pair(c,v));
+    // take into accout the relation
     if (i != EMPTY_NODE){
         links[i].next = head;
         links[i].prev = -1;

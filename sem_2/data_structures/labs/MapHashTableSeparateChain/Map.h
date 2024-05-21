@@ -20,6 +20,9 @@ class Map {
         struct Node
         {
             TElem element;
+            // this should be a pointer to the next element
+            // in the case of a collision
+            Node* next;
             bool valid;
         };
 
@@ -28,7 +31,7 @@ class Map {
         int m_size;
 
         int hash(TKey key) const;
-        int getNextPosition(int position, int i) const;
+        // int getNextPosition(int position, int i) const;
         void resize();
 
 	public:
