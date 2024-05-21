@@ -12,6 +12,9 @@ Map::~Map() {
 }
 
 int Map::hash(TKey key) const {
+    // clear out the sign bit
+    // basically this is the maximum value of signed 32 bit integer
+    // so we can use it to get only the positive value of the key
     return key & 0x7FFFFFFF % m_capacity;
 }
 

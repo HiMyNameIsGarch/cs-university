@@ -61,6 +61,7 @@ int SortedMultiMap::allocate() {
         elems = newElems;
         links = newLinks;
     }
+
     // get the first empty position
     int i = firstEmpty;
     firstEmpty = links[firstEmpty].next;
