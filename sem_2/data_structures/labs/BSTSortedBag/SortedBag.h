@@ -7,13 +7,33 @@ typedef TComp TElem;
 typedef bool(*Relation)(TComp, TComp);
 #define NULL_TCOMP -11111;
 
+struct BSTNode {
+    TElem element;
+    int frequency;
+    BSTNode* left;
+    BSTNode* right;
+
+    BSTNode(TElem elem, int freq) : element(elem), frequency(freq), left(nullptr), right(nullptr) {}
+};
+
 class SortedBagIterator;
 
 class SortedBag {
 	friend class SortedBagIterator;
 
 private:
-	//TODO - Representation
+    // Representation
+    BSTNode* root; // Pointer to the root of the BST
+    Relation relation; // Function pointer for the relation
+
+    // Private helper functions
+    void recursiveAdd(BSTNode*& node, TElem e);
+    bool recursiveRemove(BSTNode*& node, TElem e);
+    BSTNode* findMin(BSTNode* node) const;
+    bool recursiveSearch(BSTNode* node, TElem e) const;
+    int recursiveNrOccurrences(BSTNode* node, TElem e) const;
+    void deleteSubtree(BSTNode* node);
+    int recursiveSize(BSTNode* node) const;
 
 public:
 	//constructor
