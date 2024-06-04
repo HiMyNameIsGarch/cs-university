@@ -1,59 +1,53 @@
 #include "Map.h"
 #include "MapIterator.h"
-#include <exception>
 #include <stdexcept>
-using namespace std;
 
-// Constructor
-MapIterator::MapIterator(const Map& m) : map(m) {
-    currentPos = 0;
-    // Find the first non-empty bucket
-    while (currentPos < map.m_capacity && map.m_hashtable[currentPos].element == NULL_TELEM) {
-        currentPos++;
-    }
-    if (currentPos < map.m_capacity) {
-        currentNode = &map.m_hashtable[currentPos];
-    } else {
-        currentNode = nullptr;
-    }
+MapIterator::MapIterator(const Map& m) : map(m), currentBucket(0), currentNode(nullptr) {
+    first();
 }
 
 void MapIterator::first() {
-    currentPos = 0;
-    // Find the first non-empty bucket
-    while (currentPos < map.m_capacity && map.m_hashtable[currentPos].element == NULL_TELEM) {
-        currentPos++;
-    }
-    if (currentPos < map.m_capacity) {
-        currentNode = &map.m_hashtable[currentPos];
-    } else {
-        currentNode = nullptr;
+    currentBucket = 0;
+    currentNode = nullptr;
+
+    // Find the first valid node in the hashtable
+    while (currentBucket < map.m_capacity) {
+        if (map.m_hashtable[currentBucket].next != nullptr) {
+            currentNode = map.m_hashtable[currentBucket].next;
+            break;
+        }
+        currentBucket++;
     }
 }
 
 void MapIterator::next() {
     if (!valid()) {
-        throw std::runtime_error("Invalid iterator position.");
+        throw std::out_of_range("Iterator is not valid");
     }
-    // Move to the next node in the linked list
-    currentNode = currentNode->next;
-    if (currentNode == nullptr) {
-        // If the end of the linked list is reached, find the next non-empty bucket
-        do {
-            currentPos++;
-        } while (currentPos < map.m_capacity && map.m_hashtable[currentPos].element == NULL_TELEM);
-        if (currentPos < map.m_capacity) {
-            currentNode = &map.m_hashtable[currentPos];
-        } else {
-            currentNode = nullptr;
+
+    if (currentNode->next != nullptr) {
+        // Move to the next node in the linked list
+        currentNode = currentNode->next;
+    } else {
+        // Move to the next valid node in the hashtable
+        currentBucket++;
+        while (currentBucket < map.m_capacity) {
+            if (map.m_hashtable[currentBucket].next != nullptr) {
+                currentNode = map.m_hashtable[currentBucket].next;
+                return;
+            }
+            currentBucket++;
         }
+        // If no more valid nodes found, set currentNode to nullptr
+        currentNode = nullptr;
     }
 }
 
-TElem MapIterator::getCurrent() {
+TElem MapIterator::getCurrent() const {
     if (!valid()) {
-        throw std::runtime_error("Invalid iterator position.");
+        throw std::out_of_range("Iterator is not valid");
     }
+
     return currentNode->element;
 }
 

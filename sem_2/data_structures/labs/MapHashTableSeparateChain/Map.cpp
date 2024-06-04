@@ -2,168 +2,125 @@
 #include "MapIterator.h"
 
 Map::Map() {
-    // Initialize capacity, hash table, and size
-    m_capacity = INITIAL_CAPACITY; // Define your initial capacity
+    m_capacity = 8;
     m_hashtable = new Node[m_capacity]();
-    for (int i = 0; i < m_capacity; ++i) {
-        m_hashtable[i].next = nullptr;
-        m_hashtable[i].element = NULL_TELEM;
-    }
     m_size = 0;
 }
 
 Map::~Map() {
-    // // Delete all nodes and the hash table array
-    // for (int i = 0; i < m_capacity; ++i) {
-    //     Node* current = &m_hashtable[i];
-    //     while (current->next != nullptr) {
-    //         Node* next = current->next;
-    //         delete current; // Delete only the node, not the entire structure
-    //         current = next;
-    //     }
-    // }
+    for (int i = 0; i < m_capacity; i++) {
+        Node* current = m_hashtable[i].next;
+        while (current != nullptr) {
+            Node* temp = current;
+            current = current->next;
+            delete temp;
+        }
+    }
     delete[] m_hashtable;
 }
 
 int Map::hash(TKey key) const {
-    const int prime = 31; // A prime number for better distribution
-    int hashValue = 13;
-
-    // Use prime number multiplication and bitwise shifting
-    hashValue = (hashValue * prime) + (key ^ (key >> 16));
-
-    // Ensure the hash value is non-negative
-    // hashValue &= 0x7FFFFFFF;
-
-    return hashValue % m_capacity;
-
+    // clear out the sign bit
+    // basically this is the maximum value of signed 32 bit integer
+    // so we can use it to get only the positive value of the key
+    return key & 0x7FFFFFFF % m_capacity;
 }
 
 void Map::resize() {
-    // Allocate a new hash table with a larger capacity
-    int newCapacity = m_capacity * 2; // or use any other resizing strategy
-    Node** newTable = new Node*[newCapacity];
-    for (int i = 0; i < newCapacity; ++i) {
-        newTable[i] = nullptr;
-    }
+    //resize of multimap
+    int oldCapacity = m_capacity;
+    Node* oldHashtable = m_hashtable;
 
-    // Rehash all elements into the new table
-    for (int i = 0; i < m_capacity; ++i) {
-        Node* current = &m_hashtable[i];
+    m_capacity *= 2;
+    m_hashtable = new Node[m_capacity]();
+
+    for (int i = 0; i < oldCapacity; i++) {
+        Node* current = oldHashtable[i].next;
         while (current != nullptr) {
-            TKey key = current->element.first;
-            int hashValue = hash(key);
-            Node* newNode = new Node{ current->element, newTable[hashValue] };
-            newTable[hashValue] = newNode;
-            current = current->next;
+            Node* next = current->next;
+            int position = hash(current->element.first);
+            current->next = m_hashtable[position].next;
+            m_hashtable[position].next = current;
+            current = next;
         }
     }
 
-    // Update the hash table and capacity
-    delete[] m_hashtable;
-    m_hashtable = *newTable;
-    m_capacity = newCapacity;
+    delete[] oldHashtable; //delete old hashtable
 }
 
-TValue Map::add(TKey c, TValue v){
-    // Check if resize is needed
-    if (m_size > m_capacity * 2) {
+TValue Map::add(TKey c, TValue v) {
+    if (m_size >= m_capacity / 2) {
         resize();
     }
 
-    int hashValue = hash(c);
-    Node* current = &m_hashtable[hashValue];
+    int position = hash(c);
+    Node* current = m_hashtable[position].next;
 
-    // Search for the key in the chain
+    // Traverse the linked list to find the appropriate position to insert
     while (current != nullptr) {
-        // if the key is already in the map, add the value to the linked list
         if (current->element.first == c) {
-            // Key found, add the new value to the end of the linked list
-            Node* newNode = new Node{ std::make_pair(c, v), nullptr };
-            Node* temp = current;
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-            temp->next = newNode;
+            // key already exists
+            TValue oldValue = current->element.second;
+            // replace the value
+            current->element.second = v;
+            return oldValue;
+        }
+        current = current->next;
+    }
+
+    // Key not found, add new node
+    Node* newNode = new Node{std::make_pair(c, v), nullptr};
+    newNode->next = m_hashtable[position].next;
+    m_hashtable[position].next = newNode;
+    m_size++;
+    return NULL_TVALUE;
+}
+
+TValue Map::search(TKey c) const {
+    int position = hash(c);
+    Node* current = m_hashtable[position].next;
+
+    // Traverse the linked list to find the key
+    while (current != nullptr) {
+        if (current->element.first == c) {
             return current->element.second;
         }
         current = current->next;
     }
-
-    // If key not found, add a new node to the chain
-    Node* newNode = new Node{ std::make_pair(c, v), nullptr };
-    if (m_hashtable[hashValue].next == nullptr) {
-        m_hashtable[hashValue] = *newNode;
-    } else {
-        newNode->next = m_hashtable[hashValue].next;
-        m_hashtable[hashValue].next = newNode;
-    }
-    ++m_size;
-
     return NULL_TVALUE;
 }
 
-TValue Map::search(TKey c) const{
-    int hashValue = hash(c);
-    Node* current = &m_hashtable[hashValue];
+TValue Map::remove(TKey c) {
+    int position = hash(c);
+    Node* current = m_hashtable[position].next;
+    Node* prev = nullptr;
 
-    // Search for the key in the chain
+    // Traverse the linked list to find the node with the key
     while (current != nullptr) {
         if (current->element.first == c) {
-            // Key found, traverse the linked list to find the last value
-            Node* temp = current;
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-            return temp->element.second;
-        }
-        current = current->next;
-    }
-
-    // Key not found, return NULL_TVALUE
-    return NULL_TVALUE;
-}
-
-TValue Map::remove(TKey c){
-        int hashValue = hash(c);
-    Node* current = &m_hashtable[hashValue];
-    Node* previous = nullptr;
-
-    // Search for the key in the chain
-    while (current != nullptr) {
-        if (current->element.first == c) {
-            // Key found, traverse the linked list to find the last node
-            Node* temp = current;
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-
-            // Remove the node from the array
-            if (previous != nullptr) {
-                previous->next = current->next;
+            // Found the node, remove it
+            if (prev != nullptr) {
+                prev->next = current->next;
             } else {
-                m_hashtable[hashValue] = *current->next;
+                m_hashtable[position].next = current->next;
             }
-
-            // Disconnect the node from the linked list
-            current->next = nullptr;
-            --m_size;
-            return temp->element.second;
+            TValue oldValue = current->element.second;
+            delete current;
+            m_size--;
+            return oldValue;
         }
-        previous = current;
+        prev = current;
         current = current->next;
     }
 
-    // Key not found, return NULL_TVALUE
-    return NULL_TVALUE;
+    return NULL_TVALUE; // Key not found
 }
-
 
 int Map::size() const {
     return m_size;
 }
 
-bool Map::isEmpty() const{
+bool Map::isEmpty() const {
     return m_size == 0;
 }
 
