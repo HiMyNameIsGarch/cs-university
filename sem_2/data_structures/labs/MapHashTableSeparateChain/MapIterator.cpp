@@ -1,45 +1,62 @@
 #include "Map.h"
 #include "MapIterator.h"
 #include <exception>
+#include <stdexcept>
 using namespace std;
 
-
-MapIterator::MapIterator(const Map& d) : map(d)
-{
-    first();
-}
-
-
-void MapIterator::first() {
-    current = 0;
-    while (current < map.m_capacity && !map.m_hashtable[current].valid) {
-        current++;
+// Constructor
+MapIterator::MapIterator(const Map& m) : map(m) {
+    currentPos = 0;
+    // Find the first non-empty bucket
+    while (currentPos < map.m_capacity && map.m_hashtable[currentPos].element == NULL_TELEM) {
+        currentPos++;
+    }
+    if (currentPos < map.m_capacity) {
+        currentNode = &map.m_hashtable[currentPos];
+    } else {
+        currentNode = nullptr;
     }
 }
 
+void MapIterator::first() {
+    currentPos = 0;
+    // Find the first non-empty bucket
+    while (currentPos < map.m_capacity && map.m_hashtable[currentPos].element == NULL_TELEM) {
+        currentPos++;
+    }
+    if (currentPos < map.m_capacity) {
+        currentNode = &map.m_hashtable[currentPos];
+    } else {
+        currentNode = nullptr;
+    }
+}
 
 void MapIterator::next() {
     if (!valid()) {
-        throw exception();
+        throw std::runtime_error("Invalid iterator position.");
     }
-
-    current++;
-    while (current < map.m_capacity && !map.m_hashtable[current].valid) {
-        current++;
+    // Move to the next node in the linked list
+    currentNode = currentNode->next;
+    if (currentNode == nullptr) {
+        // If the end of the linked list is reached, find the next non-empty bucket
+        do {
+            currentPos++;
+        } while (currentPos < map.m_capacity && map.m_hashtable[currentPos].element == NULL_TELEM);
+        if (currentPos < map.m_capacity) {
+            currentNode = &map.m_hashtable[currentPos];
+        } else {
+            currentNode = nullptr;
+        }
     }
 }
 
-
-TElem MapIterator::getCurrent(){
+TElem MapIterator::getCurrent() {
     if (!valid()) {
-        throw exception();
+        throw std::runtime_error("Invalid iterator position.");
     }
-
-    // return the current element from the iterator
-    return map.m_hashtable[current].element;
+    return currentNode->element;
 }
-
 
 bool MapIterator::valid() const {
-    return map.size() > 0 && current < map.m_capacity;
+    return currentNode != nullptr;
 }

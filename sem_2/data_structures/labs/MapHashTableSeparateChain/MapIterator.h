@@ -6,7 +6,8 @@ class MapIterator
 	friend class Map;
 private:
 	const Map& map;
-    int current;
+    int currentPos;
+    Node *currentNode;
 
 	MapIterator(const Map& m);
 public:

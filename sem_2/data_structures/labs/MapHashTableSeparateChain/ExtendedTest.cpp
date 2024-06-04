@@ -1,7 +1,6 @@
 #include "ExtendedTest.h"
 #include "Map.h"
 #include "MapIterator.h"
-
 #include <assert.h>
 #include <iostream>
 
