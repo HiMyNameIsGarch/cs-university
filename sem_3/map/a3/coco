@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo "Running tests..."
+mvn clean test
+echo "Generating report..."
+mvn jacoco:report
+echo "Opening report in browser..."
+firefox target/site/jacoco/index.html &
+echo "Done."
