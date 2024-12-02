@@ -1,0 +1,4 @@
+In the SELECT queries mentioned above, you must use:
+     At least one composed condition with AND, OR, NOT in the WHERE clause, for 2 queries;
+     DISTINCT in at least 1 query; TOP in at least 1 query;
+     ORDER BY in at least 2 queries.

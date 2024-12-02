@@ -3,4 +3,5 @@
 
 ## Important stuff I did for the projects
 ### First semester:
-1. Implemented HeapSort
+### Second semester:
+### Third semester:

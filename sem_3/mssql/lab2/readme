@@ -1,0 +1,4 @@
+In the UPDATE / DELETE statements, use at least once (in the WHERE clause):
+the relational operators {<, <=, >, >=, =, <>}, the logical operators {AND, OR,
+NOT}, {IS NULL, IS NOT NULL}, {IN, BETWEEN}, {LIKE, NOT LIKE}. At
+least one operator from each category (mention above) should be used.
