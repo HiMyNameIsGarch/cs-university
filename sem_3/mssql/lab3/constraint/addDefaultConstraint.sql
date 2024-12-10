@@ -1,9 +1,13 @@
-CREATE PROCEDURE addDefaultConstraint
+DROP PROCEDURE IF EXISTS addDefaultConstraintProcedure;
+GO
+
+CREATE PROCEDURE addDefaultConstraintProcedure
 (
     -- parameters
-    @DefaultConstraint nvarchar(128) = NULL
-    @TableName nvarchar(128) = NULL
-    @ColumnName nvarchar(128) = NULL
+    @DefaultConstraint nvarchar(128),
+    @TableName nvarchar(128),
+    @ColumnName nvarchar(128),
+    @CanIncrement bit = 1
 )
 AS
 BEGIN
@@ -40,6 +44,26 @@ BEGIN
     DECLARE @Message NVARCHAR(255);
     SET @Message = N'Default constraint ' + @DefaultConstraint + N' added to column ' + @ColumnName + N' in table ' + @TableName + N'.';
 
-    -- Increment the database version with the store procedure
-    EXEC IncrementDatabaseVersion @Message;
+    IF @CanIncrement = 1
+    BEGIN
+        -- Increment the database version with the store procedure
+        DECLARE @RevertSql NVARCHAR(MAX);
+        SET @RevertSql = N'removeDefaultConstraint ' + N'@DefaultConstraint = ' + @DefaultConstraint + N'@TableName = ' + @TableName + N'@ColumnName = ' + @ColumnName + N', @CanIncrement = 0;';
+        DECLARE @ActionT NVARCHAR(MAX);
+        SET @ActionT = N'addDefaultConstraintProcedure ' + N'@DefaultConstraint = ' + @DefaultConstraint + N'@TableName = ' + @TableName + N'@ColumnName = ' + @ColumnName + N', @CanIncrement = 0;';
+        EXEC IncrementDatabaseVersion @Message, @ActionT, @RevertSql;
+    END;
 END;
+GO
+
+-- Add Default Constraint to MockTable1
+EXEC addDefaultConstraintProcedure @DefaultConstraint = 'ID_Default1', @TableName = 'MockTable1', @ColumnName = 'column1';
+SELECT * FROM DatabaseVersion;
+
+SELECT TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE';
+
+
+EXEC GetInformationAboutTable @TableName = 'MockTable1';
+
