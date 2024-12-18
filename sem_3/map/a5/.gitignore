@@ -1,0 +1,6 @@
+bin/
+*png
+out/
+lib/
+target/
+

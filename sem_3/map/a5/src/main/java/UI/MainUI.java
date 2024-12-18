@@ -1,0 +1,288 @@
+package ui;
+
+// custom imports
+import service.CarService;
+import service.RentalService;
+import repository.CarRepository;
+import repository.RentalRepository;
+import domain.Car;
+import domain.Rental;
+import domain.RentalStatus;
+import domain.Filter.FilterCarByModel;
+import domain.Filter.IAbstractFilter;
+import service.ReportService;
+
+// java imports
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+import java.util.UUID;
+import java.util.Map;
+
+public class MainUI {
+    private static final Scanner scanner = new Scanner(System.in);
+
+    private CarService carService;
+    private RentalService rentalService;
+    private ReportService reportService;
+
+    public MainUI(RentalService rentalService, CarService carService, ReportService reportService) {
+        this.rentalService = rentalService;
+        this.carService = carService;
+        this.reportService = reportService;
+    }
+
+    // Apply a simple filter to initialize CarRepository, e.g., filter cars by model "Corolla"
+    // private static final IAbstractFilter<Car> carFilter = new FilterCarByModel("Corolla");
+    // private static final CarRepository carRepository = new CarRepository();
+    // private static final RentalRepository rentalRepository = new RentalRepository();
+    //
+    // private static final CarService carService = new CarService(carRepository);
+    // private static final RentalService rentalService = new RentalService(rentalRepository, carRepository);
+
+    private final int ADD_OPTION = 1;
+    private final int VIEW_OPTION = 2;
+    private final int UPDATE_OPTION = 3;
+    private final int DELETE_OPTION = 4;
+    private final int FIND_BY_MANUFACTURER_OPTION = 5;
+    private final int CREATE_RENTAL_OPTION = 6;
+    private final int VIEW_RENTALS_OPTION = 7;
+    private final int CANCEL_RENTAL_OPTION = 8;
+    private final int REPORT_SERVICE_OPTION = 9;
+    private final int QUIT_OPTION = 0;
+
+    // helpers
+    private void print(String textToPrint) {
+        System.out.print(textToPrint);
+    }
+    private void println(String textToPrint) {
+        System.out.println(textToPrint);
+    }
+
+    public void start() {
+        while (true) {
+            displayMenu();
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            if (choice < 0 || choice > 9) {
+                System.out.println("Invalid choice. Please try again.");
+                continue;
+            }
+            if (choice == QUIT_OPTION) {
+                System.out.println("Exiting...");
+                System.exit(0);
+            }
+            if (choice == ADD_OPTION) addCar();
+            if (choice == VIEW_OPTION) listAllCars();
+            if (choice == UPDATE_OPTION) updateCar();
+            if (choice == DELETE_OPTION) deleteCar();
+            if (choice == FIND_BY_MANUFACTURER_OPTION) findCarsByManufacturer();
+            if (choice == CREATE_RENTAL_OPTION) createRental();
+            if (choice == VIEW_RENTALS_OPTION) listAllRentals();
+            if (choice == CANCEL_RENTAL_OPTION) cancelRental();
+            if (choice == REPORT_SERVICE_OPTION) viewReports();
+        }
+    }
+
+
+    public void viewReports() {
+        println("\n-- View Reports --");
+        println("1. Clients who booked a certain car");
+        println("2. Cars rented by a certain person");
+        println("3. Count of rentals by status");
+        println("4. Total revenue generated");
+        println("5. Cars rented at least once");
+        println("0. Go back");
+
+        int choice = Integer.parseInt(scanner.nextLine());
+
+        switch (choice) {
+            case 1:
+            print("Enter car ID to view clients: ");
+            UUID carId = UUID.fromString(scanner.nextLine());
+            List<String> clients = reportService.getClientsByCar(carId);
+            if (clients.isEmpty()) {
+                println("No clients found for this car.");
+            } else {
+                println("Clients who booked this car:");
+                clients.forEach(System.out::println);
+            }
+            break;
+
+            case 2:
+            print("Enter client name to view cars rented: ");
+            String clientName = scanner.nextLine();
+            List<Car> carsRentedByPerson = reportService.getCarsRentedByPerson(clientName);
+            if (carsRentedByPerson.isEmpty()) {
+                println("No cars rented by this client.");
+            } else {
+                println("Cars rented by " + clientName + ":");
+                carsRentedByPerson.forEach(System.out::println);
+            }
+            break;
+
+            case 3:
+            Map<RentalStatus, Long> rentalCountByStatus = reportService.getRentalCountByStatus();
+            rentalCountByStatus.forEach((status, count) -> {
+                println(status + ": " + count);
+            });
+            break;
+
+            case 4:
+            double totalRevenue = reportService.getTotalRevenue();
+            println("Total revenue generated by rentals: $" + totalRevenue);
+            break;
+
+            case 5:
+            List<Car> carsRentedAtLeastOnce = reportService.getCarsRentedAtLeastOnce();
+            if (carsRentedAtLeastOnce.isEmpty()) {
+                println("No cars rented yet.");
+            } else {
+                println("Cars rented at least once:");
+                carsRentedAtLeastOnce.forEach(System.out::println);
+            }
+            break;
+
+            case 0:
+            return; // Go back to the main menu
+            default:
+            println("Invalid choice.");
+        }
+    }
+
+    public void displayMenu() {
+        // print the count of the cars
+        println("Total cars: " + carService.getAllCars().size());
+        println("");
+        println("\n-- Welcome to the hell of cars --");
+        println("1. Add a new Car");
+        println("2. List all Cars");
+        println("3. Update a Car");
+        println("4. Delete a Car");
+        println("5. Find the Cheapest Car");
+        println("6. Find Cars by Manufacturer");
+        println("7. Create a Rental");
+        println("8. List all Rentals");
+        println("9. Cancel a Rental");
+        println("0. Exit");
+        print("Pick your poison: ");
+    }
+
+    public void addCar() {
+        print("Enter car brand: ");
+        String brand = scanner.nextLine();
+        print("Enter car model: ");
+        String model = scanner.nextLine();
+        print("Enter license plate: ");
+        String licensePlate = scanner.nextLine();
+        print("Is the car available (true/false): ");
+        boolean isAvailable = Boolean.parseBoolean(scanner.nextLine());
+
+        try {
+            carService.createCar(brand, model, licensePlate, isAvailable);
+            System.out.println("Car added successfully!");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void listAllCars() {
+        System.out.println("\nListing all cars:");
+        List<Car> cars = carService.getAllCars();
+        if (cars.isEmpty()) {
+            System.out.println("No cars available.");
+        } else {
+            cars.forEach(System.out::println);
+        }
+    }
+
+    private void updateCar() {
+        System.out.print("Enter car ID to update: ");
+        UUID carId = UUID.fromString(scanner.nextLine());
+
+        System.out.print("Enter new brand (leave blank to skip): ");
+        String brand = scanner.nextLine();
+        System.out.print("Enter new model (leave blank to skip): ");
+        String model = scanner.nextLine();
+        System.out.print("Enter new license plate (leave blank to skip): ");
+        String licensePlate = scanner.nextLine();
+        System.out.print("Is the car available (true/false): ");
+        boolean isAvailable = Boolean.parseBoolean(scanner.nextLine());
+
+        try {
+            Car updatedCar = carService.updateCar(carId, brand, model, licensePlate, isAvailable);
+            if (updatedCar != null) {
+                System.out.println("Car updated successfully!");
+            } else {
+                System.out.println("Car not found.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void deleteCar() {
+        System.out.print("Enter car ID to delete: ");
+        UUID carId = UUID.fromString(scanner.nextLine());
+        if (carService.deleteCar(carId)) {
+            System.out.println("Car deleted successfully!");
+        } else {
+            System.out.println("Car not found.");
+        }
+    }
+
+    private void findCarsByManufacturer() {
+        System.out.print("Enter manufacturer to search: ");
+        List<Car> cars = carService.getAllCars();
+        if (cars.isEmpty()) {
+            System.out.println("No cars found for the given manufacturer.");
+        } else {
+            cars.forEach(System.out::println);
+        }
+    }
+
+    // Rental Operations
+
+    private void createRental() {
+        System.out.print("Enter car ID for rental: ");
+        UUID carId = UUID.fromString(scanner.nextLine());
+        System.out.print("Enter rental start date (in ms): ");
+        Date startDate = new Date(Long.parseLong(scanner.nextLine()));
+        System.out.print("Enter rental end date (in ms): ");
+        Date endDate = new Date(Long.parseLong(scanner.nextLine()));
+
+        System.out.print("Enter client name: ");
+        String clientName = scanner.nextLine();
+
+        UUID rentalId = UUID.randomUUID();
+        try {
+            // Call createRental on rentalService with all required parameters
+            rentalService.createRental(rentalId, carId, startDate, endDate, clientName);
+            System.out.println("Rental created successfully!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error creating rental: " + e.getMessage());
+        }
+    }
+
+    private void listAllRentals() {
+        Iterable<Rental> rentals = rentalService.getAllRentals();
+        // print the count of rentals
+        for (Rental r : rentals) {
+            System.out.println(r.toString());
+        }
+    }
+
+    private void cancelRental() {
+        System.out.print("Enter rental ID to cancel: ");
+        UUID rentalId = UUID.fromString(scanner.nextLine());
+        try {
+            rentalService.cancelRental(rentalId);
+            System.out.println("Rental cancelled successfully!");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+
+}
