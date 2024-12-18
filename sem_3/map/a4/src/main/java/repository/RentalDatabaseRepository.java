@@ -8,8 +8,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import repository.DatabaseRepository;
 
-public class RentalDatabaseRepository extends RentalRepository {
+public class RentalDatabaseRepository extends DatabaseRepository {
     private final String tableName;
     protected final Connection connection;
 
@@ -21,7 +22,7 @@ public class RentalDatabaseRepository extends RentalRepository {
     }
     public void initializeRentalTable() throws SQLException {
         String createTableQuery =
-        "CREATE TABLE IF NOT EXISTS Rental (" +
+        "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
         "    id TEXT PRIMARY KEY, " +
         "    carId TEXT NOT NULL, " +
         "    clientName TEXT NOT NULL, " +
@@ -31,8 +32,8 @@ public class RentalDatabaseRepository extends RentalRepository {
         "    status TEXT NOT NULL, " +
         "    FOREIGN KEY(carId) REFERENCES Car(id)" +
         ");";
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(createTableQuery);
+        try (Statement initStatement = connection.createStatement()) {
+            initStatement.execute(createTableQuery);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to initialize Rental table.", e);
@@ -49,11 +50,11 @@ public class RentalDatabaseRepository extends RentalRepository {
 
             // Fetch all rentals from the database
             String query = "SELECT * FROM " + tableName;
-            try (Statement stmt = connection.createStatement();
-                 ResultSet rs = stmt.executeQuery(query)) {
-                while (rs.next()) {
+            try (Statement loadStatement = connection.createStatement();
+                 ResultSet resultSet = loadStatement.executeQuery(query)) {
+                while (resultSet.next()) {
                     // Map each database record to a Rental entity
-                    Rental rental = mapResultSetToEntity(rs);
+                    Rental rental = mapResultSetToEntity(resultSet);
 
                     // Add the rental to the in-memory storage
                     add(rental.getId(), rental);
@@ -83,8 +84,8 @@ public class RentalDatabaseRepository extends RentalRepository {
         // Database-specific implementations
     @Override
     public Rental add(UUID rentalId, Rental rental) {
-        try (PreparedStatement stmt = getInsertStatement(rentalId, rental)) {
-            stmt.executeUpdate();
+        try (PreparedStatement addStatement = getInsertStatement(rentalId, rental)) {
+            addStatement.executeUpdate();
             return rental;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to add rental to the database.", e);
@@ -93,8 +94,8 @@ public class RentalDatabaseRepository extends RentalRepository {
 
     @Override
     public Rental modify(UUID rentalId, Rental rental) {
-        try (PreparedStatement stmt = getUpdateStatement(rentalId, rental)) {
-            stmt.executeUpdate();
+        try (PreparedStatement modifyStatement = getUpdateStatement(rentalId, rental)) {
+            modifyStatement.executeUpdate();
             return rental;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to modify rental in the database.", e);
@@ -108,9 +109,9 @@ public class RentalDatabaseRepository extends RentalRepository {
         try {
             Rental rental = findById(rentalId);
             String query = "DELETE FROM Rental WHERE id = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, rentalId.toString());
-                stmt.executeUpdate();
+            try (PreparedStatement deleteStatement = connection.prepareStatement(query)) {
+                deleteStatement.setString(1, rentalId.toString());
+                deleteStatement.executeUpdate();
             }
             return rental;
         } catch (SQLException e) {
@@ -121,11 +122,11 @@ public class RentalDatabaseRepository extends RentalRepository {
     @Override
     public Rental findById(UUID rentalId) {
         String query = "SELECT * FROM Rental WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, rentalId.toString());
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToEntity(rs);
+        try (PreparedStatement findStatement = connection.prepareStatement(query)) {
+            findStatement.setString(1, rentalId.toString());
+            try (ResultSet resultSet = findStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapResultSetToEntity(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -138,10 +139,10 @@ public class RentalDatabaseRepository extends RentalRepository {
     public Iterable<Rental> getAll() {
         List<Rental> rentals = new ArrayList<>();
         String query = "SELECT * FROM Rental";
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                rentals.add(mapResultSetToEntity(rs));
+        try (PreparedStatement getAllStatement = connection.prepareStatement(query);
+             ResultSet resultSet = getAllStatement.executeQuery()) {
+            while (resultSet.next()) {
+                rentals.add(mapResultSetToEntity(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to retrieve all rentals from the database.", e);
@@ -150,41 +151,41 @@ public class RentalDatabaseRepository extends RentalRepository {
     }
 
 
-    private Rental mapResultSetToEntity(ResultSet rs) throws SQLException {
+    private Rental mapResultSetToEntity(ResultSet resultSet) throws SQLException {
         Rental rental = new Rental(
-            UUID.fromString(rs.getString("carId")),
-            rs.getString("clientName"),
-            new java.util.Date(rs.getDate("startDate").getTime()), // Convert java.sql.Date to java.util.Date
-            new java.util.Date(rs.getDate("endDate").getTime()),
-            rs.getDouble("totalPrice"));
-        rental.setId(UUID.fromString(rs.getString("id")));
-        rental.setStatus(RentalStatus.valueOf(rs.getString("status")));
+            UUID.fromString(resultSet.getString("carId")),
+            resultSet.getString("clientName"),
+            new java.util.Date(resultSet.getDate("startDate").getTime()), // Convert java.sql.Date to java.util.Date
+            new java.util.Date(resultSet.getDate("endDate").getTime()),
+            resultSet.getDouble("totalPrice"));
+        rental.setId(UUID.fromString(resultSet.getString("id")));
+        rental.setStatus(RentalStatus.valueOf(resultSet.getString("status")));
         return rental;
     }
 
     private PreparedStatement getInsertStatement(UUID id, Rental rental) throws SQLException {
-        PreparedStatement stmt = connection.prepareStatement(
+        PreparedStatement getInsertStatement = connection.prepareStatement(
             "INSERT INTO Rental (id, carId, clientName, startDate, endDate, status, totalPrice) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        stmt.setString(1, id.toString());
-        stmt.setString(2, rental.getCarToReserve().toString());
-        stmt.setString(3, rental.getClientName());
-        stmt.setDate(4, new java.sql.Date(rental.getStartDate().getTime())); // fuckery
-        stmt.setDate(5, new java.sql.Date(rental.getEndDate().getTime()));
-        stmt.setString(6, rental.getStatus().name());
-        stmt.setDouble(7, rental.getTotalPrice());
-        return stmt;
+        getInsertStatement.setString(1, id.toString());
+        getInsertStatement.setString(2, rental.getCarToReserve().toString());
+        getInsertStatement.setString(3, rental.getClientName());
+        getInsertStatement.setDate(4, new java.sql.Date(rental.getStartDate().getTime())); // fuckery
+        getInsertStatement.setDate(5, new java.sql.Date(rental.getEndDate().getTime()));
+        getInsertStatement.setString(6, rental.getStatus().name());
+        getInsertStatement.setDouble(7, rental.getTotalPrice());
+        return getInsertStatement;
     }
 
     private PreparedStatement getUpdateStatement(UUID id, Rental rental) throws SQLException {
-        PreparedStatement stmt = connection.prepareStatement(
+        PreparedStatement getUpdateStatement = connection.prepareStatement(
             "UPDATE Rental SET carId = ?, clientName = ?, startDate = ?, endDate = ?, status = ?, totalPrice = ? WHERE id = ?");
-        stmt.setString(1, id.toString());
-        stmt.setString(2, rental.getClientName());
-        stmt.setDate(3, new java.sql.Date(rental.getStartDate().getTime())); // fuckery
-        stmt.setDate(4, new java.sql.Date(rental.getEndDate().getTime()));
-        stmt.setString(5, rental.getStatus().name());
-        stmt.setString(6, id.toString());
-        stmt.setDouble(7, rental.getTotalPrice());
-        return stmt;
+        getUpdateStatement.setString(1, id.toString());
+        getUpdateStatement.setString(2, rental.getClientName());
+        getUpdateStatement.setDate(3, new java.sql.Date(rental.getStartDate().getTime())); // fuckery
+        getUpdateStatement.setDate(4, new java.sql.Date(rental.getEndDate().getTime()));
+        getUpdateStatement.setString(5, rental.getStatus().name());
+        getUpdateStatement.setString(6, id.toString());
+        getUpdateStatement.setDouble(7, rental.getTotalPrice());
+        return getUpdateStatement;
     }
 }

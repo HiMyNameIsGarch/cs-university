@@ -33,8 +33,8 @@ public abstract class DatabaseRepository<ID, T> implements IRepository<ID, T> {
 
     @Override
     public T add(ID id, T entityToAdd) {
-        try (PreparedStatement stmt = getInsertStatement(id, entityToAdd)) {
-            stmt.executeUpdate();
+        try (PreparedStatement addEntityStatement = getInsertStatement(id, entityToAdd)) {
+            addEntityStatement.executeUpdate();
             return entityToAdd;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,9 +48,9 @@ public abstract class DatabaseRepository<ID, T> implements IRepository<ID, T> {
         if (entity == null) {
             return null;
         }
-        try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?")) {
-            stmt.setObject(1, idToDelete);
-            stmt.executeUpdate();
+        try (PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM " + tableName + " WHERE id = ?")) {
+            deleteStatement.setObject(1, idToDelete);
+            deleteStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,8 +59,8 @@ public abstract class DatabaseRepository<ID, T> implements IRepository<ID, T> {
 
     @Override
     public T modify(ID id, T entityToModify) {
-        try (PreparedStatement stmt = getUpdateStatement(id, entityToModify)) {
-            stmt.executeUpdate();
+        try (PreparedStatement modifyStatement = getUpdateStatement(id, entityToModify)) {
+            modifyStatement.executeUpdate();
             return entityToModify;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,11 +70,11 @@ public abstract class DatabaseRepository<ID, T> implements IRepository<ID, T> {
 
     @Override
     public T findById(ID idToFind) {
-        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?")) {
-            stmt.setObject(1, idToFind);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return mapResultSetToEntity(rs);
+        try (PreparedStatement findStatement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?")) {
+            findStatement.setObject(1, idToFind);
+            ResultSet resultSet = findStatement.executeQuery();
+            if (resultSet.next()) {
+                return mapResultSetToEntity(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,8 +85,8 @@ public abstract class DatabaseRepository<ID, T> implements IRepository<ID, T> {
     @Override
     public Iterable<T> getAll() {
         List<T> entities = new ArrayList<>();
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName)) {
+        try (Statement getAllStatement = connection.createStatement();
+             ResultSet rs = getAllStatement.executeQuery("SELECT * FROM " + tableName)) {
             while (rs.next()) {
                 entities.add(mapResultSetToEntity(rs));
             }

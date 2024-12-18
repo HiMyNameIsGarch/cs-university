@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import repository.CarRepository;
+import repository.DatabaseRepository;
 
-public class CarDatabaseRepository extends CarRepository {
+public class CarDatabaseRepository extends DatabaseRepository {
     private final String tableName;
     protected final Connection connection;
 
@@ -22,15 +23,15 @@ public class CarDatabaseRepository extends CarRepository {
     }
     public void initializeCarTable() throws SQLException {
         String createTableQuery =
-        "CREATE TABLE IF NOT EXISTS Car (" +
+        "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
         " id TEXT PRIMARY KEY, " +
         " brand TEXT NOT NULL, " +
         " model TEXT NOT NULL, " +
         " licensePlate TEXT NOT NULL UNIQUE, " +
         " isAvailable BOOLEAN NOT NULL" +
         ");";
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(createTableQuery);
+        try (Statement initStatement = connection.createStatement()) {
+            initStatement.execute(createTableQuery);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,9 +50,9 @@ public class CarDatabaseRepository extends CarRepository {
 
             // Fetch all cars from the database
             String query = "SELECT * FROM " + tableName;
-            try (Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query)) {
-                while (rs.next()) {
+            try (Statement connectionStatement = connection.createStatement();
+            ResultSet resultSet = connectionStatement.executeQuery(query)) {
+                while (resultSet.next()) {
                     // Map each database record to a Car entity
                     // Car car = mapResultSetToEntity(rs);
 
@@ -86,8 +87,8 @@ public class CarDatabaseRepository extends CarRepository {
 
     @Override
     public Car add(UUID id, Car car) {
-        try (PreparedStatement stmt = getInsertStatement(id, car)) {
-            stmt.executeUpdate();
+        try (PreparedStatement addStatement = getInsertStatement(id, car)) {
+            addStatement.executeUpdate();
             return car;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to add car to the database.", e);
@@ -96,8 +97,8 @@ public class CarDatabaseRepository extends CarRepository {
 
     @Override
     public Car modify(UUID id, Car car) {
-        try (PreparedStatement stmt = getUpdateStatement(id, car)) {
-            stmt.executeUpdate();
+        try (PreparedStatement addEntityStatement = getUpdateStatement(id, car)) {
+            addEntityStatement.executeUpdate();
             return car;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to modify car in the database.", e);
@@ -109,9 +110,9 @@ public class CarDatabaseRepository extends CarRepository {
         try {
             Car car = findById(id); // Retrieve the car before deletion
             String query = "DELETE FROM Car WHERE id = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, id.toString());
-                stmt.executeUpdate();
+            try (PreparedStatement deleteStatement = connection.prepareStatement(query)) {
+                deleteStatement.setString(1, id.toString());
+                deleteStatement.executeUpdate();
             }
             return car;
         } catch (SQLException e) {
@@ -122,11 +123,11 @@ public class CarDatabaseRepository extends CarRepository {
     @Override
     public Car findById(UUID id) {
         String query = "SELECT * FROM Car WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, id.toString());
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToEntity(rs);
+        try (PreparedStatement getEntityStatement = connection.prepareStatement(query)) {
+            getEntityStatement.setString(1, id.toString());
+            try (ResultSet resultSet = getEntityStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapResultSetToEntity(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -139,10 +140,10 @@ public class CarDatabaseRepository extends CarRepository {
     public List<Car> getAll() {
         List<Car> cars = new ArrayList<>();
         String query = "SELECT * FROM Car";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                cars.add(mapResultSetToEntity(rs));
+        try (Statement getAllStatement = connection.createStatement();
+             ResultSet resultSet = getAllStatement.executeQuery(query)) {
+            while (resultSet.next()) {
+                cars.add(mapResultSetToEntity(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to retrieve all cars from the database.", e);
@@ -151,34 +152,34 @@ public class CarDatabaseRepository extends CarRepository {
     }
 
     private PreparedStatement getInsertStatement(UUID id, Car car) throws SQLException {
-        PreparedStatement stmt = connection.prepareStatement(
+        PreparedStatement getInsertStatement = connection.prepareStatement(
             "INSERT INTO Car (id, brand, model, licensePlate, isAvailable) VALUES (?, ?, ?, ?, ?)");
-        stmt.setString(1, id.toString());
-        stmt.setString(2, car.getBrand());
-        stmt.setString(3, car.getModel());
-        stmt.setString(4, car.getLicensePlate());
-        stmt.setBoolean(5, car.isAvailable());
-        return stmt;
+        getInsertStatement.setString(1, id.toString());
+        getInsertStatement.setString(2, car.getBrand());
+        getInsertStatement.setString(3, car.getModel());
+        getInsertStatement.setString(4, car.getLicensePlate());
+        getInsertStatement.setBoolean(5, car.isAvailable());
+        return getInsertStatement;
     }
 
     private PreparedStatement getUpdateStatement(UUID id, Car car) throws SQLException {
-        PreparedStatement stmt = connection.prepareStatement(
+        PreparedStatement updateStatement = connection.prepareStatement(
             "UPDATE Car SET brand = ?, model = ?, licensePlate = ?, isAvailable = ? WHERE id = ?");
-        stmt.setString(1, car.getBrand());
-        stmt.setString(2, car.getModel());
-        stmt.setString(3, car.getLicensePlate());
-        stmt.setBoolean(4, car.isAvailable());
-        stmt.setString(5, id.toString());
-        return stmt;
+        updateStatement.setString(1, car.getBrand());
+        updateStatement.setString(2, car.getModel());
+        updateStatement.setString(3, car.getLicensePlate());
+        updateStatement.setBoolean(4, car.isAvailable());
+        updateStatement.setString(5, id.toString());
+        return updateStatement;
     }
 
-    private Car mapResultSetToEntity(ResultSet rs) throws SQLException {
+    private Car mapResultSetToEntity(ResultSet resultSet) throws SQLException {
         Car car = new Car(
-            rs.getString("brand"),
-            rs.getString("model"),
-            rs.getString("licensePlate"),
-            rs.getBoolean("isAvailable"));
-        car.setId(UUID.fromString(rs.getString("id")));
+            resultSet.getString("brand"),
+            resultSet.getString("model"),
+            resultSet.getString("licensePlate"),
+            resultSet.getBoolean("isAvailable"));
+        car.setId(UUID.fromString(resultSet.getString("id")));
         return car;
     }
 }
