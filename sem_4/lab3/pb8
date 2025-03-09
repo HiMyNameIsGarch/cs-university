@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameters two file names (a file that
+# contains user names and a file that contains any text). The script will send a
+# mail to each user in the first file (the mail message will be the text in the
+# second file).
+#
+#
+
+if [ $# -ne 2 ]; then
+    echo "Invalid number of parameters"
+    echo "Usage: $0 <users_file> <message_file>"
+    exit 1
+fi
+
+users_file="$1"
+message_file="$2"
+
+# Check if the first parameter is a file
+if [ ! -f "$users_file" ]; then
+    echo "First parameter is not a file"
+    exit 1
+fi
+
+# Check if the second parameter is a file
+if [ ! -f "$message_file" ]; then
+    echo "Second parameter is not a file"
+    exit 1
+fi
+
+
+while read -r user; do
+    mail -s "Message" "$user" < "$message_file"
+done < "$users_file"

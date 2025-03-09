@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Write a shell script which displays the full user name and IP address of each
+# user currently logged on to the server
+#
+
+# Get the list of users currently logged on to the server
+who | while read -r line
+do
+    # Extract the username and IP address from the line
+    username=$(echo "$line" | awk '{print $1}')
+    ip=$(echo "$line" | awk '{print $5}')
+
+    # Display the full user name and IP address
+    echo "User: $username, IP: $ip"
+done

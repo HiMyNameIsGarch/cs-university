@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Write a shell script that reads numbers from keyboard (the reading stops when
+# the user has entered the number 0). The script will display the sum of numbers
+# entered from the keyboard.
+
+sum=0
+while true; do
+    # Prompt the user and read input
+    printf "Enter a number: "
+    read -r number
+
+    # Check if the input is a valid number
+    if ! echo "$number" | grep -qE '^-?[0-9]+$'; then
+        echo "Invalid input. Please enter a number."
+        continue
+    fi
+
+    # Check if the number is 0
+    if [ "$number" -eq 0 ]; then
+        break
+    fi
+
+    # Add the number to the sum
+    sum=$((sum + number))
+done
+
+echo "The sum is $sum"

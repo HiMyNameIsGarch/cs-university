@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameter a natural number. The script
+# will check wheather the given number is prime or not.
+#
+#
+# Example:
+# ./script.sh 5
+# The number 5 is prime.
+#
+if [ $# -ne 1 ]; then
+    echo "Invalid number of arguments"
+    echo "Usage: $0 <number>"
+    exit 1
+fi
+
+number=$1
+
+# check if numbers
+if ! [ "$number" -eq "$number" ] 2>/dev/null; then
+    echo "The parameter is not a number."
+    exit 1
+fi
+
+if [ "$number" -lt 2 ]; then
+    echo "The number $number is not prime."
+    exit 0
+fi
+
+isprime() {
+    # Storing the number to be checked
+    number=$1
+    i=2
+    # Flag variable
+    f=0
+
+    # Running a loop from 2 to number/2
+    while [ $i -le $((number / i)) ]; do
+        # Checking if i is a factor of number
+        [ $((number % i)) -eq 0 ] && f=1
+
+        # Increment the loop variable
+        i=$((i + 1))
+    done
+
+    # Print the result
+    if [ $f -eq 1 ]; then
+        printf "\033[31m%s is Not Prime\033[0m\n" "$number"
+    else
+        printf "\033[32m%s is Prime\033[0m\n" "$number"
+    fi
+}
+
+isprime "$number"

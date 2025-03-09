@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameter an user name. The script will
+# count and display the number of processes that belong to that user.
+#
+
+# Check if exactly one argument is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <username>"
+    exit 1
+fi
+
+# Check if the user exists
+if ! grep -q "^$1:" /etc/passwd; then
+    echo "User $1 does not exist."
+    exit 1
+fi
+
+user="$1"
+nr=0
+
+# Count the number of processes for the user
+for _ in $(ps -eo user,pid | awk -v user="$user" '$1 == user {print $2}'); do
+    nr=$((nr + 1))
+done
+
+echo "User $user has $nr processes."

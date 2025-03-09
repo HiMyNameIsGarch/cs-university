@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Write a shell script that reads user names from keyboard. For each user, the
+# script will display the number of times it was logged in to the server in the
+# current month. If he/she has not logged in at all during the current month, the
+# script will display the message: "User X has never logged in during the current
+# month".
+#
+# The script will stop when the user enters the string "exit".
+
+# Function to count logins for a user in the current month
+count_logins() {
+    username=$1
+    current_month=$(date +"%b")  # Current month in abbreviated form (e.g., "Mar")
+    current_year=$(date +"%Y")   # Current year (e.g., "2025")
+
+    # Use `last -F` to get login records for the user
+    login_count=$(last -F | grep -c "^$username.*$current_month.*$current_year")
+    # login_count=$(last -F | awk -v user="$username" -v month="$current_month" -v year="$current_year" '
+    #     $1 == user && $5 == month && $6 == year { count++ }
+    #     END { print count+0 }
+    # ')
+
+    if [ "$login_count" -gt 0 ]; then
+        echo "User $username has logged in $login_count times during the current month."
+    else
+        echo "User $username has never logged in during the current month."
+    fi
+}
+
+# Main script
+while true; do
+    # Read a username from the keyboard
+    printf "Enter a username (or 'quit' to exit): "
+    read -r username
+
+    # Exit if the user enters 'quit'
+    if [ "$username" = "quit" ]; then
+        break
+    fi
+
+    # Check if the user exists
+    if ! id "$username" > /dev/null 2>&1; then
+        echo "User $username does not exist."
+        continue
+    fi
+
+    # Count and display logins for the user
+    count_logins "$username"
+done

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameter a directory name. The script will
+# determine the total number of lines in all ASCII text files in this directory
+# and its subdirectories. It is assumed that any directory will only contain
+# ASCII text files.
+
+
+# Check if the number of arguments is correct
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <directory>"
+    exit 1
+fi
+
+# Check if the argument is a directory
+if [ ! -d "$1" ]; then
+    echo "$1 is not a directory"
+    exit 2
+fi
+
+# Find all ASCII text files in the directory and its subdirectories
+files=$(find "$1" -type f -exec file {} \; | grep -i 'ascii text' | cut -d: -f1)
+
+for file in $files; do
+    # Count the number of lines in each file
+    lines=$(wc -l < "$file")
+    total=$((total + lines))
+done
+
+echo "Total number of lines in all ASCII text files: $total"

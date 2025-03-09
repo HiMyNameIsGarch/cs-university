@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Write a shell script that reads words from keyboard (the reading stops when the
+# user has entered the word "stop"). The script will display the list of words
+# entered from the keyboard.
+
+
+# Initialize an empty list to store words
+word_list=""
+
+# Loop to read words from the keyboard
+while true; do
+    echo "Enter a word ('stop' to finish):"
+    read -r word
+
+    [ "$word" = "stop" ] && break
+
+    word_list="$word_list $word"
+done
+
+# Display the list of words entered
+echo "You entered the following words:"
+echo "$word_list"

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameter an user name (ex: bdae0198).
+# The script will determine the full name of that user and if he/she is
+# currently connected to the server.
+#
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <username>"
+    exit 1
+fi
+
+username=$1
+
+# check if the username exists
+if ! grep -q "^$username:" /etc/passwd; then
+    echo "User $username does not exist."
+    exit 1
+fi
+
+# get the full name of the user
+full_name=$(getent passwd "$username" | cut -d: -f5)
+
+# check if the user is connected
+if who | grep -q "^$username "; then
+    echo "$full_name is connected."
+else
+    echo "$full_name is not connected."
+fi
+
+

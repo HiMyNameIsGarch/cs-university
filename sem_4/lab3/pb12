@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameter a directory name. The script
+# will display the filename and the first 3 lines of each ASCII text file found
+# in that directory.
+#
+# Example:
+# $ ./pb12.sh /etc
+# /etc/hosts
+# # /etc/hosts: static lookup table for host names
+# # <ip-address> <hostname.domain.org> <hostname>
+
+
+# check the validity of the parameters
+if [ $# -ne 1 ]; then
+    echo "Invalid usage of the parameters"
+    echo "Usage: $0 <directory>"
+    exit 1
+fi
+
+# check if parameter is a directoy
+if [ ! -d "$1" ]; then
+    echo "$1 is not a directory"
+    exit 1
+fi
+
+# iterate through all files in the directory
+files=$(find "$1" -maxdepth 1 -type f )
+for file in $files; do
+    # check if file is a regular file
+    if [ -f "$file" ]; then
+        # check if file is an ASCII text file
+        if [ "$(file "$file" | grep -c "ASCII text")" -eq 1 ]; then
+            echo "The first 3 lines of the file $file are:"
+            echo "----------------------------------------";
+            head -n 3 "$file"
+            echo "----------------------------------------";echo
+        fi
+    fi
+done

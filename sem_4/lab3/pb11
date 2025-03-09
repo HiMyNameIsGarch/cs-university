@@ -1,0 +1,21 @@
+#!/bin/sh
+# Write a shell script which lists the content of the current directory. The
+# script will list the files as follows: sorted by file names, sorted by last
+# modified date and sorted by file size.
+#
+# Usage:
+#
+echo "Listing contents of the current directory:"
+echo "-----------------------------------------"
+echo
+#
+echo "Files sorted by name:"
+ls -1
+echo
+
+echo "Files sorted by last modified date:"
+ls -1 -t
+echo
+
+echo "Files sorted by file size:"
+ls -1 -S
