@@ -61,7 +61,7 @@ TValue Map::add(TKey c, TValue v) {
         if (current->element.first == c) {
             // key already exists
             TValue oldValue = current->element.second;
-            // replace the value
+            // place the value
             current->element.second = v;
             return oldValue;
         }

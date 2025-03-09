@@ -4,9 +4,9 @@ GO
 CREATE PROCEDURE IncrementDatabaseVersion
 (
     -- parameter for the description
-    @Description NVARCHAR(255),
-    @ActionT NVARCHAR(255),
-    @RevertAction NVARCHAR(255)
+    @Description NVARCHAR(MAX),
+    @ActionT NVARCHAR(MAX),
+    @RevertAction NVARCHAR(MAX)
 )
 AS BEGIN
     -- check if the message is null
@@ -42,18 +42,28 @@ AS BEGIN
     END;
 
     -- build the sql
-    DECLARE @Sql NVARCHAR(MAX);
-    SET @Sql = N'INSERT INTO DatabaseVersion (Description, Action, RevertAction, IsCurrentVersion) VALUES (' + QUOTENAME(@Description, '''') + N', ' + QUOTENAME(@ActionT, '''') + N', ' + QUOTENAME(@RevertAction, '''') + N', 0);';
+    BEGIN TRY
+        PRINT 'before set'
+        DECLARE @SqlCommand NVARCHAR(MAX);
+        SET @SqlCommand = N'INSERT INTO DatabaseVersion (Description, Action, RevertAction, IsCurrentVersion) VALUES (' + QUOTENAME(@Description, '''') + N', ' + QUOTENAME(@ActionT, '''') + N', ' + QUOTENAME(@RevertAction, '''') + N', 0);';
+        PRINT 'Action: ' + @ActionT;
+        PRINT 'Revert: ' + @RevertAction;
+        -- SET @SqlCommand = 'SELECT * FROM DatabaseVersion';
+        PRINT 'after set';
+        PRINT 'SQL to execute: ' + @SqlCommand;
+
     -- Execute the dynamic SQL with the alter statement
-    EXEC sp_executesql @Sql;
+        EXEC sp_executesql @SqlCommand;
+    END TRY
+    BEGIN CATCH
+        PRINT 'we got an error'
+    END CATCH
 
     -- Get the current version
     DECLARE @CurrentVersion INT;
     SELECT @CurrentVersion = MAX(VersionID) FROM DatabaseVersion;
 
     -- Execute the store procedure to alter the database version
-    SET ANSI_NULLS ON;
-    SET QUOTED_IDENTIFIER ON;
     EXEC SetCurrentVersionProcedure @VersionID = @CurrentVersion;
 
     -- Print the message to the console
@@ -61,3 +71,4 @@ AS BEGIN
 END;
 GO
 
+select * from DatabaseVersion

@@ -47,11 +47,11 @@ GO
 
 -- Create MockTable1
 -- EXEC CreateTableProcedure @TableName = 'MockTable1';
-EXEC CreateTableProcedure @TableName = 'MockTable3';
+EXEC CreateTableProcedure @TableName = 'Users';
 SELECT * FROM DatabaseVersion;
 
 
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_TYPE = 'BASE TABLE';
+WHERE TABLE_TYPE = 'Users';
 

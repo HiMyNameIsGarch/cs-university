@@ -1,0 +1,2 @@
+#include "../include/allocationFailure.h"
+

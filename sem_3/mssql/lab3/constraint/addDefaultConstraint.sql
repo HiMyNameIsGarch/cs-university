@@ -33,7 +33,7 @@ BEGIN
     END;
 
     -- Check if default constraint exists in the table
-    IF NOT EXISTS (SELECT 1 FROM sys.default_constraints WHERE parent_object_id = OBJECT_ID(@TableName) AND name = @DefaultConstraint)
+    IF NOT EXISTS (SELECT * FROM sys.default_constraints WHERE parent_object_id = OBJECT_ID(@TableName) AND name = @DefaultConstraint)
 
     -- Alter the table accordingly with sql builder
     DECLARE @Sql NVARCHAR(MAX);

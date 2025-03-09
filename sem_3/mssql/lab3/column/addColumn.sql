@@ -56,16 +56,17 @@ END;
 GO
 -- --
 -- -- test to see if this works properly
--- -- EXEC AddColumnToTableProcedure @TableName = '', @ColumnName = '';
+-- EXEC AddColumnToTableProcedure @TableName = '', @ColumnName = '';
 -- -- EXEC AddColumnToTableProcedure @TableName = 'sd', @ColumnName = 'asd';
 -- -- EXEC AddColumnToTableProcedure @TableName = 'Users', @ColumnName = 'UserID';
 -- -- EXEC AddColumnToTableProcedure @TableName = 'Users', @ColumnName = 'ser';
 -- EXEC AddColumnToTableProcedure @TableName = 'Users', @ColumnName = 'column1';
 -- EXEC AddColumnToTableProcedure @TableName = 'Users', @ColumnName = 'column2';
--- EXEC AddColumnToTableProcedure @TableName = 'Users', @ColumnName = 'column3';
+-- EXEC AddColumnToTableProcedure @TableName = 'sers', @ColumnName = 'column3';
 -- EXEC AddColumnToTableProcedure @TableName = 'MockTable1', @ColumnName = 'column1';
 
-EXEC AddColumnToTableProcedure @TableName = 'MockTable3', @ColumnName = 'columnMock2';
+EXEC AddColumnToTableProcedure @TableName = 'Users', @ColumnName = 'columnMock5';
+EXEC AddColumnToTableProcedure @TableName = 'Users', @ColumnName = 'marcus';
 
 -- EXEC RevertDatabaseToVersion @Version = 5;
 

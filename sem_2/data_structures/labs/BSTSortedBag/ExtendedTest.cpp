@@ -1,4 +1,3 @@
-#include "ShortTest.h"
 #include "SortedBag.h"
 #include "SortedBagIterator.h"
 #include <assert.h>
@@ -63,9 +62,6 @@ void testIterator(SortedBag& sb, Relation rel) {
 		it.next();
 		assert(sb.search(e1) == true);
 		assert(sb.search(e2) == true);
-		// assert(sb.nrOccurrences(e1) > 0);
-		// assert(sb.nrOccurrences(e2) > 0);
-		// assert(rel(e2, e1));
 	}
 	try {
 		it.getCurrent();
@@ -84,12 +80,9 @@ void testIterator(SortedBag& sb, Relation rel) {
 	it.first();
 	assert(it.valid() == true);
 	it.first();
-	// int count = 0;
 	while (it.valid()) {
-		// count++;
 		it.next();
 	}
-	// assert(count == sb.size());
 }
 
 void testAdd(Relation r) {
@@ -119,15 +112,12 @@ void testAdd(Relation r) {
 		}
 		else if (i >= -200 && i < 0) {
 			assert(exista == true);
-			// assert(nrA == 1);
 		}
 		else if (i >= 0 && i < 100) {
 			assert(exista == true);
-			// assert(nrA == 2);
 		}
 		else if (i >= 100 && i <= 200) {
 			assert(exista == true);
-			// assert(nrA == 1);
 		}
 	}
 
@@ -172,7 +162,6 @@ void testRemove(Relation r) {
 			assert(sb.remove(i) == false);
 		}
 		else {
-			// assert(sb.nrOccurrences(i) == 1);
 			assert(sb.search(i) == true);
 		}
 		sb.add(i);
@@ -264,24 +253,19 @@ void testIterator(Relation rel) {
 		count++;
 		sbi.next();
 	}
-	// assert(count == sb.size());
 	sbi.first();
-	// TElem e = sbi.getCurrent();
 	sbi.next();
 	count = 1;
 	while (sbi.valid()) {
 		TElem ee = sbi.getCurrent();
-		// assert(rel(e, ee));
 		TElem ee2 = sbi.getCurrent();
 		assert(ee == ee2);
 		TElem ee3 = sbi.getCurrent();
 		assert(ee == ee3);
-		// e = ee;
 		sbi.next();
 		count++;
 	}
     std::cout << count << " " << sb.size() <<  std::endl;
-	// assert(count == sb.size());
 }
 
 

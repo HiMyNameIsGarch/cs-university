@@ -10,6 +10,7 @@ typedef std::pair<TKey, TValue> TElem;
 #define NULL_TVALUE -111111
 #define NULL_TELEM std::pair<TKey, TValue>(-111111, -111111)
 class MapIterator;
+
 struct Node
 {
     TElem element;

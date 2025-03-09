@@ -16,7 +16,7 @@ BEGIN
         END;
 
         -- Check if the version exists
-        IF NOT EXISTS (SELECT 1 FROM DatabaseVersion WHERE VersionID = @Version)
+        IF NOT EXISTS (SELECT * FROM DatabaseVersion WHERE VersionID = @Version)
         BEGIN
             RAISERROR('Version does not exist.', 16, 1);
             RETURN;
@@ -74,3 +74,5 @@ BEGIN
     END CATCH;
 END;
 GO
+
+
