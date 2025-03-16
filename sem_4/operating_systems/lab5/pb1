@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameters a short month name followed
+# by a day number (ex: Mar 8). For each possible 4 hours interval, the script
+# will display the time interval (hh:mm-hh:mm) and the average number of users
+# that were connected to the server on that date and within that time frame.

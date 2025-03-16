@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a Shell program that received as parameters two directory names and will copy the branch specified by the second directory to be a subbranch in the first directory, but it will copy only .txt files.

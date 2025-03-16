@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameter a directory name. The script
+# will display the content of all text files in the given directory and its
+# subdirectories.
+
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <directory>"
+    exit 1
+fi
+
+if [ ! -d "$1" ]; then
+    echo "The argument must be a directory"
+    exit 2
+fi
+
+files=$(find "$1" -type f -exec file {} \; | grep -i 'ascii text' | cut -d: -f1)
+
+for file in $files; do
+    cat "$file"
+done
+

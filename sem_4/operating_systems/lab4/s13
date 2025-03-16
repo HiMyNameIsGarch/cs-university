@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters several file names. The script will delete the first 2 characters on each line in the given files.

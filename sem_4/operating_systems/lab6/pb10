@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a Shell program that supervises the system, such that: the program saves in a file all the users that launch the command ftp, specifying the time and (if available) the server from which the ftp connection is being attempt.

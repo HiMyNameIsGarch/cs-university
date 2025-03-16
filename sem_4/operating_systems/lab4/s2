@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Write a shell script which takes as parameters a text followed by several
+# file names. The script will delete all the lines which contain the text
+# given as parameter in all given files.
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 text [file1 file2 ...]"
+    exit 1
+fi
+
+text=$1
+
+# check if text contain spaces
+if [[ $text =~ [[:space:]]+ ]]; then
+    # contains spaces so it's a text
+    sed -i "/$text/d;/^ *$/d" "${@:2}"
+    cat "${@:2}"
+else
+  echo "Parameter is a word not a text"
+fi

@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters several file names. The script will display the lines containing the same word in consecutive positions in the given files. Each line will be prefixed with its number and the word involved.

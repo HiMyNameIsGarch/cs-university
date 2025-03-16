@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a Shell program that supervises the system, such that: for each new connection in the system, on the terminal from which the connection was made, it will print a list of all active users from the system, and for each user it will print the number of launched processes by that user.

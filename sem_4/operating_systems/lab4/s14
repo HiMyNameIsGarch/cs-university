@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters a text followed by several file names. The script will insert the given text after the 1st line in the given files.

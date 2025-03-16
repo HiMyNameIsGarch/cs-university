@@ -16,10 +16,13 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-# check if the parameters are integers
-if ! [ "$1" -eq "$1" ] 2>/dev/null || ! [ "$2" -eq "$2" ] 2>/dev/null; then
-    echo "The parameters must be integers"
-    echo "Usage: $0 <integer1> <integer2>"
+if ! echo "$1" | grep -qE '^-?[0-9]+$'; then
+    echo "$1 is not a number. Please enter a valid number."
+    exit 1
+fi
+
+if ! echo "$2" | grep -qE '^-?[0-9]+$'; then
+    echo "$2 is not a number. Please enter a valid number."
     exit 1
 fi
 

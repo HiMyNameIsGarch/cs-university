@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Given a text file, write a Shell script that creates a directory which contains 26 dictionary-files, such that: the first file contains in alphabetical order all the words from the initial file that start with ‘A’, one word per line, the second file contains all words starting with ‘B’ and so on, each files contains all the world starting with that letter, each word on a new line, ordered alphabetically

@@ -1,0 +1,2 @@
+#!/bin/sh
+ # A C++ program is given. Determine for each class defined in the program the number of instances where new objects are being created, printing the line numbers.

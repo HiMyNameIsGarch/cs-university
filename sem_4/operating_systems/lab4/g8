@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters several user accounts (ex: gmae0221 jpae0229). The script will display those user accounts (from those given as parameters) that are currently connected to the server.

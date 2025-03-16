@@ -2,7 +2,7 @@
 
 # Write a shell script which takes as parameter an user name. The script will
 # count and display the number of processes that belong to that user.
-#
+
 
 # Check if exactly one argument is provided
 if [ "$#" -ne 1 ]; then

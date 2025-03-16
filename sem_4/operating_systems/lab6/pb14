@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Given a C program, write a Shell script that finds for each global variable defined in the program, how many times it is used, printing also the program line numbers where it appears.

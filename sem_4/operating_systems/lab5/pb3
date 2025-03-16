@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters several file names. The script will display the ratio of the number of lowercase letters to the number of uppercase letters in each given file (ex: file1.txt l/U = 95/12).

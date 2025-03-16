@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters several file names. For each given file, the script will display its name and the average number of words per line. At the end, the script will display also the average number of words per file.

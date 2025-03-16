@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script that takes a group name (ex: gr821) as a parameter. The script will display the given group name followed by the list of all students that belong to that group. Each line in the student list will contain the username of the student followed by its full name.

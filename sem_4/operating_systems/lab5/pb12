@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters two words followed by several file names. The script will replace any occurrence of the first word with the second word in each line of the given files.

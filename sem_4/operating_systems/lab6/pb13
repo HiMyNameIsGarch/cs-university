@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Given a text file, write a Shell script that creates a directory containing 10 dictionary files corresponding to the 10 digits (0-9), and each file contains all the strings from the text file that start with that digit, each on a separate line, ordered alphabetically.

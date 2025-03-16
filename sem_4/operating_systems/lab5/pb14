@@ -1,0 +1,1 @@
+ # Write a shell script which takes as parameter a time interval (hh:mm-hh:mm). The script will display the average number of users that were connected to the server in the given time interval.

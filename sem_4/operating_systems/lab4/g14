@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters several file names. The script will display all the lines in the given files that contain only uppercase letters.

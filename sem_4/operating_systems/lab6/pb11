@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Given a list of files and a directory, print for each filename all the subdirectories in which it appears, ordered decreasingly by the file size (a file can have the same name but different sizes in different subdirectories).

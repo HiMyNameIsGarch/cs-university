@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a Shell program that, given a directory (as a parameter), creates a list of all the names that appear in it and its subdirectories (files, directories), and for each file it prints the maximum number of repeating lines (in the same file).

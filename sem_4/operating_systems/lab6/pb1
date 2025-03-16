@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Given a C program, write a Shell script that finds how many times each
+# function defined in the program is called, and prints the line number for
+# each function call in the program.

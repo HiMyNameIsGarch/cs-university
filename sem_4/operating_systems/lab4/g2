@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Write a shell script which takes as parameters a word followed by several
+# file names. The shell will display the names of the files containing the
+# given word and the total number of these files.
+
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 word [file1 file2 ...]"
+    exit 1
+fi
+
+word=$1
+
+grep -l "$word" "${@:2}" | tee /dev/tty | wc -l
