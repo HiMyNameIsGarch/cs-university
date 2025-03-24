@@ -9,12 +9,12 @@ function p = aitken_algo(x, f, alpha, epsilon)
     for j = 2:n
         for i = j:n
             % compute the diagonals for the determinant
-            diagonal1 = alpha - x(i-j+1) * table(i, j-1);
-            diagonal2 = alpha - x(i) * table(i-1, j-1);
+            diagonal1 = alpha - x(i - j + 1) * table(i, j - 1);
+            diagonal2 = alpha - x(i) * table(i - 1, j - 1);
             % compute the determinant
             determinant = diagonal1 - diagonal2;
             % compute the denominator
-            denominator = x(i) - x(i-j+1);
+            denominator = x(i) - x(i - j + 1);
             % finally put the result in the table
             table(i, j) = determinant / denominator;
         end

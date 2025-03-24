@@ -1,9 +1,9 @@
 function F_at_x = compute_divided_differences(x, y)
     % arguments:
-    %   x - Array of x-values (independent variable).
-    %   y - Array of y-values (dependent variable).
+    %   x independent variable.
+    %   y dependent variable.
     % output:
-    %   F_at_x - Divided differences table.
+    %   F_at_x - divided differences table.
 
     n = length(x);
     F_at_x = zeros(n, n);

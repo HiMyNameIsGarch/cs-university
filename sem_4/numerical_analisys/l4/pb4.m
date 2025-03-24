@@ -15,11 +15,13 @@ table = zeros(n, n);
 % first column
 table(:, 1) = f;
 
-% start using the Aitken's algorithm
+% start using the aitken's algorithm
 for j = 2:n
     for i = j:n
         % the determinant of the matrix
-        nominator = (alpha - x(i - j + 1)) * table(i, j-1) - (alpha - x(i)) * table(i-1, j-1);
+        diag1 = table(i, j - 1) * (alpha - x(i - j + 1) );
+        diag2 = table(i-1, j - 1) * (alpha - x(i));
+        nominator = diag1 - diag2;
         % 1 / x_i - x_j
         denominator = x(i) - x(i - j + 1);
         table(i, j) = nominator / denominator;
