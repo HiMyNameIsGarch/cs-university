@@ -1,2 +1,12 @@
 #!/bin/sh
- # Write a shell script which takes as parameters several file names. The script will delete the first 2 characters on each line in the given files.
+# Write a shell script which takes as parameters several file names. The
+# script will delete the first 2 characters on each line in the given files.
+#
+#
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 file1 file2 file3 ..."
+    exit 1
+fi
+
+# ONE LINER BABY
+sed -i 's/^..//' "${@}"

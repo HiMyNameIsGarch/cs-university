@@ -1,2 +1,6 @@
 #!/bin/sh
- # Write a shell script that takes several file names as parameters. The script will interchange the 1st word with the 3rd word in each line of the given files. The words contain only letters or numbers and are separated by any other character.
+
+# Write a shell script that takes several file names as parameters. The script
+# will interchange the 1st word with the 3rd word in each line of the given
+# files. The words contain only letters or numbers and are separated by any
+# other character.

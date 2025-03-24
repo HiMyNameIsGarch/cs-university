@@ -1,2 +1,13 @@
 #!/bin/sh
- # Write a shell script which takes as parameter a HTML file name. The script will convert the given HTML file to a text file (all HTML tags will be removed).
+
+# Write a shell script which takes as parameter a HTML file name. The script
+# will convert the given HTML file to a text file (all HTML tags will be
+# removed).
+#
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <file.html>"
+    exit 1
+fi
+
+# another one liner
+sed -i 's/<[^>]*>//g;s/  */ /g;/^$/d' "$1"

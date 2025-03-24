@@ -1,2 +1,13 @@
 #!/bin/sh
- # Write a shell script which takes as parameters several file names. The script will delete all words that contain at least one digit from all given files.
+
+# Write a shell script which takes as parameters several file names. The
+# script will delete all words that contain at least one digit from all given
+# files.
+#
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <file1> <file2> ..."
+    exit 1
+fi
+
+# that was all ?
+sed -i 's/[[:alnum:]_]*[0-9][[:alnum:]_]*//g;s/  \+/ /g' "${@}"
