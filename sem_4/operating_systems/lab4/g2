@@ -4,12 +4,37 @@
 # file names. The shell will display the names of the files containing the
 # given word and the total number of these files.
 
-
 if [ $# -lt 2 ]; then
     echo "Usage: $0 word [file1 file2 ...]"
     exit 1
 fi
 
-word=$1
+word="$1"
+
+# check for spaces in the word
+if [[ $word == *" "* ]]; then
+    echo "The word cannot contain spaces."
+    exit 2
+fi
 
 grep -l "$word" "${@:2}" | tee /dev/tty | wc -l
+
+# breakdown of the command:
+# -l option of grep: only display the names of the files containing the word
+# "${@:2}": all the arguments starting from the second one
+# tee /dev/tty: display the output of grep on the terminal
+# wc -l: count the number of lines
+#
+#
+#----------------------< alternative with pretty output >-----------------------
+
+# files="$(grep -l "$word" "${@:2}")"
+# if [ -z "$files" ]; then
+#     echo "No files contain the word."
+#     exit 3
+# fi
+# count=$(echo "$files" | wc -l)
+#
+# echo "The files are:"
+# echo "$files"
+# echo "Total number of files containing the word: $count"
