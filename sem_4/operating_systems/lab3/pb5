@@ -10,12 +10,12 @@
 
 # Function to count logins for a user in the current month
 count_logins() {
-    username=$1
+    username="$1"
     current_month=$(date +"%b")
     current_year=$(date +"%Y")
 
-    # Use `last -F` to get login records for the user
-    login_count=$(last -F | grep -c "^$username.*$current_month.*$current_year")
+    # use last -F
+    login_count=$(last -F | grep -c "^$username.*$current_month.*$current_year.*")
 
     if [ "$login_count" -gt 0 ]; then
         echo "User $username has logged in $login_count times during the current month."
@@ -27,15 +27,15 @@ count_logins() {
 # main script
 while true; do
     # read a username from the keyboard
-    printf "Enter a username (or 'quit' to exit): "
+    printf "enter a username ('quit' to exit): "
     read -r username
 
     # exit if the user enters 'quit'
     [ "$username" = "quit" ] && break
 
-    # Check if the user exists
+    # check if the user exists
     if ! id "$username" > /dev/null 2>&1; then
-        echo "User $username does not exist."
+        echo "user $username does not exist"
         continue
     fi
 
