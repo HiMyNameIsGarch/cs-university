@@ -19,6 +19,7 @@ df_values(1:2:end) = df(x_original);
 
 % div diff
 F = compute_divided_differences(x_nodes, f_values, df_values);
+% disp(F);
 
 % Hermite polynomial evaluation function
 hermite_poly = @(x) arrayfun(@(x_eval) evaluate_poly(x_eval, F, x_nodes), x);

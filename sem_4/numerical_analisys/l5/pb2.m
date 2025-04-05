@@ -62,8 +62,8 @@ plot(x_plot, y_plot, 'r--', 'LineWidth', 1.5)
 plot(x_nodes(1:2:end), f_values(1:2:end), 'ro', 'MarkerFaceColor', 'r')  % Original nodes
 
 % information
-title('Cubic Hermite Interpolation of ln(x)');
+title('cubic Hermite Interpolation of ln(x)');
 xlabel('x');
-ylabel('f(x)',r);
+ylabel('f(x)');
 
 grid on;
