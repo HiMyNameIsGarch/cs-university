@@ -17,7 +17,15 @@ if [[ $word == *" "* ]]; then
     exit 2
 fi
 
-grep -l "$word" "${@:2}" | tee /dev/tty | wc -l
+# check if the arguments are files
+for file in "${@:2}"; do
+    if [ ! -f "$file" ]; then
+        echo "$file is not a file."
+        exit 3
+    fi
+done
+
+# grep -l "$word" "${@:2}" | tee /dev/tty | wc -l
 
 # breakdown of the command:
 # -l option of grep: only display the names of the files containing the word
@@ -28,13 +36,13 @@ grep -l "$word" "${@:2}" | tee /dev/tty | wc -l
 #
 #----------------------< alternative with pretty output >-----------------------
 
-# files="$(grep -l "$word" "${@:2}")"
-# if [ -z "$files" ]; then
-#     echo "No files contain the word."
-#     exit 3
-# fi
-# count=$(echo "$files" | wc -l)
-#
-# echo "The files are:"
-# echo "$files"
-# echo "Total number of files containing the word: $count"
+files="$(grep -l "$word" "${@:2}")"
+if [ -z "$files" ]; then
+    echo "No files contain the word."
+    exit 3
+fi
+count=$(echo "$files" | wc -l)
+
+echo "The files are:"
+echo "$files"
+echo "Total number of files containing the word: $count"

@@ -13,6 +13,15 @@ text="$1"
 
 # check if text contain spaces
 if [[ $text == *" "* ]]; then
+
+    # check if the arguments are files
+    for file in "${@:2}"; do
+        if [ ! -f "$file" ]; then
+            echo "$file is not a file."
+            exit 2
+        fi
+    done
+
     # contains spaces so it's a text
     sed -i "/$text/d;/^ *$/d" "${@:2}"
     cat "${@:2}"
