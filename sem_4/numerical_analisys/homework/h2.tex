@@ -1,0 +1,242 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{colortbl} % For cell coloring
+\usepackage{amssymb} % For additional symbols
+
+\title{Homework 2, Section B}
+\author{Gabriel Hanu}
+\date{31 March 2025 \\
+Numerical Analysis}
+
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+Construct the polynomial that interpolates the data below and approximate f(2):
+\begin{center}
+    \begin{tabular}{c| c c c}
+        x & -2 & 1 & 3 \\
+        \hline
+        f(x) & 1 & 0 & 2 \\
+    \end{tabular}
+\end{center}
+
+For this problem, we will use the Lagrange polynomial is the classical form:
+\[
+    (L_mf)(x) = \sum_{i=0}^{m} l_i(x)f(x)
+\]
+where the Lagrange basis polynomials \(l_i(x)\) are defined as:
+\[
+    l_i(x) = \prod_{j=0, j\neq i}^{m} \frac{x-x_j}{x_i-x_j}
+\]
+
+Before computing all the Lagrange basis polynomials, we can analyze and see
+that \(l_1(x)\) is mutiplied by 0, so we can simplify the expression and
+compute only \(l_0(x)\) and \(l_2(x)\).
+
+\[
+    l_0(x) = \frac{(x-1)(x-3)}{(-2-1)(-2-3)} = \frac{(x-1)(x-3)}{15}
+\]
+\[
+    l_2(x) = \frac{(x+2)(x-1)}{(3+2)(3-1)} = \frac{(x+2)(x-1)}{10}
+\]
+
+Now we can compute the Lagrange polynomial:
+\[
+    (L_2f)(x) = l_0(x)f(-2) + l_1(x)f(1) + l_2(x)f(3)
+\]
+\[
+    (L_2f)(x) = \frac{(x-1)(x-3)}{15} \cdot 1 + 0 \cdot 0 + \frac{(x+2)(x-1)}{10} \cdot 2
+\]
+
+\[
+    (L_2f)(x) = \frac{(x-1)(x-3)}{15} + \frac{(x+2)(x-1)}{5}
+\]
+\[
+    (L_2f)(x) = \frac{(x-1)(x-3) + 3(x+2)(x-1)}{15}
+\]
+\[
+    (L_2f)(x) = \frac{4x^2-x-3}{15}
+\]
+
+Now we can evaluate the polynomial at x=2:
+\[
+    (L_2f)(2) = \frac{2^2 - 2 - 3}{15}
+\]
+So the final result is:
+\[
+    (L_2f)(2) = \frac{11}{15}
+\]
+
+\section*{Problem 2}
+Using Newton’s form, obtain the polynomial that interpolates the following data:
+\begin{center}
+    \begin{tabular}{c| c c c c c c}
+        x & -2 & -1 & 0 & 1 & 2 & 3 \\
+        \hline
+        f(x) & 31 & 5 & 1 & 1 & 11 & 61 \\
+    \end{tabular}
+\end{center}
+
+In order to solve this problem, we will use the Newton's form of the interpolation polynomial:
+\[
+    (N_mf)(x) = f(x_0) + \sum_{i=1}^{m} (x-x_0)...(x-x_{i-1}) \cdot (D^if)(x_0)
+\]
+Knowing the order m = 5, we can compute the divided differences:
+\begin{center}
+    \begin{tabular}{c c | c c c c c}
+        x & f(x) & \(D'(x)\) & \(D''(x)\) & \(D'''(x)\) & \(D^4(x)\) & \(D^5(x)\) \\
+        \hline
+        -2 & 31 & -26 & 11 & -3 & 1 & 0 \\
+        -1 & 5 & -4 & 2 & 1 & 1 & - \\
+        0 & 1 & 0  & 5 & 5 & - & - \\
+        1 & 1 & 10 & 20 & - & - & - \\
+        2 & 11 & 50 & - & - & - & - \\
+        3 & 61 & - & - & - & - & - \\
+    \end{tabular}
+\end{center}
+
+We can now compute the Newton's form of the polynomial:
+\begin{align*}
+(N_5f)(x) = 31 & + (x+2)D'(x) \\
+         & + (x+2)(x+1)D''(x) \\
+         & + (x+2)(x+1)xD'''(x) \\
+         & + (x+2)(x+1)x(x-1)D^4(x) \\
+         & + (x+2)(x+1)x(x-1)(x-2)D^5(x) \\
+\end{align*}
+but in this case \(D^4(x)\) = 1 and \(D^5(x)\) = 0, so we can simplify the expression:
+
+\begin{align*}
+(N_5f)(x) = 31 & + (x+2)(-26) \\
+         & + (x+2)(x+1)(11) \\
+         & + (x+2)(x+1)x(-3) \\
+         & + (x+2)(x+1)x(x-1) \\
+\end{align*}
+Finally, by doing the computations we get:
+
+\[
+    (N_4f)(x) = x^4-x^3+x^2-x+1
+\]
+
+
+\section*{Problem 3}
+Find the maximum approximation error of \(cos(\frac{\pi}{4})\) using the Lagrange polynomial corresponding
+to \(f(x)=cos(\pi x)\) and the nodes \(x_0=0,\ x_1=\frac{1}{3},\ x_2=\frac{1}{2} \).
+\newline
+\newline
+Lagrange polynomial in the classical form is defined by:
+\[
+    f(x) = L_mf(x) + R_mf(x)
+\]
+with \(R_mf(x) = \frac{u(x)}{(m+1)!}f^{m+1}(\zeta)\), where
+\[
+    u(x) = \prod_{j=0}^{m} (x-x_j)
+\]
+and
+\[
+    \zeta \in [\alpha,\beta] \text{ where } \alpha = \min\{x_0,...,x_m\} \text{ and } \beta = \max\{x_0,...,x_m\}
+\]
+We begin by computing \(u(x)\):
+\[
+    u(x) = \big(x-0\big)\bigg(x-\frac{1}{3}\bigg)\bigg(x-\frac{1}{2}\bigg)
+\]
+Now we need to compute the third derivative of \(f(x)\):
+\[
+    f(x) = cos(\pi x); \
+    f'(x) = -\pi sin(\pi x); \
+\]
+\[
+    f''(x) = -\pi^2 cos(\pi x); \
+    f'''(x) = \pi^3 sin(\pi x); \
+\]
+
+For the interval of \(\zeta\) we can see that \(\alpha\) = 0 and \(\beta\) = \(\frac{1}{2}\), so it is clearly that:
+\[
+    \zeta \in \bigg[0,\frac{1}{2}\bigg]
+\]
+Putting it all together we get:
+
+\[
+    R_2f(x) = \frac{x(x - \frac{1}{3})(x-\frac{1}{2})}{3!}
+    \cdot \pi^3 sin(\pi \zeta)\text{, with } \zeta \in \bigg[0,\frac{1}{2}\bigg]
+\]
+
+On the interval \(\zeta \in [0,\frac{1}{2}]\), the maximum value of the sine function is 1. Using x = \(\frac{\pi}{4}\) we get:
+
+\[
+    R_2f(x) = \frac{1}{192} \cdot \frac{\pi^3}{6}
+\]
+
+Finally, the maximum approximation error is:
+\[
+    R_2f(x) =~ 0.0269
+\]
+
+
+\section*{Problem 4}
+Approximate ln(43) if ln(2) = 0.6931, ln(3)=1.0986, ln(5) = 1.6094
+\newline
+
+Firstly we can try to approximate ln(43) using the Lagrange polynomial, so we can write the table:
+
+\begin{center}
+    \begin{tabular}{c| c c c}
+        x & 2 & 3 & 5 \\
+        \hline
+        ln(x) & 0.6931 & 1.0986 & 1.6094 \\
+    \end{tabular}
+\end{center}
+
+We already know the formulas so we will do just the computations:
+\[
+    l_0(x) = \frac{(x-3)(x-5)}{3} \, \
+    l_1(x) = \frac{(x-2)(x-5)}{-2} \ \
+    l_2(x) = \frac{(x-2)(x-3)}{6}
+\]
+
+So we can write the Lagrange polynomial:
+\[
+    (L_2f)(x) = \frac{(x-3)(x-5)}{3} \cdot 0.6931 + \frac{(x-2)(x-5)}{-2} \cdot 1.0986 + \frac{(x-2)(x-3)}{6} \cdot 1.6094
+\]
+Plug in the value we try to approximate: \(x=43\)
+\[
+    (L_2f)(43) = \frac{40 \cdot 38}{3} \cdot 0.6931 + \frac{41 \cdot 38}{-2} \cdot 1.0986 + \frac{41 \cdot 40}{6} \cdot 1.6094
+\]
+And we get:
+\[
+    (L_2f)(43) = -64.67616652
+\]
+I didn't expect this result, but my guess is that the Lagrange polynomial
+works best when the nodes are close to the point we try to approximate. The
+point 43 is too far from the data range and the polynomials amplifies the
+error.
+\newline
+Ok, I think we can use the rules of logarithms to solve this problem. If we
+analize the number 43 we can see that is a prime therefore we can't factorize
+it.
+\newline
+But, we already know the values of log in 2, 3 and 5, we can deduce that ln(43) lies somewhere between ln(45) and ln(40).
+Here we can express 40 as \(2^3 \cdot 5\) and 45 as \(3^2 \cdot 5\), so we can write:
+\[
+    ln(40) = ln(2^3 \cdot 5) = 3 \cdot ln(2) + ln(5) = 3 \cdot 0.6931 + 1.6094
+\]
+\[
+    ln(40) =~ 3.6887
+\]
+and
+\[
+    ln(45) = ln(3^2 \cdot 5) = 2 \cdot ln(3) + ln(5) = 2 \cdot 1.0986 + 1.6094
+\]
+\[
+    ln(45) = 3.8066
+\]
+So ln(43) lies between these 2 numbers. But to give a concise answer,
+we can say that \(ln(43) = ln(40) + \frac{3}{5} \cdot (ln(45) - ln(40))\) = 3.7594
+\newline
+\newline
+I hope that the second method is correct and it really solves the problem proposed.
+
+\end{document}
