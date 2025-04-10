@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# Write a shell script which takes as parameters several file names. For each
+# file, the script will display the name of the file, the sum of the numbers
+# on each line in that file and the ratio of the lines l1 that contain numbers
+# to the lines l2 that do not contain numbers (ex: file1 sum = 1234 l1/l2 =
+# 3/5).
+#
+
+# Check if at least one argument is provided
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 file1 file2 ..."
+    exit 1
+fi
+
+AWK_SCRIPT="./821_l5_8.awk"
+
+# check if the awk script exists
+if [ ! -f "$AWK_SCRIPT" ]; then
+    echo "AWK script $AWK_SCRIPT not found."
+    exit 1
+fi
+
+# iterate over each file provided in the arguments
+for file in "$@"; do
+    # check the existance of the file
+    if [ ! -f "$file" ]; then
+        echo "File $file does not exist."
+        continue
+    fi
+
+    # finally run the awk script on the file
+    awk -f "$AWK_SCRIPT" "$file"
+done
+

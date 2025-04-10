@@ -1,2 +1,0 @@
-#!/bin/sh
- # Write a shell script which takes as parameters several file names. For each file, the script will display the name of the file, the sum of the numbers on each line in that file and the ratio of the lines l1 that contain numbers to the lines l2 that do not contain numbers (ex: file1 sum = 1234 l1/l2 = 3/5).
