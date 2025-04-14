@@ -6,7 +6,7 @@
 
 \title{Homework 3, Section B}
 \author{Gabriel Hanu}
-\date{31 April 2025 \\
+\date{14 April 2025 \\
 Numerical Analysis}
 
 
@@ -27,6 +27,33 @@ Construct the interpolation polynomial P corresponding to the information below.
         \(y'_k\) & 0 & 3 & 36 \\
     \end{tabular}
 \end{center}
+We choose to use the Hermite interpolation method with double nodes
+The formula is:
+\[
+    H_mf(x) = f(z_0) + \sum_{i=1}^{m} (x - z_0) ... (x-z_{i-i}) D^if(z_0)
+\]
+Also we need to compute the divided differences table:
+\begin{center}
+    \begin{tabular}{c | c c c c c c}
+        \(x\) & \(y\) & \(D^1y\) & \(D^2y\) & \(D^3y\)& \(D^4y\)& \(D^5y\)\\
+        \hline
+        0 & 1 & 0 & 2 & -1 & 4 & -3 \\
+        0 & 1 & 2 & 1 & 7 & -2 & - \\
+        1 & 3 & 3 & 15 & 3 & - & - \\
+        1 & 3 & 18 & 18 & - & - & - \\
+        2 & 21 & 36 & - & - & - & - \\
+        2 & 21 & - & - & - & - & - \\
+    \end{tabular}
+\end{center}
+Finally the Hermite interpolation polynomial is:
+\[
+    H_5f(x) = 1 + 0(x-0) + 2x^2 - x^2(x-1) + 4x^2(x-1)^2 -3x^2(x-1)^2(x-2)
+\]
+Finally we get our polynomial:
+\[
+    P(x) = -3x^5 + 16x^4 - 24x^3 + 13x^2 + 1
+\]
+
 
 \section*{Section b)}
 \[
@@ -34,6 +61,33 @@ Construct the interpolation polynomial P corresponding to the information below.
     P'(-1) = f'(-1), \
     P(0) = f(0)
 \]
+
+We will use Birkhoff interpolation to construct the minimal-degree polynomial. Since we have three conditions, a quadratic polynomial is written as:
+
+\[ P(x) = ax^2 + bx + c \]
+
+Compute its derivatives:
+\begin{align*}
+    P'(x) &= 2ax + b \\
+    P''(x) &= 2a
+\end{align*}
+
+Apply the conditions:
+\begin{enumerate}
+    \item Second derivative at \( x = -2 \):
+    \[ P''(-2) = 2a = f''(-2) \implies a = \frac{f''(-2)}{2} \]
+
+    \item First derivative at \( x = -1 \):
+    \[ P'(-1) = -2a + b = f'(-1) \implies b = f'(-1) + 2a \]
+    Substituting \( a \):
+    \[ b = f'(-1) + f''(-2) \]
+
+    \item Function value at \( x = 0 \):
+    \[ P(0) = c = f(0) \]
+\end{enumerate}
+
+The final polynomial is:
+\[ P(x) = \frac{f''(-2)}{2}x^2 + \left(f'(-1) + f''(-2)\right)x + f(0) \]
 
 \section*{Section c)}
 \begin{center}
@@ -43,10 +97,124 @@ Construct the interpolation polynomial P corresponding to the information below.
         \(y_k\) & 14 & 15 & 5 & 9 \\
     \end{tabular}
 \end{center}
+We choose to solve the problem using Newton interpolation with divided differences table:
+
+The formula is:
+\[
+    N_n(x) = f(x_0) + \sum_{i=1}^{n} (x - x_0) ... (x-x_{i-1}) D^if(x_0)
+\]
+Also we need to compute the divided differences table:
+\begin{center}
+    \begin{tabular}{c| c c c c}
+        x & y & \(D^1y\) & \(D^2y\) & \(D^3y\) \\
+        \hline
+        1 & 14 & 1 & -2 & 3/4 \\
+        2 & 15 & -5 & 7/4 &  -\\
+        4 & 5 & 2 & - & - \\
+        6 & 9 & - & - & - \\
+    \end{tabular}
+\end{center}
+
+So the Newton interpolation polynomial is:
+\[
+    N_3f(x) = 14 + 1(x-1) + (-2)(x-1)(x-2) + \frac{3}{4}(x-1)(x-2)(x-4)
+\]
+Reducing the polynomial we get:
+\[
+    P(x) = \frac{3}{4}x^3 - \frac{21}{4}x^2 - 2x^2 + 7x + \frac{21}{2}x - 15
+\]
+
 
 \section*{Section d)}
 \begin{center}
     \(x_0 = 0\) simple node, \(x_1 = 1\) triple node
 \end{center}
+We may proceed to compute the interpolation polynomial using the Hermite interpolation method
+Using the formula:
+\[
+    H_mf(x) = \sum_{k=0}^{m} \sum_{j=0}^{r_k} h_{kj}(x)f^{(j)}(x_k)
+\]
+
+We will need only these polynomials:
+\[
+    h_{00}(x), h_{10}(x), h_{11}(x), h_{12}(x)
+\]
+with the general formula for \(h_{kj}(x)\) being:
+\[
+    h_{kj}(x) = ax^3 + bx^2 + cx + d
+\]
+\[
+    h'_{kj}(x) = 3ax^2 + 2bx + c
+\]
+So P(x) will be of the form:
+\[
+    P(x) = h_{00}(x)f(x_0) + h_{10}(x)f'(x_1) + h_{11}(x)f'(x_1) + h_{12}(x)f''(x_1)
+\]
+Now we compute the polynomials:
+
+\[
+\begin{array}{r@{}l@{\quad}r@{}l@{\quad}r@{}l}
+    h_{00}(x_0) &{}= 1 & a + b + c + d &{}= 0 & a &{}= -1\\
+    h_{00}(x_1) &{}= 0 & d &{}= 1 & b &{}= 3,\  \\
+    h'_{00}(x_1) &{}= 0 & c &{}= 1 & c &{}= -3,\ \\
+    h_{00}(x_2) &{}= 0 & a + b + c + d &{}= 0 & d &{}= 1 \\
+\end{array}
+\]
+
+Finally it is:
+\[
+    h_{00}(x) = -x^3 + 3x^2 - 3x + 1
+\]
+
+\[
+\begin{array}{r@{}l@{\quad}r@{}l@{\quad}r@{}l}
+    h_{10}(x_0) &{}= 0 & a + b + c + d &{}= 1 & a &{}= 1\\
+    h_{10}(x_1) &{}= 1 & d &{}= 1 & b &{}= -3,\  \\
+    h'_{10}(x_1) &{}= 0 & c &{}= 1 & c &{}= 3,\ \\
+    h_{10}(x_2) &{}= 0 & a + b + c + d &{}= 1 & d &{}= 0 \\
+\end{array}
+\]
+
+Finally it is:
+\[
+    h_{10}(x) = x^3 + -3x^2 + 3x
+\]
+
+\[
+\begin{array}{r@{}l@{\quad}r@{}l@{\quad}r@{}l}
+    h_{11}(x_0) &{}= 0 & a + b + c + d &{}= 1 & a &{}= -1\\
+    h_{11}(x_1) &{}= 0 & d &{}= 1 & b &{}= 3,\  \\
+    h'_{11}(x_1) &{}= 1 & c &{}= 1 & c &{}= -2,\ \\
+    h_{11}(x_2) &{}= 0 & a + b + c + d &{}= 1 & d &{}= 0 \\
+\end{array}
+\]
+
+Finally it is:
+\[
+    h_{11}(x) = -x^3 + 3x^2 - 2x
+\]
+
+\[
+\begin{array}{r@{}l@{\quad}r@{}l@{\quad}r@{}l}
+    h_{12}(x_0) &{}= 0 & a + b + c + d &{}= 1 & a &{}= 1/2\\
+    h_{12}(x_1) &{}= 0 & d &{}= 1 & b &{}= -1,\  \\
+    h'_{12}(x_1) &{}= 0 & c &{}= 1 & c &{}= 1/2,\ \\
+    h_{12}(x_2) &{}= 1 & a + b + c + d &{}= 1 & d &{}= 0 \\
+\end{array}
+\]
+
+Finally it is:
+\[
+    h_{12}(x) = \frac{1}{2}x^3 - x^2 + \frac{1}{2}x
+\]
+Putting it all together we get the following:
+\[
+    P(x) = \big( -x^3 + 3x^2 - 3x + 1 \big)f(x_0) + \big(x^3 + -3x^2 + 3x\big)f'(x_1)
+\]
+\[
+    + \big(-x^3 + 3x^2 - 2x\big)f'(x_1) + \big(\frac{1}{2}x^3 - x^2 + \frac{1}{2}x\big)f''(x_1)
+\]
+
+
 
 \end{document}
