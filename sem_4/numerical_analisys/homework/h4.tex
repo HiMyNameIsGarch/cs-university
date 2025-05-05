@@ -1,0 +1,188 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\title{Homework 4, Section B}
+\author{Hanu Gabriel}
+\date{5 May 2025 \\
+Numerical Analysis}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+Check if the following function is a natural cubic spline on the interval [1, 2]
+
+\[
+S(x) =
+\begin{cases}
+x e^{t-1}, & x \in [-1, 0] \\
+1 + 2(x+1) + (x+1)^3 + 5x + 3x, & x \in [0,1] \\
+1 + (x-1) + 3(x-2)^2 + (x-1)^3, & x \in [1,2]
+\end{cases}
+\]
+
+A function \( S(x) \) is a natural cubic spline on \([-1,2]\) if \( S, S', S'' \) are continuous and:
+\[
+S''(-1) = 0, \quad S''(2) = 0
+\]
+
+Compute derivatives:
+\[
+S'(x) =
+\begin{cases}
+2 + 3(x+1)^2, & x \in [-1,0] \\
+5 + 6x, & x \in [0,1] \\
+1 + 6(x-2) + 3(x-1)^2, & x \in [1,2]
+\end{cases}
+\]
+\[
+S''(x) =
+\begin{cases}
+6(x+1), & x \in [-1,0] \\
+6, & x \in [0,1] \\
+6 + 6(x-1), & x \in [1,2]
+\end{cases}
+\]
+
+Check continuity at \( x = 0 \) and \( x = 1 \):
+
+At \( x = 0 \):
+\[
+S(0^-) = 1 + 2 + 1 = 4, \quad S(0^+) = 3 \Rightarrow S(x) \text{ is not continuous at } x = 0
+\]
+
+Therefore, \( S(x) \) is \textbf{not} a natural cubic spline on \([-1,2]\).
+
+\section*{Problem 2}
+Determine coefficients \( b, c, d \) for a natural cubic spline
+
+\[
+S(x) =
+\begin{cases}
+1 + 2x - x^3, & x \in [0,1] \\
+2 + b(x-1) + c(x-1)^2 + d(x-1)^3, & x \in [1,2]
+\end{cases}
+\]
+
+The spline must satisfy continuity of \( S, S', S'' \), and:
+\[
+S''(0) = 0, \quad S''(2) = 0
+\]
+
+Compute derivatives:
+
+\[
+S'(x) =
+\begin{cases}
+2 - 3x^2, & x \in [0,1] \\
+b + 2c(x-1) + 3d(x-1)^2, & x \in [1,2]
+\end{cases}
+\]
+
+\[
+S''(x) =
+\begin{cases}
+-6x, & x \in [0,1] \\
+2c + 6d(x-1), & x \in [1,2]
+\end{cases}
+\]
+
+Continuity conditions:
+\begin{align*}
+S_0(1) &= S_1(1) &&\Rightarrow 2 = 2 \quad \text{ok} \\
+S_0'(1) &= S_1'(1) &&\Rightarrow -1 = b \Rightarrow b = -1 \\
+S_0''(1) &= S_1''(1) &&\Rightarrow -6 = 2c \Rightarrow c = -3 \\
+S''(2) &= 0 &&\Rightarrow 2c + 6d = 0 \Rightarrow -6 + 6d = 0 \Rightarrow d = 1
+\end{align*}
+
+\textbf{Final coefficients:} \( b = -1, c = -3, d = 1 \)
+
+\section*{Problem 3}
+Fit a constant, linear, and quadratic polynomial to data
+
+Given data points:
+
+\[
+\begin{array}{c|cccc}
+x & 0 & 1 & 2 & 3 \\
+\hline
+y & 5 & -6 & 7 & 4 \\
+\end{array}
+\]
+
+
+\subsection*{Constant Fit}
+
+We compute the average of the \( y \)-values:
+\[
+a_0 = \frac{1}{4}(5 + (-6) + 7 + 4) = \frac{10}{4} = 2.5
+\]
+So, the best constant fit is:
+\[
+p(x) = 2.5
+\]
+%
+\subsection*{Linear Fit}
+%
+We want to find \( p(x) = a_0 + a_1 x \) using the normal equations.
+
+\begin{align*}
+\sum x_i &= 0 + 1 + 2 + 3 = 6 \\
+\sum y_i &= 5 - 6 + 7 + 4 = 10 \\
+\sum x_i^2 &= 0^2 + 1^2 + 2^2 + 3^2 = 14 \\
+\sum x_i y_i &= (0)(5) + (1)(-6) + (2)(7) + (3)(4) = -6 + 14 + 12 = 20
+\end{align*}
+%
+The normal equations are:
+
+\[
+\begin{cases}
+4a_0 + 6a_1 = 10 \\
+6a_0 + 14a_1 = 20
+\end{cases}
+\]
+%
+Solving:
+\[
+a_1 = 1, \quad a_0 = 1
+\]
+
+So the linear fit is:
+\[
+p(x) = 1 + x
+\]
+
+\subsection*{Quadratic Fit}
+
+We want to find \( p(x) = a_0 + a_1 x + a_2 x^2 \) using the normal equations.
+
+\begin{align*}
+\sum x_i^3 &= 0^3 + 1^3 + 2^3 + 3^3 = 36 \\
+\sum x_i^4 &= 0^4 + 1^4 + 2^4 + 3^4 = 98 \\
+\sum x_i^2 y_i &= 0^2(5) + 1^2(-6) + 2^2(7) + 3^2(4) = -6 + 28 + 36 = 58
+\end{align*}
+
+The system becomes:
+
+\[
+\begin{cases}
+10 = 4a_0 + 6a_1 + 14a_2 \\
+20 = 6a_0 + 14a_1 + 36a_2 \\
+58 = 14a_0 + 36a_1 + 98a_2
+\end{cases}
+\]
+%
+Solving gives:
+\[
+a_0 = 3, \quad a_1 = -5, \quad a_2 = 2
+\]
+
+So the quadratic fit is:
+\[
+p(x) = 3 - 5x + 2x^2
+\]
+
+\end{document}
