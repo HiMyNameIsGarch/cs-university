@@ -1,13 +1,14 @@
-% Define the function
 f = @(x) x.*log(x);
 
-% Exact integral value (given)
+% exact
 exact = 0.636294368858383;
 
-% Parameters
+% params
 a = 1;
 b = 2;
-tolerance = 0.000000005; % For three decimal accuracy
+
+% go as big as you can
+tolerance = 0.000000005;
 
 % Initialize variables
 n = 1;

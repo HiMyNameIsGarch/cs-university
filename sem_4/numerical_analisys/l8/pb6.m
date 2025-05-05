@@ -44,9 +44,9 @@ end
 
 figure;
 loglog(n_values, errors, 'o-', 'LineWidth', 2);
-xlabel('Number of subintervals (n)');
-ylabel('Absolute error');
-title('Convergence of Simpson''s Rule for erf(0.5)');
+xlabel('nr of subintervals (n)');
+ylabel('abs error');
+title('convergence of simpson''s rule for erf(0.5)');
 grid on;
 
 % composite Simpson's rule function

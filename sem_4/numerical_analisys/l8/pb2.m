@@ -12,7 +12,6 @@ sum_f = 0;
 
 for i = 1:length(x)
     for j = 1:length(y)
-        weight = 1;
         if (i==1||i==length(x)) && (j==1||j==length(y))
             weight = 1;
         elseif (i==1||i==length(x)) || (j==1||j==length(y))
@@ -26,4 +25,4 @@ end
 
 I = hx * hy / 4 * sum_f;
 
-fprintf('Final approximation: %.7f\n', I);
+fprintf('final approximation: %.7f\n', I);
