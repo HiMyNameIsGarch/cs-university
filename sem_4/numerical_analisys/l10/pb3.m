@@ -30,3 +30,7 @@ function H = my_hilb(n)
         end
     end
 end
+
+% 13 4.78
+% 14 2,55
+% 15 2,49

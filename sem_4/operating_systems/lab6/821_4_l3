@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# A file is given, containing all students from a group, ordered by the
+# average grade received in the winter exams session. Write a Shell script
+# that, given the grades from the 5 exams in the summer exam session in the
+# file 'summer grades', the script will update the average grade per year for
+# each student and sort the initial file based on the yearly average grade.
+
+# check if the arguments are correct
+[ $# -gt 2 ] && echo "Usage: $0 <students_file>" && exit 1
+
+students="$1"
+# check if the file for processing exists
+[ ! -f "$students" ] && echo "Error: $1 not found" && exit 1
+[ ! -s "$students" ] && echo "Error: $students is empty" && exit 1
+
+# check if the file has the correct structure
+if ! awk 'NF < 2 || !($NF ~ /^[0-9]+(\.[0-9]+)?$/) { exit 1 }' "$1"; then
+    echo "Error: '$1' must have more than 2 columns, with last column as a number ( the winter average grade )"
+    exit 1
+fi
+
+# check if the file is empty
+summer="summer grades"
+[ ! -f "$summer" ] && echo "Error: $summer missing" && exit 1
+[ ! -s "$summer" ] && echo "Error: $summer is empty" && exit 1
+
+# check if  'summer grades' structure ( 6 columns, 5 numeric grades)
+if ! awk 'NF != 6 { exit 1 }
+          { for (i=2; i<=6; i++) if ($i !~ /^[0-9]+$/) exit 1 }' "$summer"; then
+    echo "Error: $summer must have 6 columns: student name + 5 numeric grades"
+    exit 1
+fi
+
+# standard debugging output for checking the file structure before computation
+if [ "$2" = "-v" ]; then
+    echo "=== Debug before: $students structure ==="
+    head -n 5 "$students"
+    echo "=== Debug before: $summer structure ==="
+    head -n 5 "$summer"
+fi
+
+printf "\nDoing some heavy duty computation, hold your cpu's...\n\n"
+sleep 1.5s
+
+
+# doing the work
+awk '
+NR==FNR {summer[$1]=($2+$3+$4+$5+$6)/5; next}
+!($1 in summer) { print "Error: Student "$1" missing in summer grades" > "/dev/stderr"; exit 1 }
+{
+    yearly = (summer[$1] + $NF)/2
+    print $0, yearly
+}
+' "$summer" "$students" |
+    sort -k "$(awk '{print NF-1}' "$1" | head -1)" -nr >  "$students.tmp" &&
+        mv "$students.tmp" "$students"
+
+# standard debugging output for checking the file structure after computation
+if [ "$2" = "-v" ]; then
+    echo "=== Debug after: $students structure ==="
+    head -n 5 "$students"
+    echo "=== Debug after: $summer structure ==="
+    head -n 5 "$summer"
+fi
+
+
+#--------------------< paste this to test the script work >---------------------
+# echo "Alice 85.5
+# Bob 78.0
+# Carol 92.3
+# Dave 65.8
+# Eve 88.2" > students
+#
+# echo "Alice 80 85 90 75 88
+# Bob 70 75 80 85 90
+# Carol 95 92 88 90 93
+# Dave 60 65 70 55 62
+# Eve 85 90 92 88 91" > "summer grades"
+
+# finally run the script with "./pb3 students -v" for maximum fun

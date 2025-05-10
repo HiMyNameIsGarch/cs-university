@@ -1,2 +1,0 @@
-#!/bin/sh
- # A file is given, containing all students from a group, ordered by the average grade received in the winter exams session. Write a Shell script that, given the grades from the 5 exams in the summer exam session in the file ‘summer grades’, the script will update the average grade per year for each student and sort the initial file based on the yearly average grade.

@@ -45,3 +45,5 @@ function V = my_vander(t)
         V(:,j) = t.^(n-j);
     end
 end
+
+% 15:     3.60
