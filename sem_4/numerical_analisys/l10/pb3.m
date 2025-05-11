@@ -1,34 +1,32 @@
-% create a table to display results nicely
-fprintf('n\tCondition Number\n');
-fprintf('----------------------\n');
+% create an array to store conditioning numbers
+cond_numbers = zeros(6, 1); % for n=10 to 15 (6 values)
 
-% calculate conditioning numbers for n=10 to 15
+% loop through each matrix size
 for n = 10:15
-    % generate the Hilbert matrix of size n
-    H = hilb(n);  % built-in MATLAB function for Hilbert matrix
+    % generate hilbert matrix of size n x n
+    H = hilb(n); % built-in matlab function for hilbert matrix
 
-    % calculate the condition number (using 2-norm)
-    c = cond(H);
+    % calculate condition number (using 2-norm)
+    cond_numbers(n-9) = cond(H);
 
-    % display results
-    fprintf('%d\t%g\n', n, c);
+    % display results for each n
+    fprintf('n = %d, condition number = %e\n', n, cond_numbers(n-9));
 end
 
-% additional analysis - show how quickly they grow
-fprintf('\nAdditional Analysis:\n');
-fprintf('The condition numbers grow extremely rapidly!\n');
-fprintf('At n=15, cond(H) is already ~4.7e+19\n');
+% plot the condition numbers
+figure;
+plot(10:15, cond_numbers, '-o');
+xlabel('matrix size n');
+ylabel('condition number');
+title('condition numbers of hilbert matrices H_n');
+grid on;
 
-% helper function to create Hilbert matrix (alternative implementation)
-% (not needed since we use built-in hilb(), but shown for completeness)
-function H = my_hilb(n)
-    % creates n×n Hilbert matrix where H(i,j) = 1/(i+j-1)
-    H = zeros(n);
-    for i = 1:n
-        for j = 1:n
-            H(i,j) = 1/(i+j-1);
-        end
-    end
+% optional: display in table format
+fprintf('\nsummary table:\n');
+fprintf('n\tcondition number\n');
+fprintf('-----------------------\n');
+for i = 1:6
+    fprintf('%d\t%e\n', i+9, cond_numbers(i));
 end
 
 % 13 4.78

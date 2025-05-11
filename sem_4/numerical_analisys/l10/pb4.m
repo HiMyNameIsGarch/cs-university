@@ -1,49 +1,32 @@
 %-----------------------------------< Part a >-----------------------------------
-disp('point a: tk = 1/k');
-fprintf('n\tCondition Number\n');
-fprintf('----------------------\n');
+n_values_a = [10, 15]; % sizes to compute
+cond_numbers_a = zeros(length(n_values_a), 1); % store condition numbers
 
-for n = [10, 15]
-    % create points tk = 1/k
-    t = 1./(1:n)';
-
-    % generate Vandermonde matrix
-    V = vander(t);
-
-    % calculate condition number
-    c = cond(V);
-
-    fprintf('%d\t%g\n', n, c);
+for i = 1:length(n_values_a)
+    n = n_values_a(i);
+    t = 1./(1:n)'; % points t_k = 1/k
+    V = fliplr(vander(t)); % built-in vandermonde matrix (columns are t.^(n-1:-1:0))
+    cond_numbers_a(i) = cond(V, 2); % 2-norm condition number
+    fprintf('n = %d (t_k=1/k), condition number = %e\n', n, cond_numbers_a(i));
 end
 
 %-----------------------------------< Part b >-----------------------------------
 % Vandermonde matrices for tk = -1 + (2/n)*k, k=1..n
-disp(' ');
-disp('point b: tk = -1 + (2/n)*k');
-fprintf('n\tCondition Number\n');
-fprintf('----------------------\n');
+n_values_b = 10:15; % sizes to compute
+cond_numbers_b = zeros(length(n_values_b), 1); % store condition numbers
 
-for n = 10:15
-    % create points tk = -1 + (2/n)*k
-    t = -1 + (2/n)*(1:n)';
-
-    % generate Vandermonde matrix
-    V = vander(t);
-
-    % calculate condition number
-    c = cond(V);
-
-    fprintf('%d\t%g\n', n, c);
+for i = 1:length(n_values_b)
+    n = n_values_b(i);
+    t = -1 + (2/n)*(1:n)'; % points t_k = -1 + (2/n)*k, uniformly spaced in [-1,1]
+    V = fliplr(vander(t)); % built-in vandermonde matrix
+    cond_numbers_b(i) = cond(V, 2); % 2-norm condition number
+    fprintf('n = %d (uniform [-1,1]), condition number = %e\n', n, cond_numbers_b(i));
 end
 
-% helper function to create Vandermonde matrix (alternative implementation)
-function V = my_vander(t)
-    % creates Vandermonde matrix from vector t
-    n = length(t);
-    V = zeros(n);
-    for j = 1:n
-        V(:,j) = t.^(n-j);
-    end
+%% display summary table
+fprintf('\nsummary table for uniform points in [-1,1]:\n');
+fprintf('n\tcondition number\n');
+fprintf('-----------------------\n');
+for i = 1:length(n_values_b)
+    fprintf('%d\t%e\n', n_values_b(i), cond_numbers_b(i));
 end
-
-% 15:     3.60
