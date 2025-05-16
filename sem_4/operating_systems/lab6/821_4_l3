@@ -38,6 +38,7 @@ if [ "$2" = "-v" ]; then
     head -n 5 "$students"
     echo "=== Debug before: $summer structure ==="
     head -n 5 "$summer"
+    printf "\n\n"
 fi
 
 printf "\nDoing some heavy duty computation, hold your cpu's...\n\n"
@@ -45,6 +46,9 @@ sleep 1.5s
 
 
 # doing the work
+
+# NR - the total number of records processed
+# FNR - total number of records for each input file
 awk '
 NR==FNR {summer[$1]=($2+$3+$4+$5+$6)/5; next}
 !($1 in summer) { print "Error: Student "$1" missing in summer grades" > "/dev/stderr"; exit 1 }

@@ -31,5 +31,5 @@ for file in "$@"; do
 
     # finally run the awk script on the file
     awk -f "$AWK_SCRIPT" "$file"
-done
+done | column --table
 

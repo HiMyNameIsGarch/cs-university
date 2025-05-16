@@ -16,20 +16,22 @@ disp(x_modified);
 % find the conditioning number of the original matrix
 cond_number = cond(A);
 disp(['Conditioning number for original matrix: ', num2str(cond_number)]);
+cond_number1 = cond(A_modified);
+disp(['Conditioning number for original matrix B: ', num2str(cond_number1)]);
 
 
 % let's see how much the solution changed with this small matrix change
-error_in_solution = relative_error(x, x_modified);
-disp(['Relative error in solution: ', num2str(error_in_solution)]);
-
-% let's see how much we changed the matrix to understand sensitivity
-error_in_matrix = norm(A - A_modified) / norm(A);
-disp(['Relative error in matrix: ', num2str(error_in_matrix)]);
-
-% calculate the error magnification factor
-error_magnification = error_in_solution / error_in_matrix;
-disp(['Error magnification factor: ', num2str(error_magnification)]);
-
+% error_in_solution = relative_error(x, x_modified);
+% disp(['Relative error in solution: ', num2str(error_in_solution)]);
+%
+% % let's see how much we changed the matrix to understand sensitivity
+% error_in_matrix = norm(A - A_modified) / norm(A);
+% disp(['Relative error in matrix: ', num2str(error_in_matrix)]);
+%
+% % calculate the error magnification factor
+% error_magnification = error_in_solution / error_in_matrix;
+% disp(['Error magnification factor: ', num2str(error_magnification)]);
+%
 % helper function to calculate relative error between two vectors
 function rel_error = relative_error(x, y)
     % calculates relative error between vectors x and y
