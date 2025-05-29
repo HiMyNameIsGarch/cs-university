@@ -6,7 +6,7 @@
 
 \title{Homework 5, Section B}
 \author{Gabriel Hanu}
-\date{16 May 2025 \\
+\date{17 May 2025 \\
 Numerical Analysis}
 
 
@@ -19,6 +19,85 @@ Find the degree of exactness of the following quadrature formula:
 \[
     \int_{-1}^{1} f(x) \, dx = \frac{2}{3} \big[f(-1) + f(0) + f(1)\big] +R(f)
 \]
+We assume the general form of the quadrature:
+
+\[
+\int_{-1}^{1} f(x)\,dx \approx A f(-1) + B f(0) + C f(1)
+\]
+
+Let the interpolation nodes be \( x_0 = -1 \), \( x_1 = 0 \), \( x_2 = 1 \), and define the Lagrange basis polynomials:
+
+\[
+\ell_0(x) = \frac{(x - 0)(x - 1)}{(-1 - 0)(-1 - 1)} = \frac{x(x - 1)}{2}
+\]
+
+\[
+\ell_1(x) = \frac{(x + 1)(x - 1)}{(0 + 1)(0 - 1)} = - (x + 1)(x - 1)
+\]
+
+\[
+\ell_2(x) = \frac{(x + 1)(x)}{(1 + 1)(1 - 0)} = \frac{(x + 1)(x)}{2}
+\]
+
+Now integrate each basis polynomial over the interval \([-1, 1]\):
+
+\[
+A = \int_{-1}^{1} \ell_0(x)\,dx = \int_{-1}^{1} \frac{x(x - 1)}{2}\,dx
+= \frac{1}{2} \int_{-1}^{1} (x^2 - x)\,dx
+= \frac{1}{2} \left( \frac{2}{3} - 0 \right) = \frac{1}{3}
+\]
+
+\[
+B = \int_{-1}^{1} \ell_1(x)\,dx = \int_{-1}^{1} - (x^2 - 1)\,dx
+= - \left( \frac{2}{3} - 2 \right) = \frac{4}{3}
+\]
+
+\[
+C = \int_{-1}^{1} \ell_2(x)\,dx = \int_{-1}^{1} \frac{x(x + 1)}{2}\,dx
+= \frac{1}{2} \int_{-1}^{1} (x^2 + x)\,dx
+= \frac{1}{2} \left( \frac{2}{3} + 0 \right) = \frac{1}{3}
+\]
+
+So, the exact quadrature rule using interpolation is:
+
+\[
+\int_{-1}^{1} f(x)\,dx \approx \frac{1}{3} f(-1) + \frac{4}{3} f(0) + \frac{1}{3} f(1)
+\]
+
+However, the given formula uses equal weights:
+
+\[
+\frac{2}{3} [f(-1) + f(0) + f(1)]
+\]
+
+Let’s now test this rule on monomials to determine the degree of exactness.
+
+\begin{itemize}
+  \item \( f(x) = 1 \):
+  \[
+  \text{lhs: } \int_{-1}^{1} 1\,dx = 2, \quad
+  \text{rhs: } \frac{2}{3} (1 + 1 + 1) = 2 \quad \Rightarrow \text{Exact}
+  \]
+
+  \item \( f(x) = x \):
+  \[
+  \text{lhs: } \int_{-1}^{1} x\,dx = 0, \quad
+  \text{rhs: } \frac{2}{3} (-1 + 0 + 1) = 0 \quad \Rightarrow \text{Exact}
+  \]
+
+  \item \( f(x) = x^2 \):
+  \[
+  \text{lhs: } \int_{-1}^{1} x^2\,dx = \frac{2}{3}, \quad
+  \text{rhs: } \frac{2}{3} (1 + 0 + 1) = \frac{4}{3} \quad \Rightarrow \text{Not Exact}
+  \]
+\end{itemize}
+
+
+In conclusion, the formula integrates polynomials of degree 0 and 1 exactly, but not degree 2. Therefore, the degree of exactness is:
+
+\[
+\boxed{1}
+\]
 
 \section*{Problem 2}
 Check if
@@ -26,6 +105,76 @@ Check if
     \int_{0}^{b} f(x) \, dx = \frac{b}{3} \bigg[2f\bigg(\frac{b}{4}\bigg) - f\bigg(\frac{b}{2}\bigg) + 2f\bigg(\frac{3b}{4}\bigg)\bigg] +R(f)
 \]
 has the degree of exactness of 3.
+
+\
+
+We are to check if this rule has \textbf{degree of exactness 3}. That is, whether it integrates exactly all polynomials \( f(x) = x^n \) for \( n = 0, 1, 2, 3 \).
+
+\subsection*{Case 1: \( f(x) = 1 \)}
+
+\[
+\int_{0}^{b} 1\, dx = b
+\]
+
+\[
+\text{RHS} = \frac{b}{3} \left[2(1) - 1 + 2(1)\right] = \frac{b}{3}(3) = b \quad \Rightarrow \text{Exact}
+\]
+
+\subsection*{Case 2: \( f(x) = x \)}
+
+\[
+\int_{0}^{b} x\, dx = \frac{b^2}{2}
+\]
+
+\[
+\text{rhs} = \frac{b}{3} \left[2\left(\frac{b}{4}\right) - \left(\frac{b}{2}\right) + 2\left(\frac{3b}{4}\right)\right]
+= \frac{b}{3} \left( \frac{b}{2} - \frac{b}{2} + \frac{3b}{2} \right) = \frac{b}{3} \cdot \frac{3b}{2} = \frac{b^2}{2}
+\quad \Rightarrow \text{Exact}
+\]
+
+\subsection*{Case 3: \( f(x) = x^2 \)}
+
+\[
+\int_{0}^{b} x^2\, dx = \frac{b^3}{3}
+\]
+
+\[
+\text{rhs} = \frac{b}{3} \left[ 2\left( \frac{b}{4} \right)^2 - \left( \frac{b}{2} \right)^2 + 2\left( \frac{3b}{4} \right)^2 \right]
+= \frac{b}{3} \left[ 2\cdot\frac{b^2}{16} - \frac{b^2}{4} + 2\cdot\frac{9b^2}{16} \right]
+\]
+
+\[
+= \frac{b}{3} \left[ \frac{2b^2}{16} - \frac{b^2}{4} + \frac{18b^2}{16} \right]
+= \frac{b}{3} \left[ \frac{2b^2 + 18b^2}{16} - \frac{b^2}{4} \right]
+= \frac{b}{3} \left[ \frac{20b^2}{16} - \frac{4b^2}{16} \right]
+= \frac{b}{3} \cdot \frac{16b^2}{16}
+= \frac{b^3}{3}
+\quad \Rightarrow \text{Exact}
+\]
+
+\subsection*{Case 4: \( f(x) = x^3 \)}
+
+\[
+\int_{0}^{b} x^3\, dx = \frac{b^4}{4}
+\]
+
+\[
+\text{rhs} = \frac{b}{3} \left[ 2\left( \frac{b}{4} \right)^3 - \left( \frac{b}{2} \right)^3 + 2\left( \frac{3b}{4} \right)^3 \right]
+= \frac{b}{3} \left[ 2\cdot\frac{b^3}{64} - \frac{b^3}{8} + 2\cdot\frac{27b^3}{64} \right]
+\]
+
+\[
+= \frac{b}{3} \left[ \frac{2b^3}{64} - \frac{8b^3}{64} + \frac{54b^3}{64} \right]
+= \frac{b}{3} \cdot \frac{48b^3}{64} = \frac{b}{3} \cdot \frac{3b^3}{4}
+= \frac{b^4}{4}
+\quad \Rightarrow \text{Exact}
+\]
+
+In conclusion, the quadrature rule integrates all polynomials of degree up to 3 exactly. Therefore, its degree of exactness is:
+
+\[
+\boxed{3}
+\]
 
 \section*{Problem 3}
 Find n \(\in\) N such that \( \int_{1}^{2} xln(x) \, dx \) is approximated by the Repeated Simpson formula with precision \(\epsilon\) = \(10^{-5}\)
@@ -63,7 +212,7 @@ Assuming the worst case \( \xi = 1 \), we get:
 \end{align*}
 Thus, the smallest integer satisfying the condition is:
 \[
-    n \geq 3
+    \boxed{n \geq 3}
 \]
 
 \section*{Problem 4}
@@ -130,7 +279,7 @@ Then the remainder is:
 
 Final approximation:
 \[
-\int_{1}^{3} \frac{x}{x^2 + 4} \, dx \approx 0.4654 \pm 0.0293
+    \boxed{\int_{1}^{3} \frac{x}{x^2 + 4} \, dx \approx 0.4654 \pm 0.0293}
 \]
 
 \end{document}
