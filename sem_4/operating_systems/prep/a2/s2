@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Write a shell script which takes as parameters a text followed by several
+# file names. The script will delete all the lines which contain the text
+# given as parameter in all given files.
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 text [file1 file2 ...]"
+    exit 1
+fi
+
+text="$1"
+
+# check if text contain spaces
+if [[ $text == *" "* ]]; then
+
+    # check if the arguments are files
+    for file in "${@:2}"; do
+        if [ ! -f "$file" ]; then
+            echo "$file is not a file."
+            exit 2
+        fi
+    done
+
+    # contains spaces so it's a text
+    sed -i "/$text/d;/^ *$/d" "${@:2}"
+    cat "${@:2}"
+else
+  echo "Parameter is a word not a text!"
+fi
+
+# breakdown of the command
+# I have combined 2 sed commands in one for convinience
+
+# -i edit the files in place
+# "/$text/d" delete all lines containing the text
+# "/^ *$/d" delete all empty lines
+# "${@:2}" all the arguments starting from the second one
+#
+#-------------------------------< Example files >-------------------------------
+# run the following oneliner to test the script
+# echo -e "Hello world\nThis is a test file\nRemove this line\nKeep this line\nRemove another line\n" > file1.txt; echo -e "This is another file\nRemove this line as well\nNothing to remove here\nRemove this one too\n" > file2.txt; echo -e "Sample content\nRemove this line\nRandom line\nRemove me\nAnother random line\n" > file3.txt
+#
+# then you can run the script like this:
+# ./s2 "Remove this" file1.txt file2.txt file3.txt
+

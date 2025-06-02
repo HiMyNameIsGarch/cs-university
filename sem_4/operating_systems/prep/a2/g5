@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script that takes a command name (ex: ping) as a parameter. The script will display all user accounts running the given command.

@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Write a shell script which takes as parameters several file names. For each line in the given files which contains more than 10 characters, the script will display the number of that line and its content starting from the 11th character. At the end of each file analysis, the script will display the file name and the number of lines that have been displayed before.

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameters a text followed by several
+# file names. The script will insert the given text after the 1st line in the
+# given files.
+#
+#
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <text> <file1> [<file2> ...]"
+    exit 1
+fi
+
+text=$1
+
+shift
+
+# test it
+sed -i "1 a $text" "${@}"
+

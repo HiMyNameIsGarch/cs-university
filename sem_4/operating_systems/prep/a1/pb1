@@ -1,0 +1,35 @@
+#!/bin/sh
+# Write a shell script which takes as parameters two integers. The script will
+# display the sum, the difference and the product of the two given integers.
+#
+# Example:
+# ./pb1 3 5
+# 3 + 5 = 8
+# 3 - 5 = -2
+# 3 * 5 = 15
+#
+#
+# check for parameters:
+if [ $# -ne 2 ]; then
+    echo "Incorrect number of parameters"
+    echo "Usage: $0 <integer1> <integer2>"
+    exit 1
+fi
+
+if ! echo "$1" | grep -qE '^-?[0-9]+$'; then
+    echo "$1 is not a number. Please enter a valid number."
+    exit 1
+fi
+
+if ! echo "$2" | grep -qE '^-?[0-9]+$'; then
+    echo "$2 is not a number. Please enter a valid number."
+    exit 1
+fi
+
+sum=$(($1 + $2))
+diff=$(($1 - $2))
+prod=$(($1 * $2))
+
+echo "$1 + $2 = $sum"
+echo "$1 - $2 = $diff"
+echo "$1 * $2 = $prod"

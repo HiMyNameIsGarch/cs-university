@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Write a shell script which takes as parameters several file names. The
+# script will delete the 2nd and 4th word in each line of the given files. The
+# words shall contain only letters or numbers and shall be separated by
+# spaces.

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Write a shell script which takes as parameters a word followed by several
+# file names. The shell will delete all the lines containing the given word in
+# all given files.
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 word [file1 file2 ...]"
+    exit 1
+fi
+
+word=$1
+
+# check if contains spaces
+if [[ $word =~ [[:space:]]+ ]]; then
+    # contains spaces so it's a text
+    echo "Word must not contain spaces"
+    exit 1
+else
+    sed -i "/$word/d;/^ *$/d" "${@:2}"
+    cat "${@:2}"
+fi
+

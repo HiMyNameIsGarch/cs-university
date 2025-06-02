@@ -1,0 +1,2 @@
+#!/bin/sh
+ # Given a list of filenames and a directory name, write a Shell script that prints for each file all the subdirectories in which it appears. Print these subdirectories sorted in decreasing order of the creation date and time.
