@@ -12,7 +12,7 @@ disp('std newton:')
 disp(['steps: ', num2str(n_std)])
 disp(['approx: ', num2str(x_std)])
 
-disp('mult newton:')
+disp('mult newtocann:')
 disp(['steps: ', num2str(n_mult)])
 disp(['approx: ', num2str(x_mult)])
 

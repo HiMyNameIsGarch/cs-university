@@ -1,56 +1,42 @@
 % DO NOT RUN, THIS HAS A BUG IN IT, INFINITE LOOP
+format long
 
+% Given data
+alpha = 0.5671432; % known solution
 x0 = 0.5;
-eps = 1e-10;
+epsilon = 1e-10;
 
-% first iter func: x = e^-x
-[x1, n1] = fixed_iter(x0, eps, @g1);
+% Define iteration functions as function handles
+g1 = @(x) exp(-x);
+g2 = @(x) (1 + x) / (exp(x) + 1);
+g3 = @(x) x + 1 - x * exp(x);
 
-% second iter func: x = (1+x)/e^x
-[x2, n2] = fixed_iter(x0, eps, @g2);
 
-% third iter func: x = x + 1 - x*e^x
-[x3, n3] = fixed_iter(x0, eps, @g3);
+% Call fixed point for each g
+[x1, iter1] = fixed_point(g1, x0, epsilon);
+[x2, iter2] = fixed_point(g2, x0, epsilon);
+[x3, iter3] = fixed_point(g3, x0, epsilon);
 
-% show res
-disp('first iter func:')
-disp(['approx: ', num2str(x1)])
-disp(['steps: ', num2str(n1)])
+% Display results
+fprintf('Method 1: x = %.12f, iterations = %d\n', x1, iter1);
+fprintf('Method 2: x = %.12f, iterations = %d\n', x2, iter2);
+fprintf('Method 3: x = %.12f, iterations = %d\n', x3, iter3);
 
-disp('second iter func:')
-disp(['approx: ', num2str(x2)])
-disp(['steps: ', num2str(n2)])
-
-disp('third iter func:')
-disp(['approx: ', num2str(x3)])
-disp(['steps: ', num2str(n3)])
-
-% func: fixed pt iter
-function [x, n] = fixed_iter(x0, eps, g)
-    x = x0;
-    n = 0;
+% Fixed point iteration function
+function [x_approx, iter] = fixed_point(g, x0, tol)
+    iter = 0;
+    x_old = x0;
     while true
-        x_new = g(x);
-        n = n + 1;
-        if abs(x_new - x) < eps
-            break
+        x_new = g(x_old);
+        iter = iter + 1;
+        if abs(x_new - x_old) < tol
+            break;
         end
-        x = x_new;
+        x_old = x_new;
+        if iter > 1e5
+            warning('Too many iterations');
+            break;
+        end
     end
+    x_approx = x_new;
 end
-
-% g1(x) = e^-x
-function y = g1(x)
-    y = exp(-x);
-end
-
-% g2(x) = (1+x)/e^x
-function y = g2(x)
-    y = (1 + x)/exp(x);
-end
-
-% g3(x) = x + 1 - x*e^x
-function y = g3(x)
-    y = x + 1 - x * exp(x);
-end
-

@@ -1,5 +1,36 @@
-#!/bin/sh
+#!/bin/bash
 
 # Write a shell script which takes as parameters a lowercase letter followed
 # by several file names. The script will replace any special character with
 # the given letter in all files given as parameters.
+#
+
+if [ "$#" -lt 2 ]; then
+    echo "Error: invalid parameters:"
+    exit 1;
+fi
+
+# check if the first parameter is a lowercase letter
+if [ "${#1}" != 1 ]; then
+    echo "That is not one character BOB!"
+    exit 1
+fi
+
+if [[ ! "$1" =~ [a-z] ]]; then
+    echo "Not lowercase BOB!"
+    exit 1
+fi
+
+
+# check if the rest of the parameters are files
+for f in "${@:2}"; do
+    if [ ! -f "$f" ]; then
+        echo "That is not a file BOB!: $f"
+        exit 1
+    fi
+done
+
+# do the actual replacements with god only sed
+
+sed -i "s/[^a-zA-Z0-9\s*]/$1/g" "${@:2}"
+

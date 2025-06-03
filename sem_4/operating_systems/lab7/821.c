@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
     // basic argument check
     if (argc != 3) {
         fprintf(stderr, "Usage: %s <file1> <file2>\n", argv[0]);
-        return 1;
+        return EXIT_FAILURE;
     }
 
     // open the first file
